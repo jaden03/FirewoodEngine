@@ -11,3 +11,5 @@ doing sphere checks because they are really cheap to do.
 
 Im also pretty proud of the obj loader. I know its not much, but I really liked the proccess of researching how an obj
 file works and using that information to make an obj loader.
+
+Its all probably fundamentally wrong but I dont really know. It works tho.
