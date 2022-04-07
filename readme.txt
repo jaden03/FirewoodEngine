@@ -1,5 +1,3 @@
-#Firewood Engine
-
 Basically just made this to learn and for fun.
 I dont know C++ so I settled for OpenTK because I really like C#.
 
