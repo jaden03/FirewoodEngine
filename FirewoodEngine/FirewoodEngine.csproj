@@ -60,15 +60,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Colors.cs" />
+    <Compile Include="Component.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="LineRenderer.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="MainProgram.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="OBJLoader.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="RenderManager.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="Texture.cs" />
+    <Compile Include="Transform.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Textures\grass.png" />

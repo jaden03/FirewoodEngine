@@ -9,11 +9,13 @@ using OpenTK.Graphics.OpenGL;
 
 namespace FirewoodEngine
 {
-    class LineRenderer
+    using static Logging;
+    class LineRenderer : Component
     {
         public Vector3 position1;
         public Vector3 position2;
         public Color color;
+        public bool useLocal = false;
 
         public LineRenderer(Vector3 _position1, Vector3 _position2, Color _color)
         {
@@ -26,8 +28,18 @@ namespace FirewoodEngine
         {
             GL.Begin(PrimitiveType.Lines);
             GL.Color3(color);
-            GL.Vertex3(position1);
-            GL.Vertex3(position2);
+            
+            if (useLocal && gameobject != null)
+            {
+                GL.Vertex3(position1 + gameobject.transform.position);
+                GL.Vertex3(position2 + gameobject.transform.position);
+            }
+            else if (!useLocal)
+            {
+                GL.Vertex3(position1);
+                GL.Vertex3(position2);
+            }
+            
             GL.End();
         }
     }

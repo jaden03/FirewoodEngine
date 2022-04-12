@@ -10,7 +10,7 @@ namespace FirewoodEngine
 {
     class OBJLoader
     {
-        public static void loadOBJFromFile(string path, out float[] vertices, out float radius, out float[] triangles)
+        public static void loadOBJFromFile(string path, out float[] vertices, out float[] triangles)
         {
             int counter = 0;
 
@@ -95,14 +95,13 @@ namespace FirewoodEngine
                 trianglesArray[i] = calculatedTrianglesList[i];
             }
 
-            radius = fartherestPoint;
             vertices = verticesArray;
             triangles = trianglesArray;
 
         }
 
 
-        public static void loadOBJFromFileWithTexture(string path, out float[] vertices, out float radius, out float[] triangles)
+        public static void loadOBJFromFileWithTexture(string path, out float[] vertices, out float[] triangles)
         {
             int counter = 0;
 
@@ -203,7 +202,6 @@ namespace FirewoodEngine
                 trianglesArray[i] = calculatedTrianglesList[i];
             }
 
-            radius = fartherestPoint;
             vertices = verticesArray;
             triangles = trianglesArray;
 

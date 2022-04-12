@@ -42,19 +42,20 @@ namespace FirewoodEngine
             lineRenderers.Add(rend);
         }
 
-        public static void Render(Matrix4 view, Matrix4 projection, Stopwatch stopwatch)
+        public static void Render(Matrix4 view, Matrix4 projection, Stopwatch stopwatch, Vector3 _lightpos, Vector3 _camPos)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             foreach (Renderer rend in renderers)
             {
-                rend.Render(view, projection, stopwatch.Elapsed.TotalSeconds);
+                rend.Render(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos);
             }
 
             foreach (LineRenderer rend in lineRenderers)
             {
                 rend.Draw();
             }
+
         }
 
 
