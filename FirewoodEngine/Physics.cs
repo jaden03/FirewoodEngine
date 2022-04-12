@@ -239,7 +239,7 @@ namespace FirewoodEngine
 
                                             }
 
-                                            Console.WriteLine(rend2.name + " has collided with " + rend.name + " at " + impactPos);
+                                            //Console.WriteLine(rend2.name + " has collided with " + rend.name + " at " + impactPos);
                                         }
 
                                         //if (Vector3.Dot(triangleNormal, Vector3.Cross(edge1_2, c1_2)) > 0 &&

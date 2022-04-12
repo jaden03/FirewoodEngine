@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Colors.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="LineRenderer.cs" />
     <Compile Include="MainProgram.cs" />
     <Compile Include="OBJLoader.cs" />
     <Compile Include="Physics.cs" />

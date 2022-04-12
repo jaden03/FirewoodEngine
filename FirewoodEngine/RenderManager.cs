@@ -14,6 +14,7 @@ namespace FirewoodEngine
     class RenderManager
     {
         public static List<Renderer> renderers;
+        public static List<LineRenderer> lineRenderers;
         static int VertexBufferObject;
 
         public static void Initialize()
@@ -28,11 +29,17 @@ namespace FirewoodEngine
             GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
 
             renderers = new List<Renderer>();
+            lineRenderers = new List<LineRenderer>();
         }
 
         public static void AddRenderer(Renderer rend)
         {
             renderers.Add(rend);
+        }
+
+        public static void AddRenderer(LineRenderer rend)
+        {
+            lineRenderers.Add(rend);
         }
 
         public static void Render(Matrix4 view, Matrix4 projection, Stopwatch stopwatch)
@@ -43,10 +50,15 @@ namespace FirewoodEngine
             {
                 rend.Render(view, projection, stopwatch.Elapsed.TotalSeconds);
             }
+
+            foreach (LineRenderer rend in lineRenderers)
+            {
+                rend.Draw();
+            }
         }
 
 
-        public static void UnInitialize()
+        public static void Uninitialize()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.DeleteBuffer(VertexBufferObject);

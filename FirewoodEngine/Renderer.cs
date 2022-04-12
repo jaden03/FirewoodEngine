@@ -25,7 +25,6 @@ namespace FirewoodEngine
 
         public bool wireframe = false;
 
-        public readonly string name;
 
         public readonly float radius;
 
@@ -39,7 +38,7 @@ namespace FirewoodEngine
         Texture texture;
 
 
-        public Renderer(string _name, float[] _vertices, Vector3 _position, Vector3 _eulerAngles, Color _color, Shader _shader, Vector3 _lightPos, Vector3 _camPos, float _scale)
+        public Renderer(float[] _vertices, Vector3 _position, Vector3 _eulerAngles, Color _color, Shader _shader, Vector3 _lightPos, Vector3 _camPos, float _scale)
         {
             vertices = _vertices;
             position = _position;
@@ -49,14 +48,11 @@ namespace FirewoodEngine
             lightPos = _lightPos;
             camPos = _camPos;
             scale = _scale;
-            name = _name;
 
             VertexArrayObject = GL.GenVertexArray();
-
-            Console.WriteLine("Created Vertex Array Object: " + VertexArrayObject);
         }
 
-        public Renderer(string _name, string _modelPath, Vector3 _position, Vector3 _eulerAngles, Color _color, Shader _shader, Vector3 _lightPos, Vector3 _camPos, float _scale)
+        public Renderer(string _modelPath, Vector3 _position, Vector3 _eulerAngles, Color _color, Shader _shader, Vector3 _lightPos, Vector3 _camPos, float _scale)
         {
             OBJLoader.loadOBJFromFile(_modelPath, out vertices, out radius, out triangles);
             position = _position;
@@ -66,12 +62,11 @@ namespace FirewoodEngine
             lightPos = _lightPos;
             camPos = _camPos;
             scale = _scale;
-            name = _name;
 
             VertexArrayObject = GL.GenVertexArray();
         }
 
-        public Renderer(string _name, string _modelPath, Vector3 _position, Vector3 _eulerAngles, string _texturePath, Shader _shader, Vector3 _lightPos, Vector3 _camPos, float _scale)
+        public Renderer(string _modelPath, Vector3 _position, Vector3 _eulerAngles, string _texturePath, Shader _shader, Vector3 _lightPos, Vector3 _camPos, float _scale)
         {
             OBJLoader.loadOBJFromFileWithTexture(_modelPath, out vertices, out radius, out triangles);
             position = _position;
@@ -81,7 +76,6 @@ namespace FirewoodEngine
             lightPos = _lightPos;
             camPos = _camPos;
             scale = _scale;
-            name = _name;
 
             VertexArrayObject = GL.GenVertexArray();
         }

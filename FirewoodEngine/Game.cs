@@ -117,9 +117,6 @@ namespace FirewoodEngine
             front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(yaw));
             front = Vector3.Normalize(front);
 
-
-
-
             if (input.IsKeyDown(Key.Left))
             {
                 house.position.X += 5f * (float)e.Time;
@@ -191,15 +188,17 @@ namespace FirewoodEngine
             Thread physicsThread = new Thread(new ThreadStart(startPhysics));
             physicsThread.Start();
 
-            
-            Renderer greenCube = new Renderer("Green Cube", "cube.obj", new Vector3(-5, 0, 0), new Vector3(0, 0, 0), Color.Blue, colorShader, _lightPos, camPosition, 1f);
+            LineRenderer firstLine = new LineRenderer(new Vector3(3, 3, 3), new Vector3(1, 3, 8), Color.White);
+            RenderManager.AddRenderer(firstLine);
+
+            Renderer greenCube = new Renderer("cube.obj", new Vector3(-5, 0, 0), new Vector3(0, 0, 0), Color.Blue, colorShader, _lightPos, camPosition, 1f);
             RenderManager.AddRenderer(greenCube);
             greenCube.wireframe = true;
 
-            Renderer ground = new Renderer("Ground", "ground.obj", new Vector3(0, -5, 0), new Vector3(0, 0, 0), Color.Green, colorShader, _lightPos, camPosition, 1f);
+            Renderer ground = new Renderer("ground.obj", new Vector3(0, -5, 0), new Vector3(0, 0, 0), Color.Green, colorShader, _lightPos, camPosition, 1f);
             RenderManager.AddRenderer(ground);
 
-            house = new Renderer("House", "house.obj", new Vector3(-5, 0, 0), new Vector3(0, 0, 0), "House.png", textureShader, _lightPos, camPosition, 1f);
+            house = new Renderer("house.obj", new Vector3(-5, 0, 0), new Vector3(0, 0, 0), "House.png", textureShader, _lightPos, camPosition, 1f);
             RenderManager.AddRenderer(house);
 
             stopwatch.Start();
@@ -243,6 +242,7 @@ namespace FirewoodEngine
         {
             colorShader.Dispose();
             textureShader.Dispose();
+            RenderManager.Uninitialize();
             base.OnUnload(e);
         }
 
