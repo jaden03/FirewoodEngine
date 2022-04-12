@@ -201,19 +201,13 @@ namespace FirewoodEngine
             firstGameobject.AddComponent(lRenderer);
             RenderManager.AddRenderer(lRenderer);
 
-
-
-            Material houseMat = new Material();
-            houseMat.SetTexture("House.png");
-            houseMat.shader = textureShader;
-
-            house = new GameObject();
-            house.name = "House";
-            Renderer houseRenderer = new Renderer();
-            houseRenderer.SetOBJ("house.obj", houseMat.texture != null);
-            houseRenderer.material = houseMat;
-            house.AddComponent(houseRenderer);
-            RenderManager.AddRenderer(houseRenderer);
+            GameObject secondGameobject = new GameObject();
+            secondGameobject.name = "Line";
+            secondGameobject.transform.position = new Vector3(10, 10, 5);
+            LineRenderer lRenderer2 = new LineRenderer(new Vector3(1, 5, 7), new Vector3(1, 3, 8), Color.White);
+            lRenderer2.useLocal = true;
+            secondGameobject.AddComponent(lRenderer2);
+            RenderManager.AddRenderer(lRenderer2);
 
 
 
@@ -228,7 +222,20 @@ namespace FirewoodEngine
             groundRenderer.material = groundMat;
             ground.AddComponent(groundRenderer);
             RenderManager.AddRenderer(groundRenderer);
+            
 
+
+            Material houseMat = new Material();
+            houseMat.SetTexture("House.png");
+            houseMat.shader = textureShader;
+
+            house = new GameObject();
+            house.name = "House";
+            Renderer houseRenderer = new Renderer();
+            houseRenderer.SetOBJ("house.obj", houseMat.texture != null);
+            houseRenderer.material = houseMat;
+            house.AddComponent(houseRenderer);
+            RenderManager.AddRenderer(houseRenderer);
 
 
             stopwatch.Start();

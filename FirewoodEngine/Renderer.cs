@@ -12,10 +12,6 @@ namespace FirewoodEngine
     using static Logging;
     class Renderer : Component
     {
-        public Vector3 position;
-        public Vector3 eulerAngles;
-        public Vector3 scale;
-
         public float[] vertices;
         public float[] triangles;
         
@@ -27,10 +23,6 @@ namespace FirewoodEngine
 
         public Renderer()
         {
-            position = Vector3.Zero;
-            eulerAngles = Vector3.Zero;
-            scale = Vector3.One;
-
             VertexArrayObject = GL.GenVertexArray();
         }
 
@@ -46,9 +38,9 @@ namespace FirewoodEngine
         {
             Matrix4 model =
             (
-                Matrix4.CreateScale(scale) 
-                * Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(eulerAngles.X, eulerAngles.Y, eulerAngles.Z))
-                * Matrix4.CreateTranslation(position + gameobject.transform.position)
+                Matrix4.CreateScale(gameobject.transform.scale) 
+                * Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(gameobject.transform.eulerAngles.X, gameobject.transform.eulerAngles.Y, gameobject.transform.eulerAngles.Z))
+                * Matrix4.CreateTranslation(gameobject.transform.position)
             );
 
             //texture.Use(TextureUnit.Texture0);
@@ -123,6 +115,7 @@ namespace FirewoodEngine
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Length * 3);
+            GL.Flush();
         }
 
     }

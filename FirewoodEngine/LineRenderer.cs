@@ -17,6 +17,13 @@ namespace FirewoodEngine
         public Color color;
         public bool useLocal = false;
 
+        public LineRenderer()
+        {
+            position1 = Vector3.Zero;
+            position2 = Vector3.One;
+            color = Color.White;
+        }
+
         public LineRenderer(Vector3 _position1, Vector3 _position2, Color _color)
         {
             position1 = _position1;
