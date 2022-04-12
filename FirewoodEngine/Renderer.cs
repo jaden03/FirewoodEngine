@@ -52,6 +52,8 @@ namespace FirewoodEngine
             name = _name;
 
             VertexArrayObject = GL.GenVertexArray();
+
+            Console.WriteLine("Created Vertex Array Object: " + VertexArrayObject);
         }
 
         public Renderer(string _name, string _modelPath, Vector3 _position, Vector3 _eulerAngles, Color _color, Shader _shader, Vector3 _lightPos, Vector3 _camPos, float _scale)

@@ -18,8 +18,6 @@ namespace FirewoodEngine
     {
         public Game(int width, int height, string title) : base(width, height, GraphicsMode.Default, title) {  }
 
-        int VertexBufferObject;
-
         Stopwatch stopwatch = new Stopwatch();
         
         Shader colorShader;
@@ -38,9 +36,9 @@ namespace FirewoodEngine
         public Vector3 front = new Vector3(0.0f, 0.0f, -1.0f);
         public Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
 
-        List<Renderer> renderers;
-
         private readonly Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
+
+        Renderer house;
 
 
         //------------------------\\
@@ -59,64 +57,31 @@ namespace FirewoodEngine
                 Exit();
             }
 
-            //if (input.IsKeyDown(Key.W))
-            //{
-            //    camPosition += front * speed * (float)e.Time;
-            //}
-            //if (input.IsKeyDown(Key.S))
-            //{
-            //    camPosition -= front * speed * (float)e.Time;
-            //}
-            //if (input.IsKeyDown(Key.A))
-            //{
-            //    camPosition -= Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)e.Time;
-            //}
-            //if (input.IsKeyDown(Key.D))
-            //{
-            //    camPosition += Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)e.Time;
-            //}
-            //if (input.IsKeyDown(Key.Space))
-            //{
-            //    camPosition += up * speed * (float)e.Time;
-            //}
-            //if (input.IsKeyDown(Key.ControlLeft))
-            //{
-            //    camPosition -= up * speed * (float)e.Time;
-            //}
-
-            foreach (Renderer rend in renderers)
+            if (input.IsKeyDown(Key.W))
             {
-                if (rend.name == "Player")
-                {
-                    //camPosition = rend.position + new Vector3(0, 3, 0);
-                    rend.eulerAngles = new Vector3(0, MathHelper.DegreesToRadians(-yaw), 0);
-
-                    if (input.IsKeyDown(Key.W))
-                    {
-                        var addedVec = front * speed * (float)e.Time;
-                        addedVec.Y = 0;
-                        rend.position += addedVec;
-                    }
-                    if (input.IsKeyDown(Key.A))
-                    {
-                        var addedVec = Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)e.Time;
-                        addedVec.Y = 0;
-                        rend.position -= addedVec;
-                    }
-                    if (input.IsKeyDown(Key.S))
-                    {
-                        var addedVec = front * speed * (float)e.Time;
-                        addedVec.Y = 0;
-                        rend.position -= addedVec;
-                    }
-                    if (input.IsKeyDown(Key.D))
-                    {
-                        var addedVec = Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)e.Time;
-                        addedVec.Y = 0;
-                        rend.position += addedVec;
-                    }
-                }
+                camPosition += front * speed * (float)e.Time;
             }
+            if (input.IsKeyDown(Key.S))
+            {
+                camPosition -= front * speed * (float)e.Time;
+            }
+            if (input.IsKeyDown(Key.A))
+            {
+                camPosition -= Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)e.Time;
+            }
+            if (input.IsKeyDown(Key.D))
+            {
+                camPosition += Vector3.Normalize(Vector3.Cross(front, up)) * speed * (float)e.Time;
+            }
+            if (input.IsKeyDown(Key.Space))
+            {
+                camPosition += up * speed * (float)e.Time;
+            }
+            if (input.IsKeyDown(Key.ControlLeft))
+            {
+                camPosition -= up * speed * (float)e.Time;
+            }
+
 
             var mouse = Mouse.GetState();
 
@@ -151,69 +116,33 @@ namespace FirewoodEngine
             front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(pitch));
             front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(yaw));
             front = Vector3.Normalize(front);
-            
+
 
 
 
             if (input.IsKeyDown(Key.Left))
             {
-                foreach (Renderer rend in renderers)
-                {
-                    if (rend.name == "House")
-                    {
-                        rend.position.X += 5f * (float)e.Time;
-                    }
-                }
+                house.position.X += 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.Right))
             {
-                foreach (Renderer rend in renderers)
-                {
-                    if (rend.name == "House")
-                    {
-                        rend.position.X -= 5f * (float)e.Time;
-                    }
-                }
+                house.position.X -= 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.Down))
             {
-                foreach (Renderer rend in renderers)
-                {
-                    if (rend.name == "House")
-                    {
-                        rend.position.Z -= 5f * (float)e.Time;
-                    }
-                }
+                house.position.Z -= 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.Up))
             {
-                foreach (Renderer rend in renderers)
-                {
-                    if (rend.name == "House")
-                    {
-                        rend.position.Z += 5f * (float)e.Time;
-                    }
-                }
+                house.position.Z += 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.E))
             {
-                foreach (Renderer rend in renderers)
-                {
-                    if (rend.name == "House")
-                    {
-                        rend.position.Y -= 5f * (float)e.Time;
-                    }
-                }
+                house.position.Y -= 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.Q))
             {
-                foreach (Renderer rend in renderers)
-                {
-                    if (rend.name == "House")
-                    {
-                        rend.position.Y += 5f * (float)e.Time;
-                    }
-                }
+                house.position.Y += 5f * (float)e.Time;
             }
 
 
@@ -250,57 +179,29 @@ namespace FirewoodEngine
 
         protected override void OnLoad(EventArgs e)
         {
-            GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-            GL.Enable(EnableCap.DepthTest);
+            RenderManager.Initialize();
             CursorVisible = false;
             CursorGrabbed = true;
 
-            VertexBufferObject = GL.GenBuffer();
+            Location = new System.Drawing.Point(80, 45);
+            
             colorShader = new Shader("C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Shaders/color.vert", "C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Shaders/color.frag");
             textureShader = new Shader("C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Shaders/texture.vert", "C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Shaders/texture.frag");
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
 
             Thread physicsThread = new Thread(new ThreadStart(startPhysics));
             physicsThread.Start();
 
-            renderers = new List<Renderer>();
-
-            //Renderer newSquare = new Renderer("Test Model", "untitled.obj", new Vector3(0, -2, 0), "Untitled.png", textureShader, _lightPos, camPosition, 1f);
-            //renderers.Add(newSquare);
-            //Physics.addRenderer(newSquare);
-
-            //Renderer newSquare = new Renderer("Donut", "donut.obj", new Vector3(0, -2, 0), new Vector3(0, 0, 0), Color.Gray, colorShader, _lightPos, camPosition, 1f);
-            //renderers.Add(newSquare);
-            //Physics.addRenderer(newSquare);
-
-            //Renderer blueCube = new Renderer("Blue Cube", "cube.obj", new Vector3(0, 1f, 0), Color.Blue, colorShader,_lightPos, camPosition, 1f);
-            //renderers.Add(blueCube);
-            //Physics.addRenderer(blueCube);
-
+            
             Renderer greenCube = new Renderer("Green Cube", "cube.obj", new Vector3(-5, 0, 0), new Vector3(0, 0, 0), Color.Blue, colorShader, _lightPos, camPosition, 1f);
-            renderers.Add(greenCube);
-            //greenCube.anchored = false;
-            //greenCube.gravity = true;
+            RenderManager.AddRenderer(greenCube);
             greenCube.wireframe = true;
-            //Physics.addRenderer(greenCube);
 
             Renderer ground = new Renderer("Ground", "ground.obj", new Vector3(0, -5, 0), new Vector3(0, 0, 0), Color.Green, colorShader, _lightPos, camPosition, 1f);
-            renderers.Add(ground);
-            //Physics.addRenderer(ground);
+            RenderManager.AddRenderer(ground);
 
-            //Renderer player = new Renderer("Player", "cube.obj", new Vector3(0, 1, 0), new Vector3(0, 0, 0), Color.FromArgb(0, 0, 0, 0), colorShader, _lightPos, camPosition, 1f);
-            //renderers.Add(player);
-            ////player.anchored = false;
-            ////player.gravity = true;
-            //Physics.addRenderer(player);
+            house = new Renderer("House", "house.obj", new Vector3(-5, 0, 0), new Vector3(0, 0, 0), "House.png", textureShader, _lightPos, camPosition, 1f);
+            RenderManager.AddRenderer(house);
 
-            Renderer laCubis = new Renderer("House", "house.obj", new Vector3(-5, 0, 0), new Vector3(0, 0, 0), "House.png", textureShader, _lightPos, camPosition, 1f);
-            renderers.Add(laCubis);
-            //Physics.addRenderer(laCubis);
-
-
-            //GL.Frustum(100, 100, 100, 100, 0.01f, 1000);
             stopwatch.Start();
 
             base.OnLoad(e);
@@ -323,20 +224,12 @@ namespace FirewoodEngine
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            //Console.WriteLine(position);
-            //Console.WriteLine(yaw);
-
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
             Matrix4 view = Matrix4.LookAt(camPosition, camPosition + front, up);
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), Width / Height, 0.1f, 100.0f);
-
-            foreach (Renderer rend in renderers)
-            {
-                rend.Render(view, projection, stopwatch.Elapsed.TotalSeconds);
-            }
-
             Context.SwapBuffers();
+
+            RenderManager.Render(view, projection, stopwatch);
+
             base.OnRenderFrame(e);
         }
 
@@ -348,8 +241,6 @@ namespace FirewoodEngine
 
         protected override void OnUnload(EventArgs e)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.DeleteBuffer(VertexBufferObject);
             colorShader.Dispose();
             textureShader.Dispose();
             base.OnUnload(e);

@@ -8,10 +8,11 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>FirewoodEngine</RootNamespace>
     <AssemblyName>FirewoodEngine</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -64,6 +65,7 @@
     <Compile Include="OBJLoader.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="Renderer.cs" />
+    <Compile Include="RenderManager.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="Texture.cs" />
   </ItemGroup>
