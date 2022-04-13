@@ -43,6 +43,7 @@ namespace FirewoodEngine
         GameObject house;
         GameObject ground;
 
+        Material lineMat;
 
         //------------------------\\
 
@@ -144,7 +145,19 @@ namespace FirewoodEngine
             {
                 house.transform.position.Y += 5f * (float)e.Time;
             }
-            ground.transform.position.Y -= 2f * (float)e.Time;
+            
+            
+            
+            if (house.transform.position.X < 0)
+            {
+                lineMat.color = Color.Red;
+            }
+            else
+            {
+                lineMat.color = Color.Green;
+            }
+
+
 
             base.OnUpdateFrame(e);
         }
@@ -191,23 +204,18 @@ namespace FirewoodEngine
             Thread physicsThread = new Thread(new ThreadStart(startPhysics));
             physicsThread.Start();
 
-
+            lineMat = new Material();
+            lineMat.shader = colorShader;
+            lineMat.color = Color.Blue;
 
             firstGameobject = new GameObject();
-            firstGameobject.name = "Line";
-            firstGameobject.transform.position = new Vector3(0, 10, 0);
-            LineRenderer lRenderer = new LineRenderer(new Vector3(3, 12, 3), new Vector3(1, 3, 8), Color.White);
+            firstGameobject.name = "Lines";
+            firstGameobject.transform.position = new Vector3(5, 0, 5);
+            LineRenderer lRenderer = new LineRenderer(new Vector3(-10, 3, 0), new Vector3(-8, 3, 0));
+            lRenderer.material = lineMat;
             lRenderer.useLocal = true;
             firstGameobject.AddComponent(lRenderer);
             RenderManager.AddRenderer(lRenderer);
-
-            GameObject secondGameobject = new GameObject();
-            secondGameobject.name = "Line";
-            secondGameobject.transform.position = new Vector3(10, 10, 5);
-            LineRenderer lRenderer2 = new LineRenderer(new Vector3(1, 5, 7), new Vector3(1, 3, 8), Color.White);
-            lRenderer2.useLocal = true;
-            secondGameobject.AddComponent(lRenderer2);
-            RenderManager.AddRenderer(lRenderer2);
 
 
 

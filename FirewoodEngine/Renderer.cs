@@ -14,12 +14,10 @@ namespace FirewoodEngine
     {
         public float[] vertices;
         public float[] triangles;
-        
         public bool wireframe = false;
-
         public readonly int VertexArrayObject;
-        
         public Material material;
+        public bool rgb = false;
 
         public Renderer()
         {
@@ -55,7 +53,8 @@ namespace FirewoodEngine
             int projectionLocation = GL.GetUniformLocation(material.shader.Handle, "projection");
             GL.UniformMatrix4(projectionLocation, true, ref projection);
             
-            //material.color = Colors.ColorFromHSV((timeValue * 100) % 255, 1, 1);
+            if (rgb == true)
+                material.color = Colors.ColorFromHSV((timeValue * 100) % 255, 1, 1);
 
             GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
 

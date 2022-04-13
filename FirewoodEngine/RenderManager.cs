@@ -53,7 +53,7 @@ namespace FirewoodEngine
 
             foreach (LineRenderer rend in lineRenderers)
             {
-                rend.Draw();
+                rend.Draw(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos);
             }
 
         }
