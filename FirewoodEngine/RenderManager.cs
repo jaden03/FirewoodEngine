@@ -19,7 +19,9 @@ namespace FirewoodEngine
 
         public static void Initialize()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Renderer Initialized");
+            Console.ForegroundColor = ConsoleColor.White;
 
             GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
             GL.Enable(EnableCap.DepthTest);

@@ -16,7 +16,6 @@ namespace FirewoodEngine
         public Vector3 position2;
         public bool useLocal = false;
         public Material material;
-        public bool rgb = false;
 
         public LineRenderer()
         {
@@ -41,7 +40,7 @@ namespace FirewoodEngine
 
             material.shader.Use();
 
-            if (rgb == true)
+            if (material.rgb == true)
                 material.color = Colors.ColorFromHSV((timeValue * 100) % 255, 1, 1);
 
             int modelLocation = GL.GetUniformLocation(material.shader.Handle, "model");

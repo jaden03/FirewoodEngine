@@ -17,7 +17,6 @@ namespace FirewoodEngine
         public bool wireframe = false;
         public readonly int VertexArrayObject;
         public Material material;
-        public bool rgb = false;
 
         public Renderer()
         {
@@ -30,6 +29,8 @@ namespace FirewoodEngine
                 OBJLoader.loadOBJFromFileWithTexture(path, out vertices, out triangles);
             else
                 OBJLoader.loadOBJFromFile(path, out vertices, out triangles);
+
+            
         }
 
         public void Render(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos)
@@ -53,7 +54,7 @@ namespace FirewoodEngine
             int projectionLocation = GL.GetUniformLocation(material.shader.Handle, "projection");
             GL.UniformMatrix4(projectionLocation, true, ref projection);
             
-            if (rgb == true)
+            if (material.rgb == true)
                 material.color = Colors.ColorFromHSV((timeValue * 100) % 255, 1, 1);
 
             GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);

@@ -12,6 +12,7 @@ namespace FirewoodEngine
         public Shader shader;
         public Texture texture;
         public Color color;
+        public bool rgb = false;
 
         public Material()
         {

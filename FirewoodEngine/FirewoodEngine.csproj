@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Textures\grass.png" />
+    <Content Include="Textures\ground.png" />
     <Content Include="Textures\House.png" />
     <Content Include="Textures\LaBetterTexture.png" />
     <Content Include="Textures\Untitled.png" />

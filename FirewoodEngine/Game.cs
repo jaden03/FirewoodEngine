@@ -39,11 +39,12 @@ namespace FirewoodEngine
 
         public Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
-        GameObject firstGameobject;
+        GameObject lineObject;
         GameObject house;
         GameObject ground;
 
         Material lineMat;
+        LineRenderer line;
 
         //------------------------\\
 
@@ -123,38 +124,48 @@ namespace FirewoodEngine
 
             if (input.IsKeyDown(Key.Left))
             {
+                line.position1.X += 5f * (float)e.Time;
                 house.transform.position.X += 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.Right))
             {
+                line.position1.X -= 5f * (float)e.Time;
                 house.transform.position.X -= 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.Down))
             {
+                line.position1.Z -= 5f * (float)e.Time;
                 house.transform.position.Z -= 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.Up))
             {
+                line.position1.Z += 5f * (float)e.Time;
                 house.transform.position.Z += 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.E))
             {
+                line.position1.Y += 5f * (float)e.Time;
                 house.transform.position.Y -= 5f * (float)e.Time;
             }
             if (input.IsKeyDown(Key.Q))
             {
+                line.position1.Y -= 5f * (float)e.Time;
                 house.transform.position.Y += 5f * (float)e.Time;
             }
+
             
+
             
+
+
             
-            if (house.transform.position.X < 0)
+            if (line.position1.Y < 0)
             {
                 lineMat.color = Color.Red;
             }
             else
             {
-                lineMat.color = Color.Green;
+                lineMat.color = Color.Blue;
             }
 
 
@@ -208,23 +219,24 @@ namespace FirewoodEngine
             lineMat.shader = colorShader;
             lineMat.color = Color.Blue;
 
-            firstGameobject = new GameObject();
-            firstGameobject.name = "Lines";
-            firstGameobject.transform.position = new Vector3(5, 0, 5);
-            LineRenderer lRenderer = new LineRenderer(new Vector3(-10, 3, 0), new Vector3(-8, 3, 0));
-            lRenderer.material = lineMat;
-            lRenderer.useLocal = true;
-            firstGameobject.AddComponent(lRenderer);
-            RenderManager.AddRenderer(lRenderer);
+            lineObject = new GameObject();
+            lineObject.name = "Lines";
+            lineObject.transform.position = new Vector3(5, 0, 5);
+            line = new LineRenderer(new Vector3(-8.8f, 0.3f, -2.8f), new Vector3(-8, 3, 0));
+            line.material = lineMat;
+            line.useLocal = true;
+            lineObject.AddComponent(line);
+            RenderManager.AddRenderer(line);
 
 
 
             Material groundMat = new Material();
-            groundMat.shader = colorShader;
-            groundMat.color = Color.Green;
+            groundMat.SetTexture("ground.png");
+            groundMat.shader = textureShader;
 
             ground = new GameObject();
             ground.name = "Ground";
+            ground.transform.position.Y = -3;
             Renderer groundRenderer = new Renderer();
             groundRenderer.SetOBJ("ground.obj", groundMat.texture != null);
             groundRenderer.material = groundMat;
