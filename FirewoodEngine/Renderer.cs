@@ -29,8 +29,6 @@ namespace FirewoodEngine
                 OBJLoader.loadOBJFromFileWithTexture(path, out vertices, out triangles);
             else
                 OBJLoader.loadOBJFromFile(path, out vertices, out triangles);
-
-            
         }
 
         public void Render(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos)

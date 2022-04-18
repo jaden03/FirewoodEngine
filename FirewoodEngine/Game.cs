@@ -46,6 +46,11 @@ namespace FirewoodEngine
         Material lineMat;
         LineRenderer line;
 
+        List<float> vertices;
+        List<float> triangles;
+
+        float[][] noise;
+
         //------------------------\\
 
 
@@ -159,14 +164,14 @@ namespace FirewoodEngine
 
 
             
-            if (line.position1.Y < 0)
-            {
-                lineMat.color = Color.Red;
-            }
-            else
-            {
-                lineMat.color = Color.Blue;
-            }
+            //if (line.position1.Y < 0)
+            //{
+            //    lineMat.color = Color.Red;
+            //}
+            //else
+            //{
+            //    lineMat.color = Color.Blue;
+            //}
 
 
 
@@ -201,6 +206,93 @@ namespace FirewoodEngine
             base.OnMouseWheel(e);
         }
 
+
+        void AddQuadAtPosition(Vector2 pos)
+        {
+            Vector2 noisePos = new Vector2(pos.X + .5f, pos.Y + .5f);
+
+            float bottomLeftNoise = noise[(int)Math.Round(noisePos.X - .5f)][(int)Math.Round(noisePos.Y - .5f)] * 5;
+            //bottomLeftNoise = (float)Math.Round(bottomLeftNoise * 3) / 3;
+            
+            vertices.Add(pos.X - .5f);
+            vertices.Add(bottomLeftNoise);
+            vertices.Add(pos.Y - .5f);
+            triangles.Add(pos.X - .5f);
+            triangles.Add(bottomLeftNoise);
+            triangles.Add(pos.Y - .5f);
+
+            vertices.Add(0);
+            vertices.Add(1);
+            vertices.Add(0);
+
+            float topLeftNoise = noise[(int)Math.Round(noisePos.X - .5f)][(int)Math.Round(noisePos.Y + .5f)] * 5;
+            //topLeftNoise = (float)Math.Round(topLeftNoise * 3) / 3;
+
+            vertices.Add(pos.X - .5f);
+            vertices.Add(topLeftNoise);
+            vertices.Add(pos.Y + .5f);
+            triangles.Add(pos.X - .5f);
+            triangles.Add(topLeftNoise);
+            triangles.Add(pos.Y + .5f);
+
+            vertices.Add(0);
+            vertices.Add(1);
+            vertices.Add(0);
+
+            float topRightNoise = noise[(int)Math.Round(noisePos.X + .5f)][(int)Math.Round(noisePos.Y + .5f)] * 5;
+            //topRightNoise = (float)Math.Round(topRightNoise * 3) / 3;
+
+            vertices.Add(pos.X + .5f);
+            vertices.Add(topRightNoise);
+            vertices.Add(pos.Y + .5f);
+            triangles.Add(pos.X + .5f);
+            triangles.Add(topRightNoise);
+            triangles.Add(pos.Y + .5f);
+
+            vertices.Add(0);
+            vertices.Add(1);
+            vertices.Add(0);
+
+            vertices.Add(pos.X + .5f);
+            vertices.Add(topRightNoise);
+            vertices.Add(pos.Y + .5f);
+            triangles.Add(pos.X + .5f);
+            triangles.Add(topRightNoise);
+            triangles.Add(pos.Y + .5f);
+
+            vertices.Add(0);
+            vertices.Add(1);
+            vertices.Add(0);
+
+            float bottomRightNoise = noise[(int)Math.Round(noisePos.X + .5f)][(int)Math.Round(noisePos.Y - .5f)] * 5;
+            //bottomRightNoise = (float)Math.Round(bottomRightNoise * 3) / 3;
+
+            vertices.Add(pos.X + .5f);
+            vertices.Add(bottomRightNoise);
+            vertices.Add(pos.Y - .5f);
+            triangles.Add(pos.X + .5f);
+            triangles.Add(bottomRightNoise);
+            triangles.Add(pos.Y - .5f);
+
+            vertices.Add(0);
+            vertices.Add(1);
+            vertices.Add(0);
+
+            vertices.Add(pos.X - .5f);
+            vertices.Add(bottomLeftNoise);
+            vertices.Add(pos.Y - .5f);
+            triangles.Add(pos.X - .5f);
+            triangles.Add(bottomLeftNoise);
+            triangles.Add(pos.Y - .5f);
+
+            vertices.Add(0);
+            vertices.Add(1);
+            vertices.Add(0);
+
+        }
+
+
+
         protected override void OnLoad(EventArgs e)
         {
             RenderManager.Initialize();
@@ -228,20 +320,19 @@ namespace FirewoodEngine
             lineObject.AddComponent(line);
             RenderManager.AddRenderer(line);
 
+            //Material groundMat = new Material();
+            //groundMat.SetTexture("ground.png");
+            //groundMat.shader = textureShader;
 
-
-            Material groundMat = new Material();
-            groundMat.SetTexture("ground.png");
-            groundMat.shader = textureShader;
-
-            ground = new GameObject();
-            ground.name = "Ground";
-            ground.transform.position.Y = -3;
-            Renderer groundRenderer = new Renderer();
-            groundRenderer.SetOBJ("ground.obj", groundMat.texture != null);
-            groundRenderer.material = groundMat;
-            ground.AddComponent(groundRenderer);
-            RenderManager.AddRenderer(groundRenderer);
+            //ground = new GameObject();
+            //ground.name = "Ground";
+            //ground.transform.position.Y = -3;
+            
+            //Renderer groundRenderer = new Renderer();
+            //groundRenderer.SetOBJ("ground.obj", groundMat.texture != null);
+            //groundRenderer.material = groundMat;
+            //ground.AddComponent(groundRenderer);
+            //RenderManager.AddRenderer(groundRenderer);
             
 
 
@@ -251,11 +342,76 @@ namespace FirewoodEngine
 
             house = new GameObject();
             house.name = "House";
+            house.transform.position = new Vector3(0, 5, 0);
             Renderer houseRenderer = new Renderer();
             houseRenderer.SetOBJ("house.obj", houseMat.texture != null);
             houseRenderer.material = houseMat;
             house.AddComponent(houseRenderer);
             RenderManager.AddRenderer(houseRenderer);
+
+
+
+
+
+            Material terrainMat = new Material();
+            terrainMat.color = Color.Green;
+            terrainMat.shader = colorShader;
+
+            //GameObject plane = new GameObject();
+            //plane.name = "Terrain";
+            //plane.transform.position.Y = -3;
+            //Renderer planeRenderer = new Renderer();
+            //planeRenderer.SetOBJ("plane.obj", terrainMat.texture != null);
+            //planeRenderer.material = terrainMat;
+            //plane.AddComponent(planeRenderer);
+            //RenderManager.AddRenderer(planeRenderer);
+
+            //// loop through the vertices and log them
+            //foreach (float v in planeRenderer.triangles)
+            //{
+            //    Console.WriteLine(v);
+            //}
+
+            GameObject terrain = new GameObject();
+            terrain.name = "Terrain";
+            terrain.transform.position.Y = -3;
+            Renderer terrainRenderer = new Renderer();
+            terrainRenderer.material = terrainMat;
+            terrain.AddComponent(terrainRenderer);
+
+            vertices = new List<float>();
+            triangles = new List<float>();
+
+            int size = 10;
+
+            noise = Noise.GeneratePerlinNoise(Noise.GenerateWhiteNoise(size * 10, size * 10), 3);
+            for (int x = 1; x < size; x++)
+            {
+                for (int y = 1; y < size; y++)
+                {
+                    AddQuadAtPosition(new Vector2(x, y));
+                }
+            }
+
+            terrainRenderer.vertices = new float[vertices.Count];
+            terrainRenderer.triangles = new float[triangles.Count];
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                terrainRenderer.vertices[i] = vertices[i];
+            }
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                terrainRenderer.triangles[i] = triangles[i];
+            }
+
+            RenderManager.AddRenderer(terrainRenderer);
+
+
+
+
+
+
 
 
             stopwatch.Start();
