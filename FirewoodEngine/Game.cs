@@ -28,7 +28,7 @@ namespace FirewoodEngine
         Vector2 lastPos;
         float pitch = 0;
         float yaw = 90;
-        float sensitivity = 0.25f;
+        float sensitivity = 0.05f;
         float fov = 90f;
 
 
@@ -307,6 +307,26 @@ namespace FirewoodEngine
             Thread physicsThread = new Thread(new ThreadStart(startPhysics));
             physicsThread.Start();
 
+
+
+
+
+            var skyboxMat = new Material();
+            skyboxMat.SetTexture("skybox.png");
+            skyboxMat.shader = textureShader;
+
+            var skybox = new GameObject();
+            var skyboxRenderer = new Renderer();
+            skyboxRenderer.SetOBJ("skyboxCube.obj", skyboxMat.texture != null);
+            skyboxRenderer.material = skyboxMat;
+
+            skybox.AddComponent(skyboxRenderer);
+            skybox.transform.scale = new Vector3(100, 100, 100);
+
+            RenderManager.AddRenderer(skyboxRenderer);
+
+
+
             lineMat = new Material();
             lineMat.shader = colorShader;
             lineMat.color = Color.Blue;
@@ -437,7 +457,7 @@ namespace FirewoodEngine
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             Matrix4 view = Matrix4.LookAt(camPosition, camPosition + front, up);
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), (float)Width / Height, 0.1f, 100.0f);
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), (float)Width / Height, 0.1f, 1000.0f);
             Context.SwapBuffers();
 
             RenderManager.Render(view, projection, stopwatch, _lightPos, camPosition);
