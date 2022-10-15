@@ -21,7 +21,7 @@ namespace FirewoodEngine
 
         public void SetTexture(string path)
         {
-            texture = Texture.LoadFromFile("C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Textures/" + path);
+            texture = Texture.LoadFromFile("../../Textures/" + path);
         }
 
     }

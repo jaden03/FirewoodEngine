@@ -112,7 +112,7 @@ namespace FirewoodEngine
 
             float fartherestPoint = 0;
 
-            foreach (string line in File.ReadLines("C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Models/" + path))
+            foreach (string line in File.ReadLines("../../Models/" + path))
             {
                 if (line.StartsWith("v "))
                 {

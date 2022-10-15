@@ -301,8 +301,8 @@ namespace FirewoodEngine
 
             Location = new System.Drawing.Point(80, 45);
             
-            colorShader = new Shader("C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Shaders/color.vert", "C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Shaders/color.frag");
-            textureShader = new Shader("C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Shaders/texture.vert", "C:/Users/PC/source/repos/FirewoodEngine/FirewoodEngine/Shaders/texture.frag");
+            colorShader = new Shader("../../Shaders/color.vert", "../../Shaders/color.frag");
+            textureShader = new Shader("../../Shaders/texture.vert", "../../Shaders/texture.frag");
 
             Thread physicsThread = new Thread(new ThreadStart(startPhysics));
             physicsThread.Start();
