@@ -32,7 +32,7 @@ namespace FirewoodEngine
         {
             Vector2 noisePos = new Vector2(pos.X + .5f, pos.Y + .5f);
 
-            float bottomLeftNoise = noise[(int)Math.Round(noisePos.X - .5f)][(int)Math.Round(noisePos.Y - .5f)] * 5;
+            float bottomLeftNoise = noise[(int)Math.Round(noisePos.X - .5f)][(int)Math.Round(noisePos.Y - .5f)] * 3;
             //bottomLeftNoise = (float)Math.Round(bottomLeftNoise * 3) / 3;
 
             vertices.Add(pos.X - .5f);
@@ -42,7 +42,7 @@ namespace FirewoodEngine
             triangles.Add(bottomLeftNoise);
             triangles.Add(pos.Y - .5f);
 
-            float topLeftNoise = noise[(int)Math.Round(noisePos.X - .5f)][(int)Math.Round(noisePos.Y + .5f)] * 5;
+            float topLeftNoise = noise[(int)Math.Round(noisePos.X - .5f)][(int)Math.Round(noisePos.Y + .5f)] * 3;
             //topLeftNoise = (float)Math.Round(topLeftNoise * 3) / 3;
 
             vertices.Add(pos.X - .5f);
@@ -53,7 +53,7 @@ namespace FirewoodEngine
             triangles.Add(pos.Y + .5f);
          
       
-            float topRightNoise = noise[(int)Math.Round(noisePos.X + .5f)][(int)Math.Round(noisePos.Y + .5f)] * 5;
+            float topRightNoise = noise[(int)Math.Round(noisePos.X + .5f)][(int)Math.Round(noisePos.Y + .5f)] * 3;
             //topRightNoise = (float)Math.Round(topRightNoise * 3) / 3;
 
             vertices.Add(pos.X + .5f);
@@ -72,7 +72,7 @@ namespace FirewoodEngine
             triangles.Add(pos.Y + .5f);
 
 
-            float bottomRightNoise = noise[(int)Math.Round(noisePos.X + .5f)][(int)Math.Round(noisePos.Y - .5f)] * 5;
+            float bottomRightNoise = noise[(int)Math.Round(noisePos.X + .5f)][(int)Math.Round(noisePos.Y - .5f)] * 3;
             //bottomRightNoise = (float)Math.Round(bottomRightNoise * 3) / 3;
 
             vertices.Add(pos.X + .5f);
@@ -134,10 +134,9 @@ namespace FirewoodEngine
             Input.HideCursor = true;
             Input.LockCursor = true;
 
-
             // Create a new GameObject
             var cameraObject = new GameObject();
-            cameraObject.transform.position = new Vector3(0.0f, 0.0f, -5.0f);
+            cameraObject.transform.position = new Vector3(0, 5, -5);
             cameraObject.name = "Camera";
             // Create a camera component
             var camera = new Camera();
@@ -196,6 +195,7 @@ namespace FirewoodEngine
             house = new GameObject();
             house.name = "House";
             house.transform.position = new Vector3(0, 5, 0);
+            house.transform.eulerAngles = new Vector3(0, 45, 0);
             Renderer houseRenderer = new Renderer();
             houseRenderer.SetOBJ("house.obj", houseMat.texture != null);
             houseRenderer.material = houseMat;
@@ -243,6 +243,16 @@ namespace FirewoodEngine
             if (Input.GetKey(Key.Escape))
             {
                 app.Exit();
+            }
+
+
+            if (Input.GetKey(Key.Q))
+            {
+                house.transform.position.Y -= 2f * (float)e.Time;
+            }
+            if (Input.GetKey(Key.E))
+            {
+                house.transform.position.Y += 2f * (float)e.Time;
             }
         }
 
