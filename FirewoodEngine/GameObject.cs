@@ -21,7 +21,7 @@ namespace FirewoodEngine
 
         public void AddComponent(Component component)
         {
-            component.gameobject = this;
+            component.gameObject = this;
             component.transform = transform;
             components.Add(component);
         }

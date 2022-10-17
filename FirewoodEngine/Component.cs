@@ -8,7 +8,7 @@ namespace FirewoodEngine
 {
     class Component
     {
-        public GameObject gameobject;
+        public GameObject gameObject;
         public Transform transform;
     }
 }

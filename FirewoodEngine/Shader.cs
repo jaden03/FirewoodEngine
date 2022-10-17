@@ -12,6 +12,9 @@ namespace FirewoodEngine
     {
         public int Handle;
 
+        public static Shader colorShader = new Shader("../../Shaders/color.vert", "../../Shaders/color.frag");
+        public static Shader textureShader = new Shader("../../Shaders/texture.vert", "../../Shaders/texture.frag");
+
         public Shader(string vertexPath, string fragmentPath)
         {
             int VertexShader;

@@ -10,9 +10,9 @@ namespace FirewoodEngine
     {
         static void Main(string[] args)
         {
-            using (Game game = new Game(1920, 1080, "FirewoodEngine"))
+            using (Application application = new Application(1920, 1080, "FirewoodEngine"))
             {
-                game.Run(144.0);
+                application.Run(144.0);
             }
         }
     }

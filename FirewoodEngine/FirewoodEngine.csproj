@@ -60,10 +60,14 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="Component.cs" />
+    <Compile Include="Freecam.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Application.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="Input.cs" />
     <Compile Include="LineRenderer.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="MainProgram.cs" />

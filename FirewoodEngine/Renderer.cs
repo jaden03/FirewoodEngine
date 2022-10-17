@@ -35,9 +35,9 @@ namespace FirewoodEngine
         {
             Matrix4 model =
             (
-                Matrix4.CreateScale(gameobject.transform.scale) 
-                * Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(gameobject.transform.eulerAngles.X, gameobject.transform.eulerAngles.Y, gameobject.transform.eulerAngles.Z))
-                * Matrix4.CreateTranslation(gameobject.transform.position)
+                Matrix4.CreateScale(gameObject.transform.scale) 
+                * Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(gameObject.transform.eulerAngles.X, gameObject.transform.eulerAngles.Y, gameObject.transform.eulerAngles.Z))
+                * Matrix4.CreateTranslation(gameObject.transform.position)
             );
 
             //texture.Use(TextureUnit.Texture0);

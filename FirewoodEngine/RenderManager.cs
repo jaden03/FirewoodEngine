@@ -11,6 +11,7 @@ using System.Diagnostics;
 
 namespace FirewoodEngine
 {
+    using static Logging;
     class RenderManager
     {
         public static List<Renderer> renderers;
