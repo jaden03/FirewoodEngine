@@ -62,27 +62,27 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera.cs" />
-    <Compile Include="Colors.cs" />
-    <Compile Include="Component.cs" />
-    <Compile Include="Freecam.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="Application.cs" />
-    <Compile Include="GameObject.cs" />
-    <Compile Include="Input.cs" />
-    <Compile Include="LineRenderer.cs" />
-    <Compile Include="Logging.cs" />
-    <Compile Include="MainProgram.cs" />
-    <Compile Include="Material.cs" />
-    <Compile Include="Noise.cs" />
-    <Compile Include="OBJLoader.cs" />
-    <Compile Include="Physics.cs" />
-    <Compile Include="Renderer.cs" />
-    <Compile Include="RenderManager.cs" />
-    <Compile Include="Rigidbody.cs" />
-    <Compile Include="Shader.cs" />
-    <Compile Include="Texture.cs" />
-    <Compile Include="Transform.cs" />
+    <Compile Include="Components\Camera.cs" />
+    <Compile Include="Core\Colors.cs" />
+    <Compile Include="Core\Component.cs" />
+    <Compile Include="Scripts\Freecam.cs" />
+    <Compile Include="Scripts\Game.cs" />
+    <Compile Include="Core\Application.cs" />
+    <Compile Include="Core\GameObject.cs" />
+    <Compile Include="Core\Input.cs" />
+    <Compile Include="Components\LineRenderer.cs" />
+    <Compile Include="Core\Logging.cs" />
+    <Compile Include="Core\MainProgram.cs" />
+    <Compile Include="Core\Material.cs" />
+    <Compile Include="Core\Noise.cs" />
+    <Compile Include="Core\OBJLoader.cs" />
+    <Compile Include="Core\Physics.cs" />
+    <Compile Include="Components\Renderer.cs" />
+    <Compile Include="Core\RenderManager.cs" />
+    <Compile Include="Components\Rigidbody.cs" />
+    <Compile Include="Core\Shader.cs" />
+    <Compile Include="Core\Texture.cs" />
+    <Compile Include="Core\Transform.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Textures\grass.png" />
