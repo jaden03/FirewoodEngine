@@ -42,6 +42,8 @@
     <None Include="Models\cube.obj" />
     <None Include="Models\plane.obj" />
     <None Include="Models\player.obj" />
+    <None Include="Models\skyboxCube.mtl" />
+    <None Include="Models\skyboxCube.obj" />
     <None Include="Models\TheMountain.obj" />
     <None Include="Models\untitled.obj" />
     <None Include="OpenTK.dll.config" />
@@ -87,6 +89,7 @@
     <Content Include="Textures\ground.png" />
     <Content Include="Textures\House.png" />
     <Content Include="Textures\LaBetterTexture.png" />
+    <Content Include="Textures\skybox.png" />
     <Content Include="Textures\Untitled.png" />
     <Content Include="Textures\wall.png" />
   </ItemGroup>
