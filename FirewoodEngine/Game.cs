@@ -207,7 +207,7 @@ namespace FirewoodEngine
             houseRenderer.material = houseMat;
             house.AddComponent(houseRenderer);
 
-            // Rigidbody on the house
+            // Rigidbody on the house for physics (no collision rn)
             var houseRB = new Rigidbody();
             house.AddComponent(houseRB);
 
