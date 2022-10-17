@@ -15,19 +15,13 @@ namespace FirewoodEngine
     {
         public Application app;
         
-
-        GameObject lineObject;
         GameObject house;
-        GameObject ground;
-
-        Material lineMat;
-        LineRenderer line;
 
         List<float> vertices;
         List<float> triangles;
 
         float[][] noise;
-
+        
         void AddQuadAtPosition(Vector2 pos)
         {
             Vector2 noisePos = new Vector2(pos.X + .5f, pos.Y + .5f);
@@ -129,8 +123,10 @@ namespace FirewoodEngine
             return newVerticesList;
         }
 
+        // Fires on the first frame of the game
         public void Start()
         {
+            // Hide the cursor and lock it to the center of the screen
             Input.HideCursor = true;
             Input.LockCursor = true;
 
@@ -156,59 +152,78 @@ namespace FirewoodEngine
             // Add the freecam component to the active scripts so the update function will work (will be refactored so you dont have to do this)
             app.activeScripts.Add(freecam);
 
-
-
-
-
+            
+            // Skybox material
             var skyboxMat = new Material();
             skyboxMat.SetTexture("skybox.png");
             skyboxMat.shader = Shader.textureShader;
 
+            // Skybox object
             var skybox = new GameObject();
+            
+            // Skybox renderer
             var skyboxRenderer = new Renderer();
             skyboxRenderer.SetOBJ("skyboxCube.obj", skyboxMat.texture != null);
             skyboxRenderer.material = skyboxMat;
 
+            // Add the renderer to the skybox and scale it up  (the skybox is literally just a big cube with inverted normals and a texture)
             skybox.AddComponent(skyboxRenderer);
             skybox.transform.scale = new Vector3(100, 100, 100);
+            
 
 
-
-            lineMat = new Material();
+            // line material
+            var lineMat = new Material();
             lineMat.shader = Shader.colorShader;
             lineMat.color = Color.Blue;
 
-            lineObject = new GameObject();
+            // line object
+            var lineObject = new GameObject();
             lineObject.name = "Lines";
             lineObject.transform.position = new Vector3(5, 0, 5);
-            line = new LineRenderer(new Vector3(-8.8f, 0.3f, -2.8f), new Vector3(-8, 3, 0));
+
+            // line renderer
+            var line = new LineRenderer(new Vector3(-8.8f, 0.3f, -2.8f), new Vector3(-8, 3, 0));
             line.material = lineMat;
             line.useLocal = true;
             lineObject.AddComponent(line);
 
+            
+            
+            // house material
             Material houseMat = new Material();
             houseMat.SetTexture("House.png");
             houseMat.shader = Shader.textureShader;
 
+            // house gameobject
             house = new GameObject();
             house.name = "House";
             house.transform.position = new Vector3(0, 5, 0);
             house.transform.eulerAngles = new Vector3(0, 45, 0);
+
+            // house renderer
             Renderer houseRenderer = new Renderer();
             houseRenderer.SetOBJ("house.obj", houseMat.texture != null);
             houseRenderer.material = houseMat;
             house.AddComponent(houseRenderer);
+
+            // Rigidbody on the house
             var houseRB = new Rigidbody();
             house.AddComponent(houseRB);
 
+            
 
+            // terrain material
             Material terrainMat = new Material();
             terrainMat.color = Color.Green;
             terrainMat.shader = Shader.colorShader;
 
+            // terrain gameobject
             GameObject terrain = new GameObject();
             terrain.name = "Terrain";
             terrain.transform.position.Y = -3;
+
+            // terrain renderer
             Renderer terrainRenderer = new Renderer();
             terrainRenderer.material = terrainMat;
             terrain.AddComponent(terrainRenderer);
@@ -235,14 +250,17 @@ namespace FirewoodEngine
         }
 
 
+        // Fires every frame
         public void Update(FrameEventArgs e)
         {
+            // If escape is pressed, exit the game
             if (Input.GetKey(Key.Escape))
             {
                 app.Exit();
             }
 
 
+            // Move the house up and down with Q and E
             if (Input.GetKey(Key.Q))
             {
                 house.transform.position.Y -= 2f * (float)e.Time;
