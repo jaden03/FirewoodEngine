@@ -13,3 +13,7 @@ Im also pretty proud of the obj loader. I know its not much, but I really liked 
 file works and using that information to make an obj loader.
 
 Its all probably fundamentally wrong but I dont really know. Atleast it works.
+
+
+Edit:
+It now actually uses a gameobject component based system (kinda like Unity) so thats pretty cool, I guess
