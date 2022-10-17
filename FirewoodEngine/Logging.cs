@@ -8,24 +8,23 @@ namespace FirewoodEngine
 {
     public static class Logging
     {
-        public static void Print(string message)
+        public static void Print(object message)
         {
             Console.WriteLine(message);
         }
 
-        public static void Print(int message)
+        public static void Warn(object message)
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.Green;
         }
 
-        public static void Print(float message)
+        public static void Error(object message)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
-        }
-
-        public static void Print(bool message)
-        {
-            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.Green;
         }
     }
 }

@@ -221,9 +221,9 @@ namespace FirewoodEngine
             triangles.Add(bottomLeftNoise);
             triangles.Add(pos.Y - .5f);
 
-            vertices.Add(0);
-            vertices.Add(1);
-            vertices.Add(0);
+            //vertices.Add(0);
+            //vertices.Add(1);
+            //vertices.Add(0);
 
             float topLeftNoise = noise[(int)Math.Round(noisePos.X - .5f)][(int)Math.Round(noisePos.Y + .5f)] * 5;
             //topLeftNoise = (float)Math.Round(topLeftNoise * 3) / 3;
@@ -235,9 +235,9 @@ namespace FirewoodEngine
             triangles.Add(topLeftNoise);
             triangles.Add(pos.Y + .5f);
 
-            vertices.Add(0);
-            vertices.Add(1);
-            vertices.Add(0);
+            //vertices.Add(0);
+            //vertices.Add(1);
+            //vertices.Add(0);
 
             float topRightNoise = noise[(int)Math.Round(noisePos.X + .5f)][(int)Math.Round(noisePos.Y + .5f)] * 5;
             //topRightNoise = (float)Math.Round(topRightNoise * 3) / 3;
@@ -249,9 +249,9 @@ namespace FirewoodEngine
             triangles.Add(topRightNoise);
             triangles.Add(pos.Y + .5f);
 
-            vertices.Add(0);
-            vertices.Add(1);
-            vertices.Add(0);
+            //vertices.Add(0);
+            //vertices.Add(1);
+            //vertices.Add(0);
 
             vertices.Add(pos.X + .5f);
             vertices.Add(topRightNoise);
@@ -260,9 +260,9 @@ namespace FirewoodEngine
             triangles.Add(topRightNoise);
             triangles.Add(pos.Y + .5f);
 
-            vertices.Add(0);
-            vertices.Add(1);
-            vertices.Add(0);
+            //vertices.Add(0);
+            //vertices.Add(1);
+            //vertices.Add(0);
 
             float bottomRightNoise = noise[(int)Math.Round(noisePos.X + .5f)][(int)Math.Round(noisePos.Y - .5f)] * 5;
             //bottomRightNoise = (float)Math.Round(bottomRightNoise * 3) / 3;
@@ -274,9 +274,9 @@ namespace FirewoodEngine
             triangles.Add(bottomRightNoise);
             triangles.Add(pos.Y - .5f);
 
-            vertices.Add(0);
-            vertices.Add(1);
-            vertices.Add(0);
+            //vertices.Add(0);
+            //vertices.Add(1);
+            //vertices.Add(0);
 
             vertices.Add(pos.X - .5f);
             vertices.Add(bottomLeftNoise);
@@ -285,10 +285,51 @@ namespace FirewoodEngine
             triangles.Add(bottomLeftNoise);
             triangles.Add(pos.Y - .5f);
 
-            vertices.Add(0);
-            vertices.Add(1);
-            vertices.Add(0);
+            //vertices.Add(0);
+            //vertices.Add(1);
+            //vertices.Add(0);
+        }
+        
+        List<float> RecalculateNormals(List<float> vertices)
+        {
+            List<float> newVerticesList;
+            newVerticesList = new List<float>();
 
+            for (int i = 0; i < vertices.Count; i += 9)
+            {
+                Vector3 v1 = new Vector3(vertices[i], vertices[i + 1], vertices[i + 2]);
+                Vector3 v2 = new Vector3(vertices[i + 3], vertices[i + 4], vertices[i + 5]);
+                Vector3 v3 = new Vector3(vertices[i + 6], vertices[i + 7], vertices[i + 8]);
+
+                Vector3 normal = Vector3.Cross(v2 - v1, v3 - v1);
+                normal.Normalize();
+
+                newVerticesList.Add(vertices[i]);
+                newVerticesList.Add(vertices[i + 1]);
+                newVerticesList.Add(vertices[i + 2]);
+                newVerticesList.Add(normal.X);
+                newVerticesList.Add(normal.Y);
+                newVerticesList.Add(normal.Z);
+
+                newVerticesList.Add(vertices[i + 3]);
+                newVerticesList.Add(vertices[i + 4]);
+                newVerticesList.Add(vertices[i + 5]);
+                newVerticesList.Add(normal.X);
+                newVerticesList.Add(normal.Y);
+                newVerticesList.Add(normal.Z);
+
+                newVerticesList.Add(vertices[i + 6]);
+                newVerticesList.Add(vertices[i + 7]);
+                newVerticesList.Add(vertices[i + 8]);
+                newVerticesList.Add(normal.X);
+                newVerticesList.Add(normal.Y);
+                newVerticesList.Add(normal.Z);
+
+                Warn("Normal: " + normal.X + ", " + normal.Y + ", " + normal.Z);
+                Warn("Vertex: " + vertices[i] + ", " + vertices[i + 1] + ", " + vertices[i + 2]);
+            }
+
+            return newVerticesList;
         }
 
 
@@ -413,17 +454,9 @@ namespace FirewoodEngine
                 }
             }
 
-            terrainRenderer.vertices = new float[vertices.Count];
-            terrainRenderer.triangles = new float[triangles.Count];
-
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                terrainRenderer.vertices[i] = vertices[i];
-            }
-            for (int i = 0; i < triangles.Count; i++)
-            {
-                terrainRenderer.triangles[i] = triangles[i];
-            }
+            vertices = RecalculateNormals(vertices);
+            terrainRenderer.vertices = vertices.ToArray();
+            terrainRenderer.triangles = triangles.ToArray();
 
             RenderManager.AddRenderer(terrainRenderer);
 
