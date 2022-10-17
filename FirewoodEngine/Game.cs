@@ -209,6 +209,7 @@ namespace FirewoodEngine
 
             // Rigidbody on the house for physics (no collision rn)
             var houseRB = new Rigidbody();
+            houseRB.useGravity = false;
             house.AddComponent(houseRB);
 
             
