@@ -171,7 +171,6 @@ namespace FirewoodEngine
 
             skybox.AddComponent(skyboxRenderer);
             skybox.transform.scale = new Vector3(100, 100, 100);
-            RenderManager.AddRenderer(skyboxRenderer);
 
 
 
@@ -186,7 +185,6 @@ namespace FirewoodEngine
             line.material = lineMat;
             line.useLocal = true;
             lineObject.AddComponent(line);
-            RenderManager.AddRenderer(line);
 
             Material houseMat = new Material();
             houseMat.SetTexture("House.png");
@@ -200,8 +198,9 @@ namespace FirewoodEngine
             houseRenderer.SetOBJ("house.obj", houseMat.texture != null);
             houseRenderer.material = houseMat;
             house.AddComponent(houseRenderer);
-            RenderManager.AddRenderer(houseRenderer);
-            
+            var houseRB = new Rigidbody();
+            house.AddComponent(houseRB);
+
 
             Material terrainMat = new Material();
             terrainMat.color = Color.Green;
@@ -232,9 +231,7 @@ namespace FirewoodEngine
 
             vertices = RecalculateNormals(vertices);
             terrainRenderer.vertices = vertices.ToArray();
-            terrainRenderer.triangles = triangles.ToArray();
-
-            RenderManager.AddRenderer(terrainRenderer);
+            terrainRenderer.triangles = triangles.ToArray();;
         }
 
 

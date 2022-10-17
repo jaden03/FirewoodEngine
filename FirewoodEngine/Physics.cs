@@ -11,12 +11,12 @@ namespace FirewoodEngine
     class Physics
     {
 
-        public static List<Renderer> renderers;
+        public static List<Rigidbody> rbs;
         public static Stopwatch stopwatch = new Stopwatch();
 
         public static void Initialize()
         {
-            renderers = new List<Renderer>();
+            rbs = new List<Rigidbody>();
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Physics Initialized");
@@ -25,19 +25,28 @@ namespace FirewoodEngine
             stopwatch.Start();
         }
 
-        public static void AddRenderer(Renderer renderer)
+        public static void AddRigidbody(Rigidbody rb)
         {
-            renderers.Add(renderer);
+            rbs.Add(rb);
         }
 
-        public static void RemoveRenderer(Renderer renderer)
+        public static void RemoveRigidbody(Rigidbody rb)
         {
-            renderers.Remove(renderer);
+            rbs.Remove(rb);
         }
 
         public static void Update()
         {
             var deltaTime = stopwatch.ElapsedTicks * 0.0000001f;
+
+            foreach (Rigidbody rb in rbs)
+            {
+                if (rb.useGravity)
+                {
+                    rb.gameObject.transform.position += new Vector3(0, -9.81f, 0) * deltaTime;
+                }
+            }
+
 
             //foreach (Renderer rend in renderers)
             //{

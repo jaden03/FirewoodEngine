@@ -21,6 +21,7 @@ namespace FirewoodEngine
         public Renderer()
         {
             VertexArrayObject = GL.GenVertexArray();
+            RenderManager.AddRenderer(this);
         }
 
         public void SetOBJ(string path, bool useTexture)

@@ -21,12 +21,14 @@ namespace FirewoodEngine
         {
             position1 = Vector3.Zero;
             position2 = Vector3.One;
+            RenderManager.AddRenderer(this);
         }
 
         public LineRenderer(Vector3 _position1, Vector3 _position2)
         {
             position1 = _position1;
             position2 = _position2;
+            RenderManager.AddRenderer(this);
         }
 
         public void Draw(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos)
