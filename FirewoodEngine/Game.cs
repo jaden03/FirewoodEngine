@@ -172,15 +172,15 @@ namespace FirewoodEngine
             
 
 
-            // line material
-            var lineMat = new Material();
-            lineMat.shader = Shader.colorShader;
-            lineMat.color = Color.Blue;
-
             // line object
             var lineObject = new GameObject();
             lineObject.name = "Lines";
             lineObject.transform.position = new Vector3(5, 0, 5);
+
+            // line material
+            var lineMat = new Material();
+            lineMat.shader = Shader.colorShader;
+            lineMat.color = Color.Blue;
 
             // line renderer
             var line = new LineRenderer(new Vector3(-8.8f, 0.3f, -2.8f), new Vector3(-8, 3, 0));
@@ -190,16 +190,16 @@ namespace FirewoodEngine
 
             
             
-            // house material
-            Material houseMat = new Material();
-            houseMat.SetTexture("House.png");
-            houseMat.shader = Shader.textureShader;
-
             // house gameobject
             house = new GameObject();
             house.name = "House";
             house.transform.position = new Vector3(0, 5, 0);
             house.transform.eulerAngles = new Vector3(0, 45, 0);
+
+            // house material
+            Material houseMat = new Material();
+            houseMat.SetTexture("House.png");
+            houseMat.shader = Shader.textureShader;
 
             // house renderer
             Renderer houseRenderer = new Renderer();
