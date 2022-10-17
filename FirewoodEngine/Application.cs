@@ -44,8 +44,15 @@ namespace FirewoodEngine
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-            if (Focused)
+            if (!Focused) return;
+
+            if (Input.LockCursor)
                 Mouse.SetPosition(X + Width / 2f, Y + Height / 2f);
+            
+            if (Input.HideCursor)
+                CursorVisible = false;
+            else
+                CursorVisible = true;
 
             base.OnMouseMove(e);
         }
@@ -63,8 +70,6 @@ namespace FirewoodEngine
         protected override void OnLoad(EventArgs e)
         {
             RenderManager.Initialize();
-            CursorVisible = false;
-            CursorGrabbed = true;
 
             Location = new System.Drawing.Point(80, 45);
 
@@ -83,7 +88,7 @@ namespace FirewoodEngine
             var input = new Input();
             input.app = this;
             activeScripts.Add(input);
-            
+
             base.OnLoad(e);
         }
 

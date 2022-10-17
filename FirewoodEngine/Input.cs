@@ -12,6 +12,9 @@ namespace FirewoodEngine
     {
         public Application app;
 
+        public static bool LockCursor = false;
+        public static bool HideCursor = false;
+
         //KeyboardState currentInput;
 
 
@@ -41,6 +44,7 @@ namespace FirewoodEngine
 
         public void Update(FrameEventArgs e)
         {
+            
         }
-        }
+    }
 }

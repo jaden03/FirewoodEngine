@@ -129,13 +129,12 @@ namespace FirewoodEngine
             return newVerticesList;
         }
 
-
-
-
-
-
         public void Start()
         {
+            Input.HideCursor = true;
+            Input.LockCursor = true;
+
+
             // Create a new GameObject
             var cameraObject = new GameObject();
             cameraObject.transform.position = new Vector3(0.0f, 0.0f, -5.0f);
@@ -218,12 +217,14 @@ namespace FirewoodEngine
             vertices = new List<float>();
             triangles = new List<float>();
 
-            int size = 10;
+            int size = 50;
+            terrain.transform.position.X = -size / 2;
+            terrain.transform.position.Z = -size / 2;
 
             noise = Noise.GeneratePerlinNoise(Noise.GenerateWhiteNoise(size * 10, size * 10), 3);
-            for (int x = 1; x < size; x++)
+            for (int x = 0; x <= size; x++)
             {
-                for (int y = 1; y < size; y++)
+                for (int y = 0; y <= size; y++)
                 {
                     AddQuadAtPosition(new Vector2(x, y));
                 }
