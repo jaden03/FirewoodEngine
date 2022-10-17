@@ -208,9 +208,9 @@ namespace FirewoodEngine
             house.AddComponent(houseRenderer);
 
             // Rigidbody on the house for physics (no collision rn)
-            var houseRB = new Rigidbody();
-            houseRB.useGravity = false;
-            house.AddComponent(houseRB);
+            //var houseRB = new Rigidbody();
+            //houseRB.useGravity = false;
+            //house.AddComponent(houseRB);
 
             
 
@@ -248,6 +248,10 @@ namespace FirewoodEngine
             vertices = RecalculateNormals(vertices);
             terrainRenderer.vertices = vertices.ToArray();
             terrainRenderer.triangles = triangles.ToArray();;
+
+            //var terrainRB = new Rigidbody();
+            //terrainRB.useGravity = false;
+            //terrain.AddComponent(terrainRB);
         }
 
 
