@@ -56,9 +56,65 @@ namespace FirewoodEngine
             Debug.DrawLine(front, back, Color.Red);
         }
 
+        public event EventHandler<CollisionEventArgs> triggerStay;
         public void OnTriggerStay(Rigidbody otherBody)
         {
-            
+            CollisionEventArgs args = new CollisionEventArgs();
+            args.OtherBody = otherBody;
+
+            if (triggerStay != null)
+                triggerStay(this, args);
+        }
+
+
+        public event EventHandler<CollisionEventArgs> collisionStay;
+        public void OnCollisionStay(Rigidbody otherBody)
+        {
+            CollisionEventArgs args = new CollisionEventArgs();
+            args.OtherBody = otherBody;
+
+            if (collisionStay != null)
+                collisionStay(this, args);
+        }
+
+        public event EventHandler<CollisionEventArgs> triggerEnter;
+        public void OnTriggerEnter(Rigidbody otherBody)
+        {
+            CollisionEventArgs args = new CollisionEventArgs();
+            args.OtherBody = otherBody;
+
+            if (triggerEnter != null)
+                triggerEnter(this, args);
+        }
+
+        public event EventHandler<CollisionEventArgs> collisionEnter;
+        public void OnCollisionEnter(Rigidbody otherBody)
+        {
+            CollisionEventArgs args = new CollisionEventArgs();
+            args.OtherBody = otherBody;
+
+            if (collisionEnter != null)
+                collisionEnter(this, args);
+        }
+
+        public event EventHandler<CollisionEventArgs> triggerExit;
+        public void OnTriggerExit(Rigidbody otherBody)
+        {
+            CollisionEventArgs args = new CollisionEventArgs();
+            args.OtherBody = otherBody;
+
+            if (triggerExit != null)
+                triggerExit(this, args);
+        }
+
+        public event EventHandler<CollisionEventArgs> collisionExit;
+        public void OnCollisionExit(Rigidbody otherBody)
+        {
+            CollisionEventArgs args = new CollisionEventArgs();
+            args.OtherBody = otherBody;
+
+            if (collisionExit != null)
+                collisionExit(this, args);
         }
     }
 }

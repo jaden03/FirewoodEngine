@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace FirewoodEngine
 {
-    class Transform
+    public class Transform
     {
         public Vector3 position;
         public Vector3 eulerAngles;

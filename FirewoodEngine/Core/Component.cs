@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FirewoodEngine
 {
-    class Component
+    public class Component
     {
         public GameObject gameObject;
         public Transform transform;

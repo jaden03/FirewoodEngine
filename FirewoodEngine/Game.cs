@@ -47,7 +47,7 @@ namespace FirewoodEngine
             // Add the freecam component to the active scripts so the update function will work (will be refactored so you dont have to do this)
             app.activeScripts.Add(freecam);
 
-            
+
             // Skybox material
             var skyboxMat = new Material();
             skyboxMat.SetTexture("skybox.png");
@@ -55,7 +55,7 @@ namespace FirewoodEngine
 
             // Skybox object
             var skybox = new GameObject();
-            
+
             // Skybox renderer
             var skyboxRenderer = new Renderer();
             skyboxRenderer.SetOBJ("skyboxCube.obj", skyboxMat.texture != null);
@@ -64,7 +64,7 @@ namespace FirewoodEngine
             // Add the renderer to the skybox and scale it up  (the skybox is literally just a big cube with inverted normals and a texture)
             skybox.AddComponent(skyboxRenderer);
             skybox.transform.scale = new Vector3(100, 100, 100);
-            
+
 
 
             // line object
@@ -83,8 +83,8 @@ namespace FirewoodEngine
             line.useLocal = true;
             lineObject.AddComponent(line);
 
-            
-            
+
+
             // house gameobject
             house = new GameObject();
             house.name = "House";
@@ -123,7 +123,7 @@ namespace FirewoodEngine
             // terrain gameobject
             GameObject terrain = new GameObject();
             terrain.name = "Terrain";
-            terrain.transform.position.Y = -3;
+            terrain.transform.position.Y = -1.5f;
 
             // terrain renderer
             Renderer terrainRenderer = new Renderer();
@@ -160,16 +160,33 @@ namespace FirewoodEngine
             var sphereCollider = new SphereCollider();
             sphere.AddComponent(sphereCollider);
             sphereCollider.CalculateBoundsFromMesh();
+            sphereCollider.isTrigger = true;
+
+            sphereCollider.triggerEnter += (object sender, CollisionEventArgs e) =>
+            {
+                Warn(e.OtherBody.gameObject.name + " entered the sphere's trigger");
+            };
+
+            sphereCollider.triggerExit += (object sender, CollisionEventArgs e) =>
+            {
+                Warn(e.OtherBody.gameObject.name + " exited the sphere's trigger");
+            };
+
+            //sphereCollider.triggerStay += (object sender, CollisionEventArgs e) =>
+            //{
+            //    Warn("Sphere triggering " + e.OtherBody.gameObject.name);
+            //};
+
             //sphereCollider.DebugBounds();
 
             var sphereRB = new Rigidbody();
+            sphereRB.useGravity = false;
             sphere.AddComponent(sphereRB);
-            
+
 
             //var generation = new Generation();
             //generation.SetupTerrain();
         }
-
 
         // Fires every frame
         public void Update(FrameEventArgs e)
@@ -198,6 +215,12 @@ namespace FirewoodEngine
             {
                 (house.GetComponent("Rigidbody") as Rigidbody).useGravity = true;
             }
+        }
+
+
+        public void HouseTrigger(object sender, EventArgs e, Rigidbody otherBody)
+        {
+            
         }
 
     }

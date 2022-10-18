@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
@@ -9,9 +10,14 @@ using OpenTK;
 namespace FirewoodEngine
 {
     using static Logging;
+
+    public class CollisionEventArgs : EventArgs
+    {
+        public Rigidbody OtherBody { get; set; }
+    }
+    
     class Physics
     {
-
         public static List<Rigidbody> rbs;
 
         public static void Initialize()
@@ -88,7 +94,39 @@ namespace FirewoodEngine
                                     min.Y < max2.Y && max.Y > min2.Y &&
                                     min.Z < max2.Z && max.Z > min2.Z)
                                 {
-                                    Warn("Collision Detected!" + e.Time);
+                                    // Check if the rigidbody is in the list of colliding bodies
+                                    if (!rb.collidingBodies.Contains(rb2))
+                                    {
+                                        // Add the rigidbody to the list of colliding bodies
+                                        rb.collidingBodies.Add(rb2);
+
+                                        // If both colliders are not triggers, fire OnCollisionEnter
+                                        if (!bc.isTrigger && !bc2.isTrigger)
+                                        {
+                                            bc.OnCollisionEnter(rb2);
+                                        }
+                                        else
+                                        {
+                                            // If one of the colliders is a trigger, fire OnTriggerEnter
+                                            bc.OnTriggerEnter(rb2);
+                                        }
+                                    }
+                                    if (!rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Add(rb);
+
+                                        if (!bc.isTrigger && !bc2.isTrigger)
+                                        {
+                                            bc2.OnCollisionEnter(rb);
+                                        }
+                                        else
+                                        {
+                                            bc2.OnTriggerEnter(rb);
+                                        }
+                                    }
+
+
+                                    //Warn("Collision Detected!" + e.Time);
 
                                     // If both colliders are not triggers
                                     if (bc.isTrigger == false && bc2.isTrigger == false)
@@ -96,17 +134,47 @@ namespace FirewoodEngine
                                         // If they are colliding, move the object back to its last position
                                         rb.velocity = Vector3.Zero;
                                         rb.gameObject.transform.position = lastPos;
+                                        
+                                        // If the two objects are colliding, call the OnCollisionStay event
+                                        bc.OnCollisionStay(rb2);
+                                        bc2.OnCollisionStay(rb);
                                     }
                                     else
                                     {
-                                        // If they are colliding, but one of them is a trigger, call the trigger event
-                                        if (bc.isTrigger)
+                                        // If the two objects are colliding, call the OnTriggerStay event
+                                        bc.OnTriggerStay(rb2);
+                                        bc2.OnTriggerStay(rb);
+                                    }
+                                }
+                                else
+                                {
+                                    // If the two objects are in the list of colliding bodies, remove them
+                                    if (rb.collidingBodies.Contains(rb2))
+                                    {
+                                        rb.collidingBodies.Remove(rb2);
+
+                                        // If both colliders are not triggers, fire OnCollisionExit
+                                        if (!bc.isTrigger && !bc2.isTrigger)
                                         {
-                                            bc.OnTriggerStay(rb2);
+                                            bc.OnCollisionExit(rb2);
                                         }
-                                        else if (bc2.isTrigger)
+                                        else
                                         {
-                                            bc2.OnTriggerStay(rb);
+                                            // If one of the colliders is a trigger, fire OnTriggerExit
+                                            bc.OnTriggerExit(rb2);
+                                        }
+                                    }
+                                    if (rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Remove(rb);
+
+                                        if (!bc.isTrigger && !bc2.isTrigger)
+                                        {
+                                            bc2.OnCollisionExit(rb);
+                                        }
+                                        else
+                                        {
+                                            bc2.OnTriggerExit(rb);
                                         }
                                     }
                                 }
@@ -126,7 +194,25 @@ namespace FirewoodEngine
                                 // Check if the two sphere colliders are colliding
                                 if (distance < radius3 + radius4)
                                 {
-                                    Warn("Collision Detected!" + e.Time);
+                                    // Check if the rigidbody is in the list of colliding bodies
+                                    if (!rb.collidingBodies.Contains(rb2))
+                                    {
+                                        // Add the rigidbody to the list of colliding bodies
+                                        rb.collidingBodies.Add(rb2);
+
+                                        // If both colliders are not triggers, fire OnCollisionEnter
+                                        if (!sc.isTrigger && !sc2.isTrigger)
+                                        {
+                                            sc.OnCollisionEnter(rb2);
+                                        }
+                                        else
+                                        {
+                                            // If one of the colliders is a trigger, fire OnTriggerEnter
+                                            sc.OnTriggerEnter(rb2);
+                                        }
+                                    }
+
+                                    //Warn("Collision Detected!" + e.Time);
 
                                     // If both colliders are not triggers
                                     if (sc.isTrigger == false && sc2.isTrigger == false)
@@ -134,17 +220,34 @@ namespace FirewoodEngine
                                         // If they are colliding, move the object back to its last position
                                         rb.velocity = Vector3.Zero;
                                         rb.gameObject.transform.position = lastPos;
+
+                                        // If the two objects are colliding, call the OnCollisionStay event
+                                        sc.OnCollisionStay(rb2);
+                                        sc2.OnCollisionStay(rb);
                                     }
                                     else
                                     {
-                                        // If they are colliding, but one of them is a trigger, call the trigger event
-                                        if (sc.isTrigger)
+                                        // If the two objects are colliding, call the OnTriggerStay event
+                                        sc.OnTriggerStay(rb2);
+                                        sc2.OnTriggerStay(rb);
+                                    }
+                                }
+                                else
+                                {
+                                    // If the two objects are in the list of colliding bodies, remove them
+                                    if (rb.collidingBodies.Contains(rb2))
+                                    {
+                                        rb.collidingBodies.Remove(rb2);
+
+                                        // If both colliders are not triggers, fire OnCollisionExit
+                                        if (!sc.isTrigger && !sc2.isTrigger)
                                         {
-                                            sc.OnTriggerStay(rb2);
+                                            sc.OnCollisionExit(rb2);
                                         }
-                                        else if (sc2.isTrigger)
+                                        else
                                         {
-                                            sc2.OnTriggerStay(rb);
+                                            // If one of the colliders is a trigger, fire OnTriggerExit
+                                            sc.OnTriggerExit(rb2);
                                         }
                                     }
                                 }
@@ -180,7 +283,25 @@ namespace FirewoodEngine
                                 // Check if the closest point is within the radius of the sphere collider
                                 if (Vector3.Distance(pos2, closestPoint) < radius3)
                                 {
-                                    Warn("Collision Detected!" + e.Time);
+                                    // Check if the rigidbody is in the list of colliding bodies
+                                    if (!rb.collidingBodies.Contains(rb2))
+                                    {
+                                        // Add the rigidbody to the list of colliding bodies
+                                        rb.collidingBodies.Add(rb2);
+
+                                        // If both colliders are not triggers, fire OnCollisionEnter
+                                        if (!bc.isTrigger && !sc.isTrigger)
+                                        {
+                                            bc.OnCollisionEnter(rb2);
+                                        }
+                                        else
+                                        {
+                                            // If one of the colliders is a trigger, fire OnTriggerEnter
+                                            bc.OnTriggerEnter(rb2);
+                                        }
+                                    }
+
+                                    //Warn("Collision Detected!" + e.Time);
 
                                     // If both colliders are not triggers
                                     if (bc.isTrigger == false && sc.isTrigger == false)
@@ -188,17 +309,123 @@ namespace FirewoodEngine
                                         // If they are colliding, move the object back to its last position
                                         rb.velocity = Vector3.Zero;
                                         rb.gameObject.transform.position = lastPos;
+
+                                        // If the two objects are colliding, call the OnCollisionStay event
+                                        bc.OnCollisionStay(rb2);
+                                        sc.OnCollisionStay(rb);
                                     }
                                     else
                                     {
-                                        // If they are colliding, but one of them is a trigger, call the trigger event
-                                        if (bc.isTrigger)
+                                        // If the two objects are colliding, call the OnTriggerStay event
+                                        bc.OnTriggerStay(rb2);
+                                        sc.OnTriggerStay(rb);
+                                    }
+                                }
+                                else
+                                {
+                                    // If the two objects are in the list of colliding bodies, remove them
+                                    if (rb.collidingBodies.Contains(rb2))
+                                    {
+                                        rb.collidingBodies.Remove(rb2);
+
+                                        // If both colliders are not triggers, fire OnCollisionExit
+                                        if (!bc.isTrigger && !sc.isTrigger)
                                         {
-                                            bc.OnTriggerStay(rb2);
+                                            bc.OnCollisionExit(rb2);
                                         }
-                                        else if (sc.isTrigger)
+                                        else
                                         {
-                                            sc.OnTriggerStay(rb);
+                                            // If one of the colliders is a trigger, fire OnTriggerExit
+                                            bc.OnTriggerExit(rb2);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Sphere Box Check \\
+                            if (rb.gameObject.GetComponent("SphereCollider") as SphereCollider != null && rb2.gameObject.GetComponent("BoxCollider") as BoxCollider != null)
+                            {
+                                // Get the sphere collider
+                                var sc = rb.gameObject.GetComponent("SphereCollider") as SphereCollider;
+                                var bc = rb2.gameObject.GetComponent("BoxCollider") as BoxCollider;
+
+                                // Get the radius of the sphere collider
+                                var radius3 = sc.radius;
+
+                                // Get the size of the box colider
+                                var size = bc.size;
+
+                                // Get the center of the box collider (used for offsetting the colliders position)
+                                var center = bc.center;
+
+                                // Determine the min and max positions in the world that the box collider takes up
+                                var min = pos2 + center - (size / 2);
+                                var max = pos2 + center + (size / 2);
+
+                                // Get the closest point on the box collider to the sphere collider
+                                var closestPoint = new Vector3(
+                                    Math.Max(min.X, Math.Min(pos.X, max.X)),
+                                    Math.Max(min.Y, Math.Min(pos.Y, max.Y)),
+                                    Math.Max(min.Z, Math.Min(pos.Z, max.Z))
+                                );
+
+                                // Check if the closest point is within the radius of the sphere collider
+                                if (Vector3.Distance(pos, closestPoint) < radius3)
+                                {
+                                    // Check if the rigidbody is in the list of colliding bodies
+                                    if (!rb.collidingBodies.Contains(rb2))
+                                    {
+                                        // Add the rigidbody to the list of colliding bodies
+                                        rb.collidingBodies.Add(rb2);
+
+                                        // If both colliders are not triggers, fire OnCollisionEnter
+                                        if (!sc.isTrigger && !bc.isTrigger)
+                                        {
+                                            sc.OnCollisionEnter(rb2);
+                                        }
+                                        else
+                                        {
+                                            // If one of the colliders is a trigger, fire OnTriggerEnter
+                                            sc.OnTriggerEnter(rb2);
+                                        }
+                                    }
+
+                                    //Warn("Collision Detected!" + e.Time);
+
+                                    // If both colliders are not triggers
+                                    if (sc.isTrigger == false && bc.isTrigger == false)
+                                    {
+                                        // If they are colliding, move the object back to its last position
+                                        rb.velocity = Vector3.Zero;
+                                        rb.gameObject.transform.position = lastPos;
+
+                                        // If the two objects are colliding, call the OnCollisionStay event
+                                        sc.OnCollisionStay(rb2);
+                                        bc.OnCollisionStay(rb);
+                                    }
+                                    else
+                                    {
+                                        // If the two objects are colliding, call the OnTriggerStay event
+                                        sc.OnTriggerStay(rb2);
+                                        bc.OnTriggerStay(rb);
+                                    }
+                                }
+                                else
+                                {
+                                    // If the two objects are in the list of colliding bodies, remove them
+                                    if (rb.collidingBodies.Contains(rb2))
+                                    {
+                                        rb.collidingBodies.Remove(rb2);
+
+                                        // If both colliders are not triggers, fire OnCollisionExit
+                                        if (!sc.isTrigger && !bc.isTrigger)
+                                        {
+                                            sc.OnCollisionExit(rb2);
+                                        }
+                                        else
+                                        {
+                                            // If one of the colliders is a trigger, fire OnTriggerExit
+                                            sc.OnTriggerExit(rb2);
                                         }
                                     }
                                 }

@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace FirewoodEngine
 {
-    internal class GameObject
+    public class GameObject
     {
         public string name;
         public List<Component> components;
