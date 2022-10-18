@@ -14,6 +14,8 @@ namespace FirewoodEngine
     using static Logging;
     class Game
     {
+        // test
+
         public Application app;
         
         GameObject house;
