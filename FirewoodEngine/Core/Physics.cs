@@ -89,9 +89,26 @@ namespace FirewoodEngine
                                     min.Z < max2.Z && max.Z > min2.Z)
                                 {
                                     Warn("Collision Detected!" + e.Time);
-                                    // If they are colliding, move the object back to its last position
-                                    rb.velocity = Vector3.Zero;
-                                    rb.gameObject.transform.position = lastPos;
+
+                                    // If both colliders are not triggers
+                                    if (bc.isTrigger == false && bc2.isTrigger == false)
+                                    {
+                                        // If they are colliding, move the object back to its last position
+                                        rb.velocity = Vector3.Zero;
+                                        rb.gameObject.transform.position = lastPos;
+                                    }
+                                    else
+                                    {
+                                        // If they are colliding, but one of them is a trigger, call the trigger event
+                                        if (bc.isTrigger)
+                                        {
+                                            bc.OnTriggerStay(rb2);
+                                        }
+                                        else if (bc2.isTrigger)
+                                        {
+                                            bc2.OnTriggerStay(rb);
+                                        }
+                                    }
                                 }
                             }
 
@@ -110,9 +127,26 @@ namespace FirewoodEngine
                                 if (distance < radius3 + radius4)
                                 {
                                     Warn("Collision Detected!" + e.Time);
-                                    // If they are colliding, move the object back to its last position
-                                    rb.velocity = Vector3.Zero;
-                                    rb.gameObject.transform.position = lastPos;
+
+                                    // If both colliders are not triggers
+                                    if (sc.isTrigger == false && sc2.isTrigger == false)
+                                    {
+                                        // If they are colliding, move the object back to its last position
+                                        rb.velocity = Vector3.Zero;
+                                        rb.gameObject.transform.position = lastPos;
+                                    }
+                                    else
+                                    {
+                                        // If they are colliding, but one of them is a trigger, call the trigger event
+                                        if (sc.isTrigger)
+                                        {
+                                            sc.OnTriggerStay(rb2);
+                                        }
+                                        else if (sc2.isTrigger)
+                                        {
+                                            sc2.OnTriggerStay(rb);
+                                        }
+                                    }
                                 }
                             }
 
@@ -147,9 +181,26 @@ namespace FirewoodEngine
                                 if (Vector3.Distance(pos2, closestPoint) < radius3)
                                 {
                                     Warn("Collision Detected!" + e.Time);
-                                    // If they are colliding, move the object back to its last position
-                                    rb.velocity = Vector3.Zero;
-                                    rb.gameObject.transform.position = lastPos;
+
+                                    // If both colliders are not triggers
+                                    if (bc.isTrigger == false && sc.isTrigger == false)
+                                    {
+                                        // If they are colliding, move the object back to its last position
+                                        rb.velocity = Vector3.Zero;
+                                        rb.gameObject.transform.position = lastPos;
+                                    }
+                                    else
+                                    {
+                                        // If they are colliding, but one of them is a trigger, call the trigger event
+                                        if (bc.isTrigger)
+                                        {
+                                            bc.OnTriggerStay(rb2);
+                                        }
+                                        else if (sc.isTrigger)
+                                        {
+                                            sc.OnTriggerStay(rb);
+                                        }
+                                    }
                                 }
                             }
                         }

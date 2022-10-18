@@ -10,14 +10,9 @@ namespace FirewoodEngine
 {
     internal class SphereCollider : Component
     {
-        public Vector3 center;
-        public float radius;
-
-        public SphereCollider()
-        {
-            this.center = Vector3.Zero;
-            this.radius = 1f;
-        }
+        public Vector3 center = Vector3.Zero;
+        public float radius = 1f;
+        public bool isTrigger = false;
 
         public void CalculateBoundsFromMesh()
         {
@@ -59,6 +54,11 @@ namespace FirewoodEngine
             Vector3 front = (this.center + new Vector3(0, 0, radius)) + gameObject.transform.position;
             Vector3 back = (this.center - new Vector3(0, 0, radius)) + gameObject.transform.position;
             Debug.DrawLine(front, back, Color.Red);
+        }
+
+        public void OnTriggerStay(Rigidbody otherBody)
+        {
+            
         }
     }
 }

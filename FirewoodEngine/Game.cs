@@ -160,7 +160,7 @@ namespace FirewoodEngine
             var sphereCollider = new SphereCollider();
             sphere.AddComponent(sphereCollider);
             sphereCollider.CalculateBoundsFromMesh();
-            sphereCollider.DebugBounds();
+            //sphereCollider.DebugBounds();
 
             var sphereRB = new Rigidbody();
             sphere.AddComponent(sphereRB);

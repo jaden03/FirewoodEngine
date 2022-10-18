@@ -10,14 +10,9 @@ namespace FirewoodEngine
 {
     class BoxCollider : Component
     {
-        public Vector3 center;
-        public Vector3 size;
-
-        public BoxCollider()
-        {
-            this.center = Vector3.Zero;
-            this.size = Vector3.One;
-        }
+        public Vector3 center = Vector3.Zero;
+        public Vector3 size = Vector3.One;
+        public bool isTrigger = false;
 
         public void CalculateBoundsFromMesh()
         {
@@ -59,6 +54,11 @@ namespace FirewoodEngine
             Vector3 front = (this.center + new Vector3(0, 0, this.size.Z / 2)) + gameObject.transform.position;
             Vector3 back = (this.center - new Vector3(0, 0, this.size.Z / 2)) + gameObject.transform.position;
             Debug.DrawLine(front, back, Color.Red);
+        }
+
+        public void OnTriggerStay(Rigidbody otherBody)
+        {
+            
         }
     }
 }
