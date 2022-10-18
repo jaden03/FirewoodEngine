@@ -40,10 +40,10 @@
     <None Include="Models\ground.obj" />
     <None Include="Models\house.obj" />
     <None Include="Models\cube.obj" />
-    <None Include="Models\plane.obj" />
     <None Include="Models\player.obj" />
     <None Include="Models\skyboxCube.mtl" />
     <None Include="Models\skyboxCube.obj" />
+    <None Include="Models\sphere.obj" />
     <None Include="Models\TheMountain.obj" />
     <None Include="Models\untitled.obj" />
     <None Include="OpenTK.dll.config" />
@@ -62,11 +62,14 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\BoxCollider.cs" />
     <Compile Include="Components\Camera.cs" />
+    <Compile Include="Components\SphereCollider.cs" />
     <Compile Include="Core\Colors.cs" />
     <Compile Include="Core\Component.cs" />
+    <Compile Include="Core\Debug.cs" />
     <Compile Include="Scripts\Freecam.cs" />
-    <Compile Include="Scripts\Game.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Core\Application.cs" />
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="Core\Input.cs" />
@@ -83,13 +86,16 @@
     <Compile Include="Core\Shader.cs" />
     <Compile Include="Core\Texture.cs" />
     <Compile Include="Core\Transform.cs" />
+    <Compile Include="Scripts\Generation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\readme.txt" />
     <Content Include="Textures\grass.png" />
     <Content Include="Textures\ground.png" />
     <Content Include="Textures\House.png" />
     <Content Include="Textures\LaBetterTexture.png" />
     <Content Include="Textures\skybox.png" />
+    <Content Include="Textures\sphere.png" />
     <Content Include="Textures\Untitled.png" />
     <Content Include="Textures\wall.png" />
   </ItemGroup>

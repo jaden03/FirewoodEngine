@@ -10,7 +10,7 @@ namespace FirewoodEngine
 {
     class OBJLoader
     {
-        public static void loadOBJFromFile(string path, out float[] vertices, out float[] triangles)
+        public static void loadOBJFromFile(string path, out float[] vertices, out float[] triangles, out Vector3 bounds, out Vector3 center, out float radius)
         {
             int counter = 0;
 
@@ -18,6 +18,10 @@ namespace FirewoodEngine
             List<string> faceArrayList = new List<string>();
             List<float> normalList = new List<float>();
 
+
+            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+            Vector3 cent = new Vector3(0, 0, 0);
             float fartherestPoint = 0;
 
             foreach (string line in File.ReadLines("../../Models/" + path))
@@ -34,6 +38,19 @@ namespace FirewoodEngine
                     Vector3 pos = new Vector3(float.Parse(positionsArray[0]), float.Parse(positionsArray[1]), float.Parse(positionsArray[2]));
                     if (Vector3.Distance(Vector3.Zero, pos) > fartherestPoint)
                         fartherestPoint = Vector3.Distance(Vector3.Zero, pos);
+
+                    if (pos.X < min.X)
+                        min.X = pos.X;
+                    if (pos.Y < min.Y)
+                        min.Y = pos.Y;
+                    if (pos.Z < min.Z)
+                        min.Z = pos.Z;
+                    if (pos.X > max.X)
+                        max.X = pos.X;
+                    if (pos.Y > max.Y)
+                        max.Y = pos.Y;
+                    if (pos.Z > max.Z)
+                        max.Z = pos.Z;
                 }
                 if (line.StartsWith("vn "))
                 {
@@ -97,11 +114,13 @@ namespace FirewoodEngine
 
             vertices = verticesArray;
             triangles = trianglesArray;
-
+            bounds = max - min;
+            center = (max + min) / 2;
+            radius = fartherestPoint;
         }
 
 
-        public static void loadOBJFromFileWithTexture(string path, out float[] vertices, out float[] triangles)
+        public static void loadOBJFromFileWithTexture(string path, out float[] vertices, out float[] triangles, out Vector3 bounds, out Vector3 center, out float radius)
         {
             int counter = 0;
 
@@ -110,6 +129,9 @@ namespace FirewoodEngine
             List<float> textureCoordList = new List<float>();
             List<float> normalList = new List<float>();
 
+            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+            Vector3 cent = new Vector3(0, 0, 0);
             float fartherestPoint = 0;
 
             foreach (string line in File.ReadLines("../../Models/" + path))
@@ -127,6 +149,19 @@ namespace FirewoodEngine
                     Vector3 pos = new Vector3(float.Parse(positionsArray[0]), float.Parse(positionsArray[1]), float.Parse(positionsArray[2]));
                     if (Vector3.Distance(Vector3.Zero, pos) > fartherestPoint)
                         fartherestPoint = Vector3.Distance(Vector3.Zero, pos);
+
+                    if (pos.X < min.X)
+                        min.X = pos.X;
+                    if (pos.Y < min.Y)
+                        min.Y = pos.Y;
+                    if (pos.Z < min.Z)
+                        min.Z = pos.Z;
+                    if (pos.X > max.X)
+                        max.X = pos.X;
+                    if (pos.Y > max.Y)
+                        max.Y = pos.Y;
+                    if (pos.Z > max.Z)
+                        max.Z = pos.Z;
                 }
                 if (line.StartsWith("vt "))
                 {
@@ -204,7 +239,9 @@ namespace FirewoodEngine
 
             vertices = verticesArray;
             triangles = trianglesArray;
-
+            bounds = max - min;
+            center = (max + min) / 2;
+            radius = fartherestPoint;
         }
     }
 }

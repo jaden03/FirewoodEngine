@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,9 @@ namespace FirewoodEngine
     class Rigidbody : Component
     {
         public float mass = 1f;
-        public bool useGravity = true;
+        public bool useGravity = false;
         public bool kinematic = false;
+        public Vector3 velocity;
 
         public Rigidbody()
         {

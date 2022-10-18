@@ -38,6 +38,8 @@ namespace FirewoodEngine
                 script.GetType().GetMethod("Update").Invoke(script, new[] { e });
             }
 
+            Physics.Update(e);
+
             base.OnUpdateFrame(e);
         }
 
@@ -73,8 +75,9 @@ namespace FirewoodEngine
 
             Location = new System.Drawing.Point(80, 45);
 
-            Thread physicsThread = new Thread(new ThreadStart(startPhysics));
-            physicsThread.Start();
+            //Thread physicsThread = new Thread(new ThreadStart(startPhysics));
+            //physicsThread.Start();
+            startPhysics();
 
             stopwatch.Start();
 
@@ -96,16 +99,16 @@ namespace FirewoodEngine
         {
             Physics.Initialize();
 
-            System.Timers.Timer physicsTimer = new System.Timers.Timer();
-            physicsTimer.Interval = 10;
-            physicsTimer.Elapsed += updateTick;
-            physicsTimer.Enabled = true;
+            //System.Timers.Timer physicsTimer = new System.Timers.Timer();
+            //physicsTimer.Interval = 1;
+            //physicsTimer.Elapsed += updateTick;
+            //physicsTimer.Enabled = true;
         }
 
-        void updateTick(Object source, EventArgs e)
-        {
-            Physics.Update();
-        }
+        //void updateTick(Object source, EventArgs e)
+        //{
+        //    Physics.Update();
+        //}
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {

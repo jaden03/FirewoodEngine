@@ -18,6 +18,11 @@ namespace FirewoodEngine
         public readonly int VertexArrayObject;
         public Material material;
 
+        public Vector3 bounds;
+        public Vector3 offset;
+        public float radius;
+
+
         public Renderer()
         {
             VertexArrayObject = GL.GenVertexArray();
@@ -27,9 +32,9 @@ namespace FirewoodEngine
         public void SetOBJ(string path, bool useTexture)
         {
             if (useTexture == true)
-                OBJLoader.loadOBJFromFileWithTexture(path, out vertices, out triangles);
+                OBJLoader.loadOBJFromFileWithTexture(path, out vertices, out triangles, out bounds, out offset, out radius);
             else
-                OBJLoader.loadOBJFromFile(path, out vertices, out triangles);
+                OBJLoader.loadOBJFromFile(path, out vertices, out triangles, out bounds, out offset, out radius);
         }
 
         public void Render(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos)
