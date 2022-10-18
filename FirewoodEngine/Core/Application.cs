@@ -49,7 +49,14 @@ namespace FirewoodEngine
             if (!Focused) return;
 
             if (Input.LockCursor)
+            {
                 Mouse.SetPosition(X + Width / 2f, Y + Height / 2f);
+                CursorGrabbed = true;
+            }
+            else
+            {
+                CursorGrabbed = false;
+            }
             
             if (Input.HideCursor)
                 CursorVisible = false;

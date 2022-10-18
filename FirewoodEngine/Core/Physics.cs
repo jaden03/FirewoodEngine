@@ -52,7 +52,7 @@ namespace FirewoodEngine
                 }
 
                 var pos = rb.gameObject.transform.position;
-                
+
                 float radius = 1;
                 if (rb.gameObject.GetComponent("Renderer") as Renderer == null)
                 {
@@ -60,6 +60,24 @@ namespace FirewoodEngine
                 }
                 else
                     radius = (rb.gameObject.GetComponent("Renderer") as Renderer).radius;
+
+
+
+                float largestAxisValue = 0;
+                if (rb.gameObject.transform.scale.X > largestAxisValue)
+                {
+                    largestAxisValue = rb.gameObject.transform.scale.X;
+                }
+                if (rb.gameObject.transform.scale.Y > largestAxisValue)
+                {
+                    largestAxisValue = rb.gameObject.transform.scale.Y;
+                }
+                if (rb.gameObject.transform.scale.Z > largestAxisValue)
+                {
+                    largestAxisValue = rb.gameObject.transform.scale.Z;
+                }
+                radius *= largestAxisValue;
+
 
                 foreach (Rigidbody rb2 in rbs)
                 {
@@ -74,6 +92,23 @@ namespace FirewoodEngine
                         }
                         else
                             radius2 = (rb2.gameObject.GetComponent("Renderer") as Renderer).radius;
+
+
+                        float largestAxisValue2 = 0;
+                        if (rb2.gameObject.transform.scale.X > largestAxisValue2)
+                        {
+                            largestAxisValue2 = rb2.gameObject.transform.scale.X;
+                        }
+                        if (rb2.gameObject.transform.scale.Y > largestAxisValue2)
+                        {
+                            largestAxisValue2 = rb2.gameObject.transform.scale.Y;
+                        }
+                        if (rb2.gameObject.transform.scale.Z > largestAxisValue2)
+                        {
+                            largestAxisValue2 = rb2.gameObject.transform.scale.Z;
+                        }
+                        radius2 *= largestAxisValue2;
+
 
                         // If the two objects are close enough to collide
                         var distance = Vector3.Distance(pos, pos2);

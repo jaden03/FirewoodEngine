@@ -117,6 +117,46 @@ namespace FirewoodEngine
             var terrainCollider = new BoxCollider();
             terrain.AddComponent(terrainCollider);
             terrainCollider.CalculateBoundsFromMesh();
+
+
+            // mountain
+            Material mountainMat = new Material();
+            mountainMat.shader = Shader.colorShader;
+            mountainMat.color = Color.Gray;
+
+            GameObject mountain = new GameObject();
+            mountain.name = "Mountain";
+            mountain.transform.scale = new Vector3(1, .3f, 1);
+
+            Renderer mountainRenderer = new Renderer();
+            mountainRenderer.SetOBJ("TheMountain.obj", false);
+            mountainRenderer.material = mountainMat;
+            mountain.AddComponent(mountainRenderer);
+
+
+            // house
+            Material houseMat = new Material();
+            houseMat.shader = Shader.textureShader;
+            houseMat.SetTexture("house.png");
+
+            house = new GameObject();
+            house.name = "House";
+            house.transform.position = new Vector3(-7, .85f, 3);
+            house.transform.scale = new Vector3(1.5f, 1.3f, 1.5f);
+
+            Renderer houseRenderer = new Renderer();
+            houseRenderer.SetOBJ("house.obj", true);
+            houseRenderer.material = houseMat;
+            house.AddComponent(houseRenderer);
+
+            var houseRB = new Rigidbody();
+            houseRB.useGravity = false;
+            house.AddComponent(houseRB);
+
+            var houseCollider = new BoxCollider();
+            house.AddComponent(houseCollider);
+            houseCollider.CalculateBoundsFromMesh();
+            
         }
 
         // Fires every frame

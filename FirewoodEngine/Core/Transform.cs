@@ -19,5 +19,6 @@ namespace FirewoodEngine
             eulerAngles = Vector3.Zero;
             scale = Vector3.One;
         }
+
     }
 }
