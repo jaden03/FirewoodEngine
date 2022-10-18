@@ -10,12 +10,6 @@ using OpenTK;
 namespace FirewoodEngine
 {
     using static Logging;
-
-    public class CollisionEventArgs : EventArgs
-    {
-        public Rigidbody OtherBody { get; set; }
-    }
-    
     class Physics
     {
         public static List<Rigidbody> rbs;

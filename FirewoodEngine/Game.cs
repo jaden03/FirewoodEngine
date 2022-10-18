@@ -162,20 +162,20 @@ namespace FirewoodEngine
             sphereCollider.CalculateBoundsFromMesh();
             sphereCollider.isTrigger = true;
 
-            sphereCollider.triggerEnter += (object sender, CollisionEventArgs e) =>
+            sphereCollider.triggerEnter += (Rigidbody otherBody) =>
             {
-                Warn(e.OtherBody.gameObject.name + " entered the sphere's trigger");
+                Warn(otherBody.gameObject.name + " entered the sphere's trigger");
             };
 
-            sphereCollider.triggerExit += (object sender, CollisionEventArgs e) =>
+            sphereCollider.triggerExit += (Rigidbody otherBody) =>
             {
-                Warn(e.OtherBody.gameObject.name + " exited the sphere's trigger");
+                Warn(otherBody.gameObject.name + " exited the sphere's trigger");
             };
 
-            //sphereCollider.triggerStay += (object sender, CollisionEventArgs e) =>
-            //{
-            //    Warn("Sphere triggering " + e.OtherBody.gameObject.name);
-            //};
+            sphereCollider.triggerStay += (Rigidbody otherBody) =>
+            {
+                Warn("Sphere triggering " + otherBody.gameObject.name);
+            };
 
             //sphereCollider.DebugBounds();
 

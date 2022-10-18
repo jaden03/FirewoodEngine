@@ -56,65 +56,47 @@ namespace FirewoodEngine
             Debug.DrawLine(front, back, Color.Red);
         }
 
-        public event EventHandler<CollisionEventArgs> triggerStay;
+        public event Action<Rigidbody> triggerStay;
         public void OnTriggerStay(Rigidbody otherBody)
         {
-            CollisionEventArgs args = new CollisionEventArgs();
-            args.OtherBody = otherBody;
-
             if (triggerStay != null)
-                triggerStay(this, args);
+                triggerStay(otherBody);
         }
 
 
-        public event EventHandler<CollisionEventArgs> collisionStay;
+        public event Action<Rigidbody> collisionStay;
         public void OnCollisionStay(Rigidbody otherBody)
         {
-            CollisionEventArgs args = new CollisionEventArgs();
-            args.OtherBody = otherBody;
-
             if (collisionStay != null)
-                collisionStay(this, args);
+                collisionStay(otherBody);
         }
 
-        public event EventHandler<CollisionEventArgs> triggerEnter;
+        public event Action<Rigidbody> triggerEnter;
         public void OnTriggerEnter(Rigidbody otherBody)
         {
-            CollisionEventArgs args = new CollisionEventArgs();
-            args.OtherBody = otherBody;
-
             if (triggerEnter != null)
-                triggerEnter(this, args);
+                triggerEnter(otherBody);
         }
-
-        public event EventHandler<CollisionEventArgs> collisionEnter;
+        
+        public event Action<Rigidbody> collisionEnter;
         public void OnCollisionEnter(Rigidbody otherBody)
         {
-            CollisionEventArgs args = new CollisionEventArgs();
-            args.OtherBody = otherBody;
-
             if (collisionEnter != null)
-                collisionEnter(this, args);
+                collisionEnter(otherBody);
         }
 
-        public event EventHandler<CollisionEventArgs> triggerExit;
+        public event Action<Rigidbody> triggerExit;
         public void OnTriggerExit(Rigidbody otherBody)
         {
-            CollisionEventArgs args = new CollisionEventArgs();
-            args.OtherBody = otherBody;
-
             if (triggerExit != null)
-                triggerExit(this, args);
+                triggerExit(otherBody);
         }
 
-        public event EventHandler<CollisionEventArgs> collisionExit;
+        public event Action<Rigidbody> collisionExit;
         public void OnCollisionExit(Rigidbody otherBody)
         {
-            CollisionEventArgs args = new CollisionEventArgs();
-            args.OtherBody = otherBody;
-
             if (collisionExit != null)
-                collisionExit(this, args);
+                collisionExit(otherBody);
         }
     }
 }
