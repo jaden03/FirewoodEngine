@@ -68,6 +68,7 @@
     <Compile Include="Core\Colors.cs" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\Debug.cs" />
+    <Compile Include="Scripts\CameraRotation.cs" />
     <Compile Include="Scripts\Freecam.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Core\Application.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Core\Texture.cs" />
     <Compile Include="Core\Transform.cs" />
     <Compile Include="Scripts\Generation.cs" />
+    <Compile Include="Scripts\Movement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\readme.txt" />

@@ -52,14 +52,28 @@ namespace FirewoodEngine
                 }
 
                 var pos = rb.gameObject.transform.position;
-                var radius = (rb.gameObject.GetComponent("Renderer") as Renderer).radius;
+                
+                float radius = 1;
+                if (rb.gameObject.GetComponent("Renderer") as Renderer == null)
+                {
+                    radius = 1;
+                }
+                else
+                    radius = (rb.gameObject.GetComponent("Renderer") as Renderer).radius;
 
                 foreach (Rigidbody rb2 in rbs)
                 {
                     if (rb2 != rb)
                     {
                         var pos2 = rb2.gameObject.transform.position;
-                        var radius2 = (rb2.gameObject.GetComponent("Renderer") as Renderer).radius;
+
+                        float radius2 = 1;
+                        if (rb2.gameObject.GetComponent("Renderer") as Renderer == null)
+                        {
+                            radius2 = 1;
+                        }
+                        else
+                            radius2 = (rb2.gameObject.GetComponent("Renderer") as Renderer).radius;
 
                         // If the two objects are close enough to collide
                         var distance = Vector3.Distance(pos, pos2);
