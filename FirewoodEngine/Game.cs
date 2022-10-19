@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using OpenTK.Input;
 using FirewoodEngine.Scripts;
+using System.Drawing.Printing;
 
 namespace FirewoodEngine
 {
@@ -17,6 +18,10 @@ namespace FirewoodEngine
         public Application app;
         
         GameObject house;
+
+        List<GameObject> coins;
+        float coinYExtra = 0;
+        bool coinAscending = true;
 
         // Fires on the first frame of the game
         public void Start()
@@ -156,7 +161,56 @@ namespace FirewoodEngine
             var houseCollider = new BoxCollider();
             house.AddComponent(houseCollider);
             houseCollider.CalculateBoundsFromMesh();
+
+
+
+            coins = new List<GameObject>();
+
+            for (int i = 0; i < 100; i++)
+            {
+                SpawnCoin();
+            }
+        }
+
+        void SpawnCoin()
+        {
+            Material coinMat = new Material();
+            coinMat.shader = Shader.textureShader;
+            coinMat.SetTexture("coin.png");
+
+            GameObject coin = new GameObject();
+            coin.name = "Coin";
+
+            var random = new Random();
+            coin.transform.position = new Vector3(random.Next(-1000, 1000) / 100f, 1, random.Next(-1000, 1000) / 100f);
             
+            coin.transform.scale = new Vector3(.2f, .2f, .2f);
+
+            Renderer coinRenderer = new Renderer();
+            coinRenderer.SetOBJ("coin.obj", true);
+            coinRenderer.material = coinMat;
+            coin.AddComponent(coinRenderer);
+
+            var coinRB = new Rigidbody();
+            coinRB.useGravity = false;
+            coin.AddComponent(coinRB);
+
+            var coinCollider = new SphereCollider();
+            coin.AddComponent(coinCollider);
+            coinCollider.radius = .2f;
+            coinCollider.isTrigger = true;
+
+            coinCollider.triggerEnter += (object sender, CollisionEventArgs e) =>
+            {
+                if (e.OtherBody.gameObject.name == "Camera")
+                {
+                    coin.RemoveComponent(coinCollider);
+                    RenderManager.RemoveRenderer(coinRenderer);
+                    coin.RemoveComponent(coinRenderer);
+                }
+            };
+
+            coins.Add(coin);
         }
 
         // Fires every frame
@@ -168,7 +222,35 @@ namespace FirewoodEngine
                 app.Exit();
             }
 
+            foreach (GameObject coin in coins)
+            {
+                coin.transform.eulerAngles.Y -= .05f;
+                coin.transform.position.Y = coinYExtra;
+            }
 
+
+            if (coinAscending)
+            {
+                if (coinYExtra < .25f)
+                {
+                    coinYExtra += .001f;
+                }
+                else
+                {
+                    coinAscending = false;
+                }
+            }
+            else
+            {
+                if (coinYExtra > 0f)
+                {
+                    coinYExtra -= .001f;
+                }
+                else
+                {
+                    coinAscending = true;
+                }
+            }
             
         }
 

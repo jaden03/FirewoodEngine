@@ -40,9 +40,19 @@ namespace FirewoodEngine
             renderers.Add(rend);
         }
 
+        public static void RemoveRenderer(Renderer rend)
+        {
+            renderers.Remove(rend);
+        }
+
         public static void AddRenderer(LineRenderer rend)
         {
             lineRenderers.Add(rend);
+        }
+
+        public static void RemoveRenderer(LineRenderer rend)
+        {
+            lineRenderers.Remove(rend);
         }
 
         public static void Render(Matrix4 view, Matrix4 projection, Stopwatch stopwatch, Vector3 _lightpos, Vector3 _camPos)

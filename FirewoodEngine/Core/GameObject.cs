@@ -26,6 +26,11 @@ namespace FirewoodEngine
             components.Add(component);
         }
 
+        public void RemoveComponent(Component component)
+        {
+            components.Remove(component);
+        }
+
         public Component GetComponent(string _type)
         {
             foreach (Component component in components)

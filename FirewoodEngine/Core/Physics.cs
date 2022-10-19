@@ -260,6 +260,19 @@ namespace FirewoodEngine
                                             sc.OnTriggerEnter(rb2);
                                         }
                                     }
+                                    if (!rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Add(rb);
+
+                                        if (!sc.isTrigger && !sc2.isTrigger)
+                                        {
+                                            sc2.OnCollisionEnter(rb);
+                                        }
+                                        else
+                                        {
+                                            sc2.OnTriggerEnter(rb);
+                                        }
+                                    }
 
                                     //Warn("Collision Detected!" + e.Time);
 
@@ -297,6 +310,19 @@ namespace FirewoodEngine
                                         {
                                             // If one of the colliders is a trigger, fire OnTriggerExit
                                             sc.OnTriggerExit(rb2);
+                                        }
+                                    }
+                                    if (rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Remove(rb);
+
+                                        if (!sc.isTrigger && !sc2.isTrigger)
+                                        {
+                                            sc2.OnCollisionExit(rb);
+                                        }
+                                        else
+                                        {
+                                            sc2.OnTriggerExit(rb);
                                         }
                                     }
                                 }
@@ -349,6 +375,19 @@ namespace FirewoodEngine
                                             bc.OnTriggerEnter(rb2);
                                         }
                                     }
+                                    if (!rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Add(rb);
+
+                                        if (!bc.isTrigger && !sc.isTrigger)
+                                        {
+                                            sc.OnCollisionEnter(rb);
+                                        }
+                                        else
+                                        {
+                                            sc.OnTriggerEnter(rb);
+                                        }
+                                    }
 
                                     //Warn("Collision Detected!" + e.Time);
 
@@ -386,6 +425,19 @@ namespace FirewoodEngine
                                         {
                                             // If one of the colliders is a trigger, fire OnTriggerExit
                                             bc.OnTriggerExit(rb2);
+                                        }
+                                    }
+                                    if (rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Remove(rb);
+
+                                        if (!bc.isTrigger && !sc.isTrigger)
+                                        {
+                                            sc.OnCollisionExit(rb);
+                                        }
+                                        else
+                                        {
+                                            sc.OnTriggerExit(rb);
                                         }
                                     }
                                 }
@@ -438,6 +490,19 @@ namespace FirewoodEngine
                                             sc.OnTriggerEnter(rb2);
                                         }
                                     }
+                                    if (!rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Add(rb);
+
+                                        if (!sc.isTrigger && !bc.isTrigger)
+                                        {
+                                            bc.OnCollisionEnter(rb);
+                                        }
+                                        else
+                                        {
+                                            bc.OnTriggerEnter(rb);
+                                        }
+                                    }
 
                                     //Warn("Collision Detected!" + e.Time);
 
@@ -475,6 +540,19 @@ namespace FirewoodEngine
                                         {
                                             // If one of the colliders is a trigger, fire OnTriggerExit
                                             sc.OnTriggerExit(rb2);
+                                        }
+                                    }
+                                    if (rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Remove(rb);
+
+                                        if (!sc.isTrigger && !bc.isTrigger)
+                                        {
+                                            bc.OnCollisionExit(rb);
+                                        }
+                                        else
+                                        {
+                                            bc.OnTriggerExit(rb);
                                         }
                                     }
                                 }

@@ -41,8 +41,6 @@ namespace FirewoodEngine
                 return;
             }
 
-            Renderer rend = gameObject.GetComponent("Renderer") as Renderer;
-
             Vector3 top = (this.center + new Vector3(0, radius, 0)) + gameObject.transform.position;
             Vector3 bottom = (this.center - new Vector3(0, radius, 0)) + gameObject.transform.position;
             Debug.DrawLine(top, bottom, Color.Red);
