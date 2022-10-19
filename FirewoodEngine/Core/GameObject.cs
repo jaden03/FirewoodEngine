@@ -38,5 +38,18 @@ namespace FirewoodEngine
             return null;
         }
 
+        public Component GetComponent<T>()
+        {
+            foreach (Component component in components)
+            {
+                if (component.GetType() == typeof(T))
+                {
+                    return component;
+                }
+            }
+
+            return null;
+        }
+
     }
 }
