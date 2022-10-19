@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+.idea/.idea.FirewoodEngine/.idea/indexLayout.xml
+.idea/.idea.FirewoodEngine/.idea/projectSettingsUpdater.xml
+.idea/.idea.FirewoodEngine/.idea/vcs.xml
+.idea/.idea.FirewoodEngine/.idea/workspace.xml
