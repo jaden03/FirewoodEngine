@@ -25,17 +25,18 @@ namespace FirewoodEngine
             component.transform = transform;
             components.Add(component);
         }
-
-        public Component GetComponent(string _type)
+        
+        public T GetComponent<T>()
         {
-            foreach (Component component in components)
+            foreach (object component in components)
             {
-                if (component.GetType().Name == _type)
+                if (component.GetType() == typeof(T))
                 {
-                    return component;
+                    return (T)component;
                 }
             }
-            return null;
+
+            return default(T);
         }
 
     }

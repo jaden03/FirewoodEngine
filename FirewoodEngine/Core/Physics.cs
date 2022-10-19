@@ -46,7 +46,7 @@ namespace FirewoodEngine
                 }
 
                 var pos = rb.gameObject.transform.position;
-                var radius = (rb.gameObject.GetComponent("Renderer") as Renderer).radius;
+                var radius = (rb.gameObject.GetComponent<Renderer>()).radius;
 
 
 
@@ -71,7 +71,7 @@ namespace FirewoodEngine
                     if (rb2 != rb)
                     {
                         var pos2 = rb2.gameObject.transform.position;
-                        var radius2 = (rb2.gameObject.GetComponent("Renderer") as Renderer).radius;
+                        var radius2 = (rb2.gameObject.GetComponent<Renderer>()).radius;
 
 
                         float largestAxisValue2 = 0;
@@ -98,11 +98,11 @@ namespace FirewoodEngine
                         {
 
                             // AABB AABB Check \\
-                            if (rb.gameObject.GetComponent("BoxCollider") as BoxCollider != null && rb2.gameObject.GetComponent("BoxCollider") as BoxCollider != null)
+                            if (rb.gameObject.GetComponent<BoxCollider>() != null && rb2.gameObject.GetComponent<BoxCollider>() != null)
                             {
                                 // Get the box collider
-                                var bc = rb.gameObject.GetComponent("BoxCollider") as BoxCollider;
-                                var bc2 = rb2.gameObject.GetComponent("BoxCollider") as BoxCollider;
+                                var bc = rb.gameObject.GetComponent<BoxCollider>();
+                                var bc2 = rb2.gameObject.GetComponent<BoxCollider>();
 
                                 // Get the size of the box colider
                                 var size = bc.size;
@@ -210,11 +210,11 @@ namespace FirewoodEngine
                             }
 
                             // Sphere Sphere Check \\
-                            if (rb.gameObject.GetComponent("SphereCollider") as SphereCollider != null && rb2.gameObject.GetComponent("SphereCollider") as SphereCollider != null)
+                            if (rb.gameObject.GetComponent<SphereCollider>() != null && rb2.gameObject.GetComponent<SphereCollider>() != null)
                             {
                                 // Get the sphere collider
-                                var sc = rb.gameObject.GetComponent("SphereCollider") as SphereCollider;
-                                var sc2 = rb2.gameObject.GetComponent("SphereCollider") as SphereCollider;
+                                var sc = rb.gameObject.GetComponent<SphereCollider>();
+                                var sc2 = rb2.gameObject.GetComponent<SphereCollider>();
 
                                 // Get the radius of the sphere collider
                                 var radius3 = sc.radius;
@@ -238,6 +238,19 @@ namespace FirewoodEngine
                                         {
                                             // If one of the colliders is a trigger, fire OnTriggerEnter
                                             sc.OnTriggerEnter(rb2);
+                                        }
+                                    }
+                                    if (!rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Add(rb);
+
+                                        if (!sc.isTrigger && !sc2.isTrigger)
+                                        {
+                                            sc2.OnCollisionEnter(rb);
+                                        }
+                                        else
+                                        {
+                                            sc2.OnTriggerEnter(rb);
                                         }
                                     }
 
@@ -279,15 +292,28 @@ namespace FirewoodEngine
                                             sc.OnTriggerExit(rb2);
                                         }
                                     }
+                                    if (rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Remove(rb);
+
+                                        if (!sc.isTrigger && !sc2.isTrigger)
+                                        {
+                                            sc2.OnCollisionExit(rb);
+                                        }
+                                        else
+                                        {
+                                            sc2.OnTriggerExit(rb);
+                                        }
+                                    }
                                 }
                             }
 
                             // Box Sphere Check \\
-                            if (rb.gameObject.GetComponent("BoxCollider") as BoxCollider != null && rb2.gameObject.GetComponent("SphereCollider") as SphereCollider != null)
+                            if (rb.gameObject.GetComponent<BoxCollider>() != null && rb2.gameObject.GetComponent<SphereCollider>() != null)
                             {
                                 // Get the box collider
-                                var bc = rb.gameObject.GetComponent("BoxCollider") as BoxCollider;
-                                var sc = rb2.gameObject.GetComponent("SphereCollider") as SphereCollider;
+                                var bc = rb.gameObject.GetComponent<BoxCollider>();
+                                var sc = rb2.gameObject.GetComponent<SphereCollider>();
 
                                 // Get the size of the box colider
                                 var size = bc.size;
@@ -329,6 +355,19 @@ namespace FirewoodEngine
                                             bc.OnTriggerEnter(rb2);
                                         }
                                     }
+                                    if (!rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Add(rb);
+
+                                        if (!bc.isTrigger && !sc.isTrigger)
+                                        {
+                                            sc.OnCollisionEnter(rb);
+                                        }
+                                        else
+                                        {
+                                            sc.OnTriggerEnter(rb);
+                                        }
+                                    }
 
                                     //Warn("Collision Detected!" + e.Time);
 
@@ -368,15 +407,28 @@ namespace FirewoodEngine
                                             bc.OnTriggerExit(rb2);
                                         }
                                     }
+                                    if (rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Remove(rb);
+
+                                        if (!bc.isTrigger && !sc.isTrigger)
+                                        {
+                                            sc.OnCollisionExit(rb);
+                                        }
+                                        else
+                                        {
+                                            sc.OnTriggerExit(rb);
+                                        }
+                                    }
                                 }
                             }
 
                             // Sphere Box Check \\
-                            if (rb.gameObject.GetComponent("SphereCollider") as SphereCollider != null && rb2.gameObject.GetComponent("BoxCollider") as BoxCollider != null)
+                            if (rb.gameObject.GetComponent<SphereCollider>() != null && rb2.gameObject.GetComponent<SphereCollider>() != null)
                             {
                                 // Get the sphere collider
-                                var sc = rb.gameObject.GetComponent("SphereCollider") as SphereCollider;
-                                var bc = rb2.gameObject.GetComponent("BoxCollider") as BoxCollider;
+                                var sc = rb.gameObject.GetComponent<SphereCollider>();
+                                var bc = rb2.gameObject.GetComponent<BoxCollider>();
 
                                 // Get the radius of the sphere collider
                                 var radius3 = sc.radius;
@@ -418,6 +470,19 @@ namespace FirewoodEngine
                                             sc.OnTriggerEnter(rb2);
                                         }
                                     }
+                                    if (!rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Add(rb);
+
+                                        if (!sc.isTrigger && !bc.isTrigger)
+                                        {
+                                            bc.OnCollisionEnter(rb);
+                                        }
+                                        else
+                                        {
+                                            bc.OnTriggerEnter(rb);
+                                        }
+                                    }
 
                                     //Warn("Collision Detected!" + e.Time);
 
@@ -455,6 +520,19 @@ namespace FirewoodEngine
                                         {
                                             // If one of the colliders is a trigger, fire OnTriggerExit
                                             sc.OnTriggerExit(rb2);
+                                        }
+                                    }
+                                    if (rb2.collidingBodies.Contains(rb))
+                                    {
+                                        rb2.collidingBodies.Remove(rb);
+
+                                        if (!sc.isTrigger && !bc.isTrigger)
+                                        {
+                                            bc.OnCollisionExit(rb);
+                                        }
+                                        else
+                                        {
+                                            bc.OnTriggerExit(rb);
                                         }
                                     }
                                 }

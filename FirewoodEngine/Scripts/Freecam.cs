@@ -28,7 +28,7 @@ namespace FirewoodEngine
         
         public void Start()
         {
-            cam = gameObject.GetComponent("Camera") as Camera;
+            cam = gameObject.GetComponent<Camera>();
         }
 
         public void Update(FrameEventArgs e)

@@ -22,13 +22,13 @@ namespace FirewoodEngine
                 return;
             }
 
-            if (gameObject.GetComponent("Renderer") as Renderer == null)
+            if (gameObject.GetComponent<Renderer>() == null)
             {
                 Logging.Error("No renderer found on gameobject " + gameObject.name + "!");
                 return;
             }
 
-            Renderer rend = gameObject.GetComponent("Renderer") as Renderer;
+            Renderer rend = gameObject.GetComponent<Renderer>();
             this.center = rend.offset;
             this.radius = rend.radius * gameObject.transform.scale.X;
         }
@@ -41,7 +41,7 @@ namespace FirewoodEngine
                 return;
             }
 
-            Renderer rend = gameObject.GetComponent("Renderer") as Renderer;
+            Renderer rend = gameObject.GetComponent<Renderer>();
 
             Vector3 top = (this.center + new Vector3(0, radius, 0)) + gameObject.transform.position;
             Vector3 bottom = (this.center - new Vector3(0, radius, 0)) + gameObject.transform.position;
