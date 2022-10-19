@@ -12,6 +12,7 @@ namespace FirewoodEngine
         public Vector3 position;
         public Vector3 eulerAngles;
         public Vector3 scale;
+        
         //Example of simple Hierarchy system
         public Vector3 localPosition;
         public Vector3 localRotation;
@@ -25,6 +26,7 @@ namespace FirewoodEngine
             position = Vector3.Zero;
             eulerAngles = Vector3.Zero;
             scale = Vector3.One;
+            
             localPosition = Vector3.Zero;
             localRotation = Vector3.Zero;
             localScale = Vector3.One;

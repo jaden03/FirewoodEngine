@@ -201,11 +201,11 @@ namespace FirewoodEngine
             // Move the house up and down with Q and E
             if (Input.GetKey(Key.Q))
             {
-                (house.GetComponent("Rigidbody") as Rigidbody).velocity.Y = -.02f;
+                (house.GetComponent<Rigidbody>()).velocity.Y = -.02f;
             }
             if (Input.GetKey(Key.E))
             {
-                (house.GetComponent("Rigidbody") as Rigidbody).velocity.Y = .02f;
+                (house.GetComponent<Rigidbody>()).velocity.Y = .02f;
             }
             if (!Input.GetKey(Key.Q) && !Input.GetKey(Key.E))
             {
@@ -213,7 +213,7 @@ namespace FirewoodEngine
             }
             if (Input.GetKey(Key.F))
             {
-                (house.GetComponent("Rigidbody") as Rigidbody).useGravity = true;
+                (house.GetComponent<Rigidbody>()).useGravity = true;
             }
         }
 
