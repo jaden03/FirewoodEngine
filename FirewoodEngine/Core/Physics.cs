@@ -6,8 +6,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
+using FirewoodEngine.Componenents;
 
-namespace FirewoodEngine
+namespace FirewoodEngine.Core
 {
     using static Logging;
     class Physics

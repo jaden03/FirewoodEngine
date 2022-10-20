@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using OpenTK;
 
-namespace FirewoodEngine
+namespace FirewoodEngine.Core
 {
     class OBJLoader
     {

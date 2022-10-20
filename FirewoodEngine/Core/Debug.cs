@@ -8,8 +8,9 @@ using System.Windows.Media.Media3D;
 using Quaternion = OpenTK.Quaternion;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using FirewoodEngine.Componenents;
 
-namespace FirewoodEngine
+namespace FirewoodEngine.Core
 {
     public static class Debug
     {

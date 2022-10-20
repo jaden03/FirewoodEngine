@@ -8,7 +8,9 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
-namespace FirewoodEngine
+using FirewoodEngine.Core;
+
+namespace FirewoodEngine.Componenents
 {
     class Camera : Component
     {

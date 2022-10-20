@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Timers;
 using System.Threading;
 
-namespace FirewoodEngine
+namespace FirewoodEngine.Core
 {
     using static Logging;
     class Application : GameWindow

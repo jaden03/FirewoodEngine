@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Drawing;
 using OpenTK.Input;
 using FirewoodEngine.Scripts;
+using FirewoodEngine.Core;
+using FirewoodEngine.Componenents;
 
 namespace FirewoodEngine
 {

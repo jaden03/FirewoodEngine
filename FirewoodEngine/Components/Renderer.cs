@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using FirewoodEngine.Core;
 
-namespace FirewoodEngine
+namespace FirewoodEngine.Componenents
 {
     using static Logging;
     class Renderer : Component

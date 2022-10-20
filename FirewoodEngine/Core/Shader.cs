@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
 
-namespace FirewoodEngine
+namespace FirewoodEngine.Core
 {
     class Shader
     {

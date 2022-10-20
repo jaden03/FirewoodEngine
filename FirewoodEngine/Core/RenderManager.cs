@@ -8,8 +8,9 @@ using OpenTK.Graphics;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 using System.Diagnostics;
+using FirewoodEngine.Componenents;
 
-namespace FirewoodEngine
+namespace FirewoodEngine.Core
 {
     using static Logging;
     class RenderManager

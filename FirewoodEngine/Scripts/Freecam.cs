@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FirewoodEngine.Core;
+using FirewoodEngine.Componenents;
 
 namespace FirewoodEngine
 {

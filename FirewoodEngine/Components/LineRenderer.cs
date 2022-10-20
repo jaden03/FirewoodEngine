@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using OpenTK;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
+using FirewoodEngine.Core;
 
-namespace FirewoodEngine
+namespace FirewoodEngine.Componenents
 {
     using static Logging;
     class LineRenderer : Component
