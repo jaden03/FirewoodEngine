@@ -238,7 +238,7 @@ namespace FirewoodEngine
 
             if (Input.GetKey(Key.F))
             {
-                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Forward() * 10, Color.Red);
+                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Forward() * 10, Color.Blue);
             }
             if (Input.GetKey(Key.R))
             {
@@ -246,7 +246,7 @@ namespace FirewoodEngine
             }
             if (Input.GetKey(Key.U))
             {
-                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Up() * 10, Color.Red);
+                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Up() * 10, Color.Green);
             }
 
 
