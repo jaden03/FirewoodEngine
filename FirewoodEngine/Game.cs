@@ -19,6 +19,7 @@ namespace FirewoodEngine
         public Application app;
         
         GameObject house;
+        GameObject sphere;
 
         // Fires on the first frame of the game
         public void Start()
@@ -146,7 +147,7 @@ namespace FirewoodEngine
 
 
 
-            var sphere = new GameObject();
+            sphere = new GameObject();
             sphere.name = "Sphere";
             sphere.transform.scale = new Vector3(.2f, .2f, .2f);
 
@@ -209,14 +210,30 @@ namespace FirewoodEngine
             if (Input.GetKey(Key.X))
             {
                 house.transform.eulerAngles.X += 0.1f;
+                //house.transform.position.X += 0.1f;
             }
             if (Input.GetKey(Key.Y))
             {
                 house.transform.eulerAngles.Y += 0.1f;
+                //house.transform.position.Y += 0.1f;
             }
             if (Input.GetKey(Key.Z))
             {
                 house.transform.eulerAngles.Z += 0.1f;
+                //house.transform.position.Z += 0.1f;
+            }
+
+            if (Input.GetKey(Key.I))
+            {
+                sphere.transform.localPosition.X += 0.1f;
+            }
+            if (Input.GetKey(Key.J))
+            {
+                sphere.transform.localPosition.Y += 0.1f;
+            }
+            if (Input.GetKey(Key.K))
+            {
+                sphere.transform.localPosition.Z += 0.1f;
             }
 
             if (Input.GetKey(Key.F))

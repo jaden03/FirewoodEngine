@@ -41,7 +41,8 @@ namespace FirewoodEngine.Core
             {
                 Print(gameObject.name + " is updating " + child.gameObject.name);
 
-                child.position = position + child.localPosition;
+                child.position = position + ((child.localPosition.Z * Forward()) + (child.localPosition.Y * Up()) + (-child.localPosition.X * Right()));
+
                 child.localEulerAngles = eulerAngles + child.localEulerAngles;
 
                 child.Update(e);
