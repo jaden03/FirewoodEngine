@@ -93,6 +93,7 @@
     <Compile Include="Scripts\Generation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Core\OpenAL32.dll" />
     <Content Include="Scripts\readme.txt" />
     <Content Include="Textures\grass.png" />
     <Content Include="Textures\ground.png" />
