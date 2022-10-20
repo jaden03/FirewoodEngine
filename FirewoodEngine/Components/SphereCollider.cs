@@ -30,7 +30,22 @@ namespace FirewoodEngine
 
             Renderer rend = gameObject.GetComponent<Renderer>();
             this.center = rend.offset;
-            this.radius = rend.radius * gameObject.transform.scale.X;
+
+            float largestAxisValue = 0;
+            if (gameObject.transform.scale.X > largestAxisValue)
+            {
+                largestAxisValue = gameObject.transform.scale.X;
+            }
+            if (gameObject.transform.scale.Y > largestAxisValue)
+            {
+                largestAxisValue = gameObject.transform.scale.Y;
+            }
+            if (gameObject.transform.scale.Z > largestAxisValue)
+            {
+                largestAxisValue = gameObject.transform.scale.Z;
+            }
+            
+            this.radius = rend.radius * largestAxisValue;
         }
 
         public void DebugBounds()
@@ -40,9 +55,7 @@ namespace FirewoodEngine
                 Logging.Error("Add the sphere collider to a gameobject first!");
                 return;
             }
-
-            Renderer rend = gameObject.GetComponent<Renderer>();
-
+            
             Vector3 top = (this.center + new Vector3(0, radius, 0)) + gameObject.transform.position;
             Vector3 bottom = (this.center - new Vector3(0, radius, 0)) + gameObject.transform.position;
             Debug.DrawLine(top, bottom, Color.Red);

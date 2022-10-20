@@ -25,6 +25,11 @@ namespace FirewoodEngine
             component.transform = transform;
             components.Add(component);
         }
+
+        public void RemoveComponent(Component component)
+        {
+            components.Remove(component);
+        }
         
         public T GetComponent<T>()
         {

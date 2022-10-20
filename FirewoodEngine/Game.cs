@@ -160,6 +160,8 @@ namespace FirewoodEngine
             var sphereCollider = new SphereCollider();
             sphere.AddComponent(sphereCollider);
             sphereCollider.CalculateBoundsFromMesh();
+            sphereCollider.DebugBounds();
+            sphereCollider.radius = .5f;
             sphereCollider.isTrigger = true;
 
             sphereCollider.triggerEnter += (Rigidbody otherBody) =>
@@ -215,12 +217,6 @@ namespace FirewoodEngine
             {
                 (house.GetComponent<Rigidbody>()).useGravity = true;
             }
-        }
-
-
-        public void HouseTrigger(object sender, EventArgs e, Rigidbody otherBody)
-        {
-            
         }
 
     }

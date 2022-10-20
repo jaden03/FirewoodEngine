@@ -46,24 +46,48 @@ namespace FirewoodEngine
                 }
 
                 var pos = rb.gameObject.transform.position;
-                var radius = (rb.gameObject.GetComponent<Renderer>()).radius;
 
 
+                float radius = 1;
 
-                float largestAxisValue = 0;
-                if (rb.gameObject.transform.scale.X > largestAxisValue)
+                if (rb.gameObject.GetComponent<BoxCollider>() != null)
                 {
-                    largestAxisValue = rb.gameObject.transform.scale.X;
+                    float largestColliderAxisValue = 0;
+                    BoxCollider thisBoxCollider = rb.gameObject.GetComponent<BoxCollider>();
+                    if (thisBoxCollider.size.X > largestColliderAxisValue)
+                    {
+                        largestColliderAxisValue = thisBoxCollider.size.X;
+                    }
+                    if (thisBoxCollider.size.Y > largestColliderAxisValue)
+                    {
+                        largestColliderAxisValue = thisBoxCollider.size.Y;
+                    }
+                    if (thisBoxCollider.size.Z > largestColliderAxisValue)
+                    {
+                        largestColliderAxisValue = thisBoxCollider.size.Z;
+                    }
+                    radius = largestColliderAxisValue / 2;
+
+
+                    float largestAxisValue = 0;
+                    if (rb.gameObject.transform.scale.X > largestAxisValue)
+                    {
+                        largestAxisValue = rb.gameObject.transform.scale.X;
+                    }
+                    if (rb.gameObject.transform.scale.Y > largestAxisValue)
+                    {
+                        largestAxisValue = rb.gameObject.transform.scale.Y;
+                    }
+                    if (rb.gameObject.transform.scale.Z > largestAxisValue)
+                    {
+                        largestAxisValue = rb.gameObject.transform.scale.Z;
+                    }
+                    radius *= largestAxisValue;
                 }
-                if (rb.gameObject.transform.scale.Y > largestAxisValue)
+                else if (rb.gameObject.GetComponent<SphereCollider>() != null)
                 {
-                    largestAxisValue = rb.gameObject.transform.scale.Y;
+                    radius = rb.gameObject.GetComponent<SphereCollider>().radius;
                 }
-                if (rb.gameObject.transform.scale.Z > largestAxisValue)
-                {
-                    largestAxisValue = rb.gameObject.transform.scale.Z;
-                }
-                radius *= largestAxisValue;
 
 
                 foreach (Rigidbody rb2 in rbs)
@@ -71,23 +95,48 @@ namespace FirewoodEngine
                     if (rb2 != rb)
                     {
                         var pos2 = rb2.gameObject.transform.position;
-                        var radius2 = (rb2.gameObject.GetComponent<Renderer>()).radius;
+                        
+                        
+                        float radius2 = 1;
+
+                        if (rb2.gameObject.GetComponent<BoxCollider>() != null)
+                        {
+                            float largestColliderAxisValue2 = 0;
+                            BoxCollider thisBoxCollider2 = rb2.gameObject.GetComponent<BoxCollider>();
+                            if (thisBoxCollider2.size.X > largestColliderAxisValue2)
+                            {
+                                largestColliderAxisValue2 = thisBoxCollider2.size.X;
+                            }
+                            if (thisBoxCollider2.size.Y > largestColliderAxisValue2)
+                            {
+                                largestColliderAxisValue2 = thisBoxCollider2.size.Y;
+                            }
+                            if (thisBoxCollider2.size.Z > largestColliderAxisValue2)
+                            {
+                                largestColliderAxisValue2 = thisBoxCollider2.size.Z;
+                            }
+                            radius = largestColliderAxisValue2 / 2;
 
 
-                        float largestAxisValue2 = 0;
-                        if (rb2.gameObject.transform.scale.X > largestAxisValue2)
-                        {
-                            largestAxisValue2 = rb2.gameObject.transform.scale.X;
+                            float largestAxisValue2 = 0;
+                            if (rb2.gameObject.transform.scale.X > largestAxisValue2)
+                            {
+                                largestAxisValue2 = rb2.gameObject.transform.scale.X;
+                            }
+                            if (rb2.gameObject.transform.scale.Y > largestAxisValue2)
+                            {
+                                largestAxisValue2 = rb2.gameObject.transform.scale.Y;
+                            }
+                            if (rb2.gameObject.transform.scale.Z > largestAxisValue2)
+                            {
+                                largestAxisValue2 = rb2.gameObject.transform.scale.Z;
+                            }
+                            radius2 *= largestAxisValue2;
                         }
-                        if (rb2.gameObject.transform.scale.Y > largestAxisValue2)
+                        else if (rb2.gameObject.GetComponent<SphereCollider>() != null)
                         {
-                            largestAxisValue2 = rb2.gameObject.transform.scale.Y;
+                            radius2 = rb2.gameObject.GetComponent<SphereCollider>().radius;
                         }
-                        if (rb2.gameObject.transform.scale.Z > largestAxisValue2)
-                        {
-                            largestAxisValue2 = rb2.gameObject.transform.scale.Z;
-                        }
-                        radius2 *= largestAxisValue2;
 
 
                         // If the two objects are close enough to collide

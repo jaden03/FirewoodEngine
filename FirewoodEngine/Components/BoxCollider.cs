@@ -40,9 +40,7 @@ namespace FirewoodEngine
                 Logging.Error("Add the box collider to a gameobject first!");
                 return;
             }
-
-            Renderer rend = gameObject.GetComponent<Renderer>();
-
+            
             Vector3 top = (this.center + new Vector3(0, this.size.Y / 2, 0)) + gameObject.transform.position;
             Vector3 bottom = (this.center - new Vector3(0, this.size.Y / 2, 0)) + gameObject.transform.position;
             Debug.DrawLine(top, bottom, Color.Red);
