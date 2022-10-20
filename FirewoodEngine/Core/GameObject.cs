@@ -16,7 +16,9 @@ namespace FirewoodEngine.Core
         public GameObject()
         {
             transform = new Transform();
+            transform.gameObject = this;
             components = new List<Component>();
+            GameObjectManager.AddGameObject(this);
         }
 
         public void AddComponent(Component component)

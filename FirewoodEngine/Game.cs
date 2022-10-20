@@ -187,6 +187,9 @@ namespace FirewoodEngine
             sphereRB.useGravity = false;
             sphere.AddComponent(sphereRB);
 
+            sphere.transform.localPosition = new Vector3(2, 0, 2);
+            sphere.transform.SetParent(house.transform);
+
 
             //var generation = new Generation();
             //generation.SetupTerrain();
@@ -202,22 +205,41 @@ namespace FirewoodEngine
             }
 
 
-            // Move the house up and down with Q and E
-            if (Input.GetKey(Key.Q))
+            
+            if (Input.GetKey(Key.X))
             {
-                (house.GetComponent<Rigidbody>()).velocity.Y = -.02f;
+                house.transform.eulerAngles.X += 0.1f;
             }
-            if (Input.GetKey(Key.E))
+            if (Input.GetKey(Key.Y))
             {
-                (house.GetComponent<Rigidbody>()).velocity.Y = .02f;
+                house.transform.eulerAngles.Y += 0.1f;
             }
+            if (Input.GetKey(Key.Z))
+            {
+                house.transform.eulerAngles.Z += 0.1f;
+            }
+
+            if (Input.GetKey(Key.F))
+            {
+                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Forward() * 10, Color.Red);
+            }
+            if (Input.GetKey(Key.R))
+            {
+                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Right() * 10, Color.Red);
+            }
+            if (Input.GetKey(Key.U))
+            {
+                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Up() * 10, Color.Red);
+            }
+
+
             if (!Input.GetKey(Key.Q) && !Input.GetKey(Key.E))
             {
                 //(house.GetComponent("Rigidbody") as Rigidbody).velocity.Y = 0;
             }
             if (Input.GetKey(Key.F))
             {
-                (house.GetComponent<Rigidbody>()).useGravity = true;
+                //(house.GetComponent<Rigidbody>()).useGravity = true;
             }
         }
 

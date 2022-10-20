@@ -38,6 +38,11 @@ namespace FirewoodEngine.Core
                 script.GetType().GetMethod("Update").Invoke(script, new[] { e });
             }
 
+            foreach (GameObject gameObject in GameObjectManager.gameObjects)
+            {
+                gameObject.transform.Update(e);
+            }
+
             Physics.Update(e);
 
             base.OnUpdateFrame(e);
@@ -78,6 +83,7 @@ namespace FirewoodEngine.Core
 
         protected override void OnLoad(EventArgs e)
         {
+            GameObjectManager.Initialize();
             RenderManager.Initialize();
 
             Location = new System.Drawing.Point(80, 45);

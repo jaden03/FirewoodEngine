@@ -68,6 +68,7 @@
     <Compile Include="Core\Colors.cs" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\Debug.cs" />
+    <Compile Include="Core\GameObjectManager.cs" />
     <Compile Include="Scripts\Freecam.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Core\Application.cs" />
