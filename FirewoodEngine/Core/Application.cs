@@ -92,7 +92,7 @@ namespace FirewoodEngine.Core
             //physicsThread.Start();
             startPhysics();
 
-            //AudioManager.Init();
+            AudioManager.Init();
 
             stopwatch.Start();
 
