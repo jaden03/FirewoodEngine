@@ -92,6 +92,8 @@ namespace FirewoodEngine.Core
             //physicsThread.Start();
             startPhysics();
 
+            //AudioManager.Init();
+
             stopwatch.Start();
 
             activeScripts = new List<object>();

@@ -65,6 +65,7 @@
     <Compile Include="Components\BoxCollider.cs" />
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\SphereCollider.cs" />
+    <Compile Include="Core\AudioManager.cs" />
     <Compile Include="Core\Colors.cs" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\Debug.cs" />
