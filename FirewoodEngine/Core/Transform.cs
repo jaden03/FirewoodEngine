@@ -22,6 +22,10 @@ namespace FirewoodEngine.Core
         public Transform parent;
         public List<Transform> children;
 
+        public Vector3 forward;
+        public Vector3 right;
+        public Vector3 up;
+
         public Transform()
         {
             position = Vector3.Zero;
@@ -37,9 +41,13 @@ namespace FirewoodEngine.Core
 
         public void Update(FrameEventArgs e)
         {
+            forward = Forward();
+            right = Right();
+            up = Up();
+
             foreach (Transform child in children)
             {
-                child.position = position + ((child.localPosition.Z * Forward()) + (child.localPosition.Y * Up()) + (-child.localPosition.X * Right()));
+                child.position = position + ((child.localPosition.Z * forward) + (child.localPosition.Y * up) + (-child.localPosition.X * right));
 
                 child.localEulerAngles = eulerAngles + child.localEulerAngles;
 

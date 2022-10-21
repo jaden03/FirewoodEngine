@@ -244,15 +244,15 @@ namespace FirewoodEngine
 
             if (Input.GetKey(Key.F))
             {
-                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Forward() * 10, Color.Blue);
+                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.forward * 10, Color.Blue);
             }
             if (Input.GetKey(Key.R))
             {
-                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Right() * 10, Color.Red);
+                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.right * 10, Color.Red);
             }
             if (Input.GetKey(Key.U))
             {
-                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.Up() * 10, Color.Green);
+                Debug.DrawLine(house.transform.position, house.transform.position + house.transform.up * 10, Color.Green);
             }
 
 
