@@ -207,7 +207,7 @@ namespace FirewoodEngine
                 app.Exit();
             }
 
-            if (Input.GetKeyDown(Key.R))
+            if (Input.GetKeyDown(Key.L))
             {
                 AudioManager.PlaySound("test.wav");
             }
