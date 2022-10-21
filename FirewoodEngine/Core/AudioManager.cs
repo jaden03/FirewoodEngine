@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using System.Threading;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
-using OpenTK.Audio;
+using System.Diagnostics;
 
 namespace FirewoodEngine.Core
 {
     using static Logging;
     internal class AudioManager
     {
-        static readonly string filename = ("../../Sounds/pwwuitt.wav");
+        static readonly string filename = ("../../Sounds/test.wav");
 
         public static void Init()
         {
@@ -27,9 +27,23 @@ namespace FirewoodEngine.Core
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Audio Manager Initialized");
             Console.ForegroundColor = ConsoleColor.White;
+        }
 
+
+        public static void PlaySound(string path)
+        {
+            Thread thread = new Thread(() => PlaySoundThread(path));
+            thread.Start();
+        }
+
+
+
+        public static void PlaySoundThread(string path)
+        {
+            string filename = ("../../Sounds/" + path);
 
             int buffer, source, state;
+
             buffer = AL.GenBuffer();
             source = AL.GenSource();
 
@@ -52,6 +66,10 @@ namespace FirewoodEngine.Core
             AL.DeleteSource(source);
             AL.DeleteBuffer(buffer);
         }
+
+
+        
+
 
         public static byte[] LoadWave(Stream stream, out int channels, out int bits, out int rate)
         {

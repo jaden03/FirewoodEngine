@@ -8,12 +8,19 @@ using OpenTK;
 
 namespace FirewoodEngine.Core
 {
+    using static Logging;
     class Input
     {
         public Application app;
 
         public static bool LockCursor = false;
         public static bool HideCursor = false;
+
+        static List<Key> keysDownThisFrame = new List<Key>();
+        static List<Key> keysDownLastFrame = new List<Key>();
+
+        static List<Key> keyUps = new List<Key>();
+        static List<Key> keyDowns = new List<Key>();
 
         //KeyboardState currentInput;
 
@@ -44,7 +51,53 @@ namespace FirewoodEngine.Core
 
         public void Update(FrameEventArgs e)
         {
-            
+            var currentInput = Keyboard.GetState();
+
+            keyUps.Clear();
+            keyDowns.Clear();
+
+            foreach (Key key in Enum.GetValues(typeof(Key)))
+            {
+                if (currentInput.IsKeyDown(key) && !keysDownThisFrame.Contains(key))
+                {
+                    keysDownThisFrame.Add(key);
+                }
+                else if (!currentInput.IsKeyDown(key) && keysDownThisFrame.Contains(key))
+                {
+                    keysDownThisFrame.Remove(key);
+                }
+
+                if (keysDownThisFrame.Contains(key) && !keysDownLastFrame.Contains(key))
+                {
+                    keyDowns.Add(key);
+                }
+                if (!keysDownThisFrame.Contains(key) && keysDownLastFrame.Contains(key))
+                {
+                    keyUps.Add(key);
+                }
+
+                if (currentInput.IsKeyDown(key) && !keysDownLastFrame.Contains(key))
+                {
+                    keysDownLastFrame.Add(key);
+                }
+                else if (!currentInput.IsKeyDown(key) && keysDownLastFrame.Contains(key))
+                {
+                    keysDownLastFrame.Remove(key);
+                }
+            }
         }
+
+
+        public static bool GetKeyDown(Key key)
+        {
+            return keyDowns.Contains(key);
+        }
+
+        public static bool GetKeyUp(Key key)
+        {
+            return keyUps.Contains(key);
+        }
+
+
     }
 }

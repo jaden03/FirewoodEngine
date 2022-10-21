@@ -68,7 +68,7 @@ namespace FirewoodEngine
             skybox.AddComponent(skyboxRenderer);
             skybox.transform.scale = new Vector3(100, 100, 100);
 
-
+            
 
             // line object
             var lineObject = new GameObject();
@@ -181,12 +181,14 @@ namespace FirewoodEngine
             {
                 Warn("Sphere triggering " + otherBody.gameObject.name);
             };
+            
 
             //sphereCollider.DebugBounds();
 
             var sphereRB = new Rigidbody();
             sphereRB.useGravity = false;
             sphere.AddComponent(sphereRB);
+
 
             sphere.transform.localPosition = new Vector3(2, 0, 2);
             sphere.transform.SetParent(house.transform);
@@ -205,6 +207,10 @@ namespace FirewoodEngine
                 app.Exit();
             }
 
+            if (Input.GetKeyDown(Key.R))
+            {
+                AudioManager.PlaySound("test.wav");
+            }
 
             
             if (Input.GetKey(Key.X))
