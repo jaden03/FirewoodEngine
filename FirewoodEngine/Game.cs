@@ -10,6 +10,7 @@ using OpenTK.Input;
 using FirewoodEngine.Scripts;
 using FirewoodEngine.Core;
 using FirewoodEngine.Componenents;
+using FirewoodEngine.Components;
 
 namespace FirewoodEngine
 {
@@ -32,12 +33,16 @@ namespace FirewoodEngine
             var cameraObject = new GameObject();
             cameraObject.transform.position = new Vector3(0, 5, -5);
             cameraObject.name = "Camera";
+
+            var cameraObjectChild = new GameObject();
+            cameraObjectChild.transform.SetParent(cameraObject.transform);
+
             // Create a camera component
             var camera = new Camera();
             // Set the app variable in Camera
             camera.app = app;
             // Add the camera component to the GameObject
-            cameraObject.AddComponent(camera);
+            cameraObjectChild.AddComponent(camera);
             // Add the camera component to the active scripts so the update function will work (will be refactored so you dont have to do this)
             app.activeScripts.Add(camera);
 
@@ -49,6 +54,16 @@ namespace FirewoodEngine
             freecam.Start();
             // Add the freecam component to the active scripts so the update function will work (will be refactored so you dont have to do this)
             app.activeScripts.Add(freecam);
+
+
+            // Audio Listener \\
+            var audioListener = new AudioListener();
+            cameraObjectChild.AddComponent(audioListener);
+            audioListener.Start();
+            app.activeScripts.Add(audioListener);
+
+
+
 
 
             // Skybox material
@@ -209,7 +224,7 @@ namespace FirewoodEngine
 
             if (Input.GetKeyDown(Key.L))
             {
-                AudioManager.PlaySound("test.wav");
+                AudioManager.PlaySound("testMono.wav");
             }
 
             

@@ -67,6 +67,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\AudioListener.cs" />
     <Compile Include="Components\BoxCollider.cs" />
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\SphereCollider.cs" />

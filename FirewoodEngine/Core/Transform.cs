@@ -49,7 +49,34 @@ namespace FirewoodEngine.Core
             {
                 child.position = position + ((child.localPosition.Z * forward) + (child.localPosition.Y * up) + (-child.localPosition.X * right));
 
-                child.localEulerAngles = eulerAngles + child.localEulerAngles;
+                child.eulerAngles = eulerAngles + (child.localEulerAngles);
+
+
+                // This converts a Quaternion to EulerAngles should probably put this somewhere accessible in the engine at some point \\
+
+                //Quaternion q = Quaternion.FromEulerAngles(eulerAngles.X, eulerAngles.Y, eulerAngles.Z) * Quaternion.FromEulerAngles(child.localEulerAngles.X, child.localEulerAngles.Y, child.localEulerAngles.Z);
+
+                //Vector3 angles;
+
+                //double sinr_cosp = 2 * (q.W * q.X + q.Y * q.Z);
+                //double cosr_cosp = 1 - 2 * (q.X * q.X + q.Y * q.Y);
+                //angles.X = (float)Math.Atan2(sinr_cosp, cosr_cosp);
+
+                //// pitch / y
+                //double sinp = 2 * (q.W * q.Y - q.Z * q.X);
+                //if (Math.Abs(sinp) >= 1)
+                //{
+                //    angles.Y = (float)Math.PI / 2 * Math.Sign(sinp);
+                //}
+                //else
+                //{
+                //    angles.Y = (float)Math.Asin(sinp);
+                //}
+
+                //// yaw / z
+                //double siny_cosp = 2 * (q.W * q.Z + q.X * q.Y);
+                //double cosy_cosp = 1 - 2 * (q.Y * q.Y + q.Z * q.Z);
+                //angles.Z = (float)Math.Atan2(siny_cosp, cosy_cosp);
 
                 child.Update(e);
             }

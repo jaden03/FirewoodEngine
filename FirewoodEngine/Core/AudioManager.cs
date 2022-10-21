@@ -8,13 +8,15 @@ using System.Threading;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 using System.Diagnostics;
+using FirewoodEngine.Components;
+using System.Windows.Media.Effects;
 
 namespace FirewoodEngine.Core
 {
     using static Logging;
     internal class AudioManager
     {
-        static readonly string filename = ("../../Sounds/test.wav");
+        public static AudioListener audioListener;
 
         public static void Init()
         {
@@ -53,6 +55,15 @@ namespace FirewoodEngine.Core
             AL.BufferData(buffer, GetSoundFormat(channels, bits_per_sample), sound_data, sound_data.Length, sample_rate);
 
             AL.Source(source, ALSourcei.Buffer, buffer);
+
+            Vector3 zero = Vector3.Zero;
+            AL.Source(source, ALSource3f.Direction, ref zero);
+            AL.Source(source, ALSource3f.Velocity, ref zero);
+            AL.Source(source, ALSource3f.Position, ref zero);
+            AL.Source(source, ALSourceb.SourceRelative, false);
+            AL.Source(source, ALSourcef.EfxAirAbsorptionFactor, 10f);
+
+
             AL.SourcePlay(source);
 
             do
@@ -124,6 +135,27 @@ namespace FirewoodEngine.Core
                 case 2: return bits == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
                 default: throw new NotSupportedException("The specified sound format is not supported.");
             }
+        }
+
+
+
+        public static void SetListener(AudioListener listener)
+        {
+            if (audioListener != null)
+                Error("There can only be one audio listener at a time!");
+
+            audioListener = listener;
+        }
+
+        public static void UpdateListener(Vector3 position, Vector3 velocity, Vector3 forward, Vector3 up)
+        {
+            if (audioListener == null)
+                Error("There is no audio listener!");
+
+            AL.Listener(ALListener3f.Position, ref position);
+            AL.Listener(ALListener3f.Velocity, ref velocity);
+            AL.Listener(ALListenerfv.Orientation, ref forward, ref up);
+            AL.Listener(ALListenerf.Gain, .1f <= 0 ? 0.001f : (.1f > 1 ? 1 : .1f));
         }
 
     }
