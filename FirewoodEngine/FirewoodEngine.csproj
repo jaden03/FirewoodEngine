@@ -103,6 +103,7 @@
     <Content Include="Scripts\readme.txt" />
     <Content Include="Sounds\pwwuitt.wav" />
     <Content Include="Sounds\test.wav" />
+    <Content Include="Sounds\testMono.wav" />
     <Content Include="Textures\grass.png" />
     <Content Include="Textures\ground.png" />
     <Content Include="Textures\House.png" />
