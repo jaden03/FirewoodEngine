@@ -223,6 +223,21 @@ namespace FirewoodEngine
 
 
 
+            GameObject amogus = new GameObject();
+
+            Renderer amogusRenderer = new Renderer();
+            amogusRenderer.SetOBJ("amogus.obj", true);
+            amogus.AddComponent(amogusRenderer);
+
+            Material amogusMat = new Material();
+            amogusMat.shader = Shader.textureShader;
+            amogusMat.SetTexture("amogus.png");
+
+            amogusRenderer.material = amogusMat;
+
+            amogus.transform.position = new Vector3(5, 4, 0);
+            amogus.transform.eulerAngles = new Vector3(0, 180, 0);
+
             //var generation = new Generation();
             //generation.SetupTerrain();
         }

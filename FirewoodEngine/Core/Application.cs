@@ -34,7 +34,6 @@ namespace FirewoodEngine.Core
 
             foreach (object script in activeScripts)
             {
-                //script.Update(e);
                 script.GetType().GetMethod("Update").Invoke(script, new[] { e });
             }
 
@@ -77,10 +76,6 @@ namespace FirewoodEngine.Core
         }
 
 
-        
-
-
-
         protected override void OnLoad(EventArgs e)
         {
             GameObjectManager.Initialize();
@@ -88,8 +83,6 @@ namespace FirewoodEngine.Core
 
             Location = new System.Drawing.Point(80, 45);
 
-            //Thread physicsThread = new Thread(new ThreadStart(startPhysics));
-            //physicsThread.Start();
             startPhysics();
 
             AudioManager.Init();
@@ -113,26 +106,11 @@ namespace FirewoodEngine.Core
         void startPhysics()
         {
             Physics.Initialize();
-
-            //System.Timers.Timer physicsTimer = new System.Timers.Timer();
-            //physicsTimer.Interval = 1;
-            //physicsTimer.Elapsed += updateTick;
-            //physicsTimer.Enabled = true;
         }
 
-        //void updateTick(Object source, EventArgs e)
-        //{
-        //    Physics.Update();
-        //}
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            //Matrix4 view = Matrix4.LookAt(camPosition, camPosition + front, up);
-            //Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), (float)Width / Height, 0.1f, 1000.0f);
-            //Context.SwapBuffers();
-
-            //RenderManager.Render(view, projection, stopwatch, _lightPos, camPosition);
-
             base.OnRenderFrame(e);
         }
 

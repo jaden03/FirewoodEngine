@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Models\amogus.obj" />
     <None Include="Models\donut.obj" />
     <None Include="Models\flatGround.obj" />
     <None Include="Models\ground.obj" />
@@ -104,6 +105,7 @@
     <Content Include="Sounds\pwwuitt.wav" />
     <Content Include="Sounds\test.wav" />
     <Content Include="Sounds\testMono.wav" />
+    <Content Include="Textures\amogus.png" />
     <Content Include="Textures\grass.png" />
     <Content Include="Textures\ground.png" />
     <Content Include="Textures\House.png" />
