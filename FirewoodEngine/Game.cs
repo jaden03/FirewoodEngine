@@ -22,6 +22,8 @@ namespace FirewoodEngine
         GameObject house;
         GameObject sphere;
 
+        GameObject testSoundObject;
+
         // Fires on the first frame of the game
         public void Start()
         {
@@ -209,6 +211,18 @@ namespace FirewoodEngine
             sphere.transform.SetParent(house.transform);
 
 
+
+
+
+            testSoundObject = new GameObject();
+            testSoundObject.name = "Test Sound";
+
+            var testSound = new AudioSource("testMono.wav");
+            testSoundObject.AddComponent(testSound);
+            testSound.directional = true;
+
+
+
             //var generation = new Generation();
             //generation.SetupTerrain();
         }
@@ -224,7 +238,7 @@ namespace FirewoodEngine
 
             if (Input.GetKeyDown(Key.L))
             {
-                AudioManager.PlaySound("testMono.wav");
+                testSoundObject.GetComponent<AudioSource>().Play();
             }
 
             

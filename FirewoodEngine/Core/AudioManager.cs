@@ -38,6 +38,12 @@ namespace FirewoodEngine.Core
             thread.Start();
         }
 
+        public static void PlaySoundAtPosition(string path, Vector3 position, float volume, bool directional)
+        {
+            Thread thread = new Thread(() => PlaySoundAtPositionThread(path, position, volume, directional));
+            thread.Start();
+        }
+
 
 
         public static void PlaySoundThread(string path)
@@ -79,7 +85,50 @@ namespace FirewoodEngine.Core
         }
 
 
-        
+        public static void PlaySoundAtPositionThread(string path, Vector3 position, float volume, bool directional)
+        {
+            string filename = ("../../Sounds/" + path);
+
+            int buffer, source, state;
+
+            buffer = AL.GenBuffer();
+            source = AL.GenSource();
+
+            int channels, bits_per_sample, sample_rate;
+            byte[] sound_data = LoadWave(File.Open(filename, FileMode.Open), out channels, out bits_per_sample, out sample_rate);
+
+            AL.BufferData(buffer, GetSoundFormat(channels, bits_per_sample), sound_data, sound_data.Length, sample_rate);
+
+            AL.Source(source, ALSourcei.Buffer, buffer);
+
+            Vector3 zero = Vector3.Zero;
+            AL.Source(source, ALSource3f.Direction, ref zero);
+            AL.Source(source, ALSource3f.Velocity, ref zero);
+            AL.Source(source, ALSource3f.Position, ref position);
+            AL.Source(source, ALSourceb.SourceRelative, !directional);
+            AL.Source(source, ALSourcef.EfxAirAbsorptionFactor, 10f);
+            AL.Source(source, ALSourcef.Gain, volume);
+
+
+            AL.SourcePlay(source);
+
+            do
+            {
+                Thread.Sleep(250);
+                AL.GetSource(source, ALGetSourcei.SourceState, out state);
+            }
+            while ((ALSourceState)state == ALSourceState.Playing);
+
+            AL.SourceStop(source);
+            AL.DeleteSource(source);
+            AL.DeleteBuffer(buffer);
+        }
+
+
+
+
+
+
 
 
         public static byte[] LoadWave(Stream stream, out int channels, out int bits, out int rate)
@@ -155,7 +204,7 @@ namespace FirewoodEngine.Core
             AL.Listener(ALListener3f.Position, ref position);
             AL.Listener(ALListener3f.Velocity, ref velocity);
             AL.Listener(ALListenerfv.Orientation, ref forward, ref up);
-            AL.Listener(ALListenerf.Gain, .1f <= 0 ? 0.001f : (.1f > 1 ? 1 : .1f));
+            AL.Listener(ALListenerf.Gain, .5f <= 0 ? 0.001f : (.5f > 1 ? 1 : .5f));
         }
 
     }

@@ -11,11 +11,12 @@ namespace FirewoodEngine.Core
     public class Transform
     {
         public Vector3 position;
+        public Quaternion rotation;
         public Vector3 eulerAngles;
         public Vector3 scale;
         
-        //Example of simple Hierarchy system
         public Vector3 localPosition;
+        public Quaternion localRotation;
         public Vector3 localEulerAngles;
         
         public GameObject gameObject;
@@ -29,10 +30,12 @@ namespace FirewoodEngine.Core
         public Transform()
         {
             position = Vector3.Zero;
+            rotation = Quaternion.Identity;
             eulerAngles = Vector3.Zero;
             scale = Vector3.One;
             
             localPosition = Vector3.Zero;
+            localRotation = Quaternion.Identity;
             localEulerAngles = Vector3.Zero;
             gameObject = null;
             parent = null;
@@ -45,38 +48,21 @@ namespace FirewoodEngine.Core
             right = Right();
             up = Up();
 
+            if (parent != null)
+            {
+                rotation = parent.rotation * localRotation;
+            }
+            else
+            {
+                rotation = Quaternion.FromEulerAngles(eulerAngles);
+            }
+            localRotation = Quaternion.FromEulerAngles(localEulerAngles);
+            
             foreach (Transform child in children)
             {
                 child.position = position + ((child.localPosition.Z * forward) + (child.localPosition.Y * up) + (-child.localPosition.X * right));
 
-                child.eulerAngles = eulerAngles + (child.localEulerAngles);
-
-
-                // This converts a Quaternion to EulerAngles should probably put this somewhere accessible in the engine at some point \\
-
-                //Quaternion q = Quaternion.FromEulerAngles(eulerAngles.X, eulerAngles.Y, eulerAngles.Z) * Quaternion.FromEulerAngles(child.localEulerAngles.X, child.localEulerAngles.Y, child.localEulerAngles.Z);
-
-                //Vector3 angles;
-
-                //double sinr_cosp = 2 * (q.W * q.X + q.Y * q.Z);
-                //double cosr_cosp = 1 - 2 * (q.X * q.X + q.Y * q.Y);
-                //angles.X = (float)Math.Atan2(sinr_cosp, cosr_cosp);
-
-                //// pitch / y
-                //double sinp = 2 * (q.W * q.Y - q.Z * q.X);
-                //if (Math.Abs(sinp) >= 1)
-                //{
-                //    angles.Y = (float)Math.PI / 2 * Math.Sign(sinp);
-                //}
-                //else
-                //{
-                //    angles.Y = (float)Math.Asin(sinp);
-                //}
-
-                //// yaw / z
-                //double siny_cosp = 2 * (q.W * q.Z + q.X * q.Y);
-                //double cosy_cosp = 1 - 2 * (q.Y * q.Y + q.Z * q.Z);
-                //angles.Z = (float)Math.Atan2(siny_cosp, cosy_cosp);
+                child.rotation = rotation * child.localRotation;
 
                 child.Update(e);
             }
@@ -151,21 +137,18 @@ namespace FirewoodEngine.Core
         }
 
         public Vector3 Forward()
-        {
-            var rot = Quaternion.FromEulerAngles(eulerAngles);
-            return rot * Vector3.UnitZ;
+        {;
+            return rotation * Vector3.UnitZ;
         }
 
         public Vector3 Right()
         {
-            var rot = Quaternion.FromEulerAngles(eulerAngles);
-            return rot * -Vector3.UnitX;
+            return rotation * -Vector3.UnitX;
         }
 
         public Vector3 Up()
         {
-            var rot = Quaternion.FromEulerAngles(eulerAngles);
-            return rot * Vector3.UnitY;
+            return rotation * Vector3.UnitY;
         }
 
     }

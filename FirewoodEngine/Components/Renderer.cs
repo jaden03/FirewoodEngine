@@ -42,8 +42,8 @@ namespace FirewoodEngine.Componenents
         {
             Matrix4 model =
             (
-                Matrix4.CreateScale(gameObject.transform.scale) 
-                * Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(gameObject.transform.eulerAngles.X, gameObject.transform.eulerAngles.Y, gameObject.transform.eulerAngles.Z))
+                Matrix4.CreateScale(gameObject.transform.scale)
+                * Matrix4.CreateFromQuaternion(gameObject.transform.rotation)
                 * Matrix4.CreateTranslation(gameObject.transform.position)
             );
 
