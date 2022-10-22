@@ -61,9 +61,6 @@ namespace FirewoodEngine.Core
             foreach (Transform child in children)
             {
                 child.position = position + ((child.localPosition.Z * forward) + (child.localPosition.Y * up) + (-child.localPosition.X * right));
-
-                child.rotation = rotation * child.localRotation;
-
                 child.Update(e);
             }
         }

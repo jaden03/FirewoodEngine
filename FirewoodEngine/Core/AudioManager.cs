@@ -106,8 +106,8 @@ namespace FirewoodEngine.Core
             AL.Source(source, ALSource3f.Velocity, ref zero);
             AL.Source(source, ALSource3f.Position, ref position);
             AL.Source(source, ALSourceb.SourceRelative, !directional);
-            AL.Source(source, ALSourcef.EfxAirAbsorptionFactor, 10f);
             AL.Source(source, ALSourcef.Gain, volume);
+            AL.Source(source, ALSourcef.EfxAirAbsorptionFactor, 10f);
 
 
             AL.SourcePlay(source);
