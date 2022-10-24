@@ -16,11 +16,11 @@ namespace FirewoodEngine.Componenents
     {
         public Application app;
         public float fov = 90f;
-        
+
         public void Update(FrameEventArgs e)
         {
             Matrix4 view = Matrix4.LookAt(gameObject.transform.position, gameObject.transform.position + transform.forward, transform.up);
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), (float)app.Width / app.Height, 0.1f, 1000.0f);
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), (float)app.Width / app.Height, 0.01f, 1000.0f);
             app.Context.SwapBuffers();
 
             RenderManager.Render(view, projection, app.stopwatch, app._lightPos, gameObject.transform.position);

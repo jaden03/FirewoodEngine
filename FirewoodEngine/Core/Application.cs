@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Timers;
 using System.Threading;
+using Dear_ImGui_Sample;
+using ImGuiNET;
 
 namespace FirewoodEngine.Core
 {
@@ -18,6 +20,8 @@ namespace FirewoodEngine.Core
     class Application : GameWindow
     {
         public Application(int width, int height, string title) : base(width, height, GraphicsMode.Default, title) {  }
+
+        ImGuiController _controller;
 
         public Stopwatch stopwatch = new Stopwatch();
 
@@ -42,6 +46,14 @@ namespace FirewoodEngine.Core
                 gameObject.transform.Update(e);
             }
 
+            _controller.Update(this, (float)e.Time);
+
+            ImGui.ShowDemoWindow();
+
+            _controller.Render();
+
+            ImGuiController.CheckGLError("End of frame");
+
             Physics.Update(e);
 
             base.OnUpdateFrame(e);
@@ -54,7 +66,7 @@ namespace FirewoodEngine.Core
 
             if (Input.LockCursor)
             {
-                Mouse.SetPosition(X + Width / 2f, Y + Height / 2f);
+                Mouse.SetPosition(X + ClientSize.Width / 2f, Y + ClientSize.Height / 2f);
                 CursorGrabbed = true;
             }
             else
@@ -67,12 +79,23 @@ namespace FirewoodEngine.Core
             else
                 CursorVisible = true;
 
+            Input.SetMousePosition(new Vector2(e.X, e.Y));
+
             base.OnMouseMove(e);
         }
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
+            _controller.MouseScroll(e.Delta);
+
             base.OnMouseWheel(e);
+        }
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            _controller.PressChar((char)e.Key);
+
+            base.OnKeyDown(e);
         }
 
 
@@ -81,7 +104,10 @@ namespace FirewoodEngine.Core
             GameObjectManager.Initialize();
             RenderManager.Initialize();
 
+            //WindowState = WindowState.Fullscreen;
             Location = new System.Drawing.Point(80, 45);
+
+            _controller = new ImGuiController(ClientSize.Width, ClientSize.Height);
 
             startPhysics();
 
@@ -116,9 +142,12 @@ namespace FirewoodEngine.Core
 
         protected override void OnResize(EventArgs e)
         {
-            GL.Viewport(0, 0, Width, Height);
+            GL.Viewport(0, 0, ClientSize.Width, ClientSize.Height);
             GL.MatrixMode(MatrixMode.Projection);
-            GL.Ortho(-1.0f * Width / Height, 1.0f * Width / Height, -1.0f, 1.0f, .1f, 100f);
+            GL.Ortho(-1.0f * ClientSize.Width / ClientSize.Height, 1.0f * ClientSize.Width / ClientSize.Height, -1.0f, 1.0f, .1f, 100f);
+
+            _controller.WindowResized(ClientSize.Width, ClientSize.Height);
+
             base.OnResize(e);
         }
 

@@ -32,7 +32,7 @@ namespace FirewoodEngine.Componenents
             RenderManager.AddRenderer(this);
         }
 
-        public void Draw(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos)
+        public void Draw(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer)
         {
             Matrix4 model =
             (
@@ -42,6 +42,8 @@ namespace FirewoodEngine.Componenents
             );
 
             material.shader.Use();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, buffer);
 
             if (material.rgb == true)
                 material.color = Colors.ColorFromHSV((timeValue * 100) % 255, 1, 1);

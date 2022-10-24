@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
+using System.Security.Policy;
 
 namespace FirewoodEngine.Core
 {
@@ -22,6 +23,8 @@ namespace FirewoodEngine.Core
         static List<Key> keyUps = new List<Key>();
         static List<Key> keyDowns = new List<Key>();
 
+        static Vector2 currentMousePos = Vector2.Zero;
+
         //KeyboardState currentInput;
 
 
@@ -29,6 +32,24 @@ namespace FirewoodEngine.Core
         //{
         //    currentInput = Keyboard.GetState();
         //}
+
+        public static KeyboardState GetKeyboardState()
+        {
+            var currentInput = Keyboard.GetState();
+            return currentInput;
+        }
+        public static MouseState GetMouseState()
+        {
+            var currentMouse = Mouse.GetState();
+            return currentMouse;
+        }
+
+
+        public static void SetMousePosition(Vector2 pos)
+        {
+            currentMousePos = pos;
+        }
+
 
 
         public static bool GetKey(Key key)
@@ -41,6 +62,10 @@ namespace FirewoodEngine.Core
         {
             var currentMouse = Mouse.GetState();
             return new Vector2(currentMouse.X, currentMouse.Y);
+        }
+        public static Vector2 GetMouseCoords()
+        {
+            return new Vector2(currentMousePos.X, currentMousePos.Y);
         }
 
         public static float GetMouseWheel()

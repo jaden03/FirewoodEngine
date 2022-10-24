@@ -62,12 +62,12 @@ namespace FirewoodEngine.Core
 
             foreach (Renderer rend in renderers)
             {
-                rend.Render(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos);
+                rend.Render(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos, VertexBufferObject);
             }
 
             foreach (LineRenderer rend in lineRenderers)
             {
-                rend.Draw(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos);
+                rend.Draw(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos, VertexBufferObject);
             }
 
         }

@@ -16,7 +16,7 @@ namespace FirewoodEngine.Componenents
         public float[] vertices;
         public float[] triangles;
         public bool wireframe = false;
-        public readonly int VertexArrayObject;
+        public int VertexArrayObject;
         public Material material;
 
         public Vector3 bounds;
@@ -38,17 +38,19 @@ namespace FirewoodEngine.Componenents
                 OBJLoader.loadOBJFromFile(path, out vertices, out triangles, out bounds, out offset, out radius);
         }
 
-        public void Render(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos)
+        public void Render(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer)
         {
             Matrix4 model =
             (
-                Matrix4.CreateScale(gameObject.transform.scale)
-                * Matrix4.CreateFromQuaternion(gameObject.transform.rotation)
-                * Matrix4.CreateTranslation(gameObject.transform.position)
+                Matrix4.CreateFromQuaternion(gameObject.transform.rotation) *
+                Matrix4.CreateScale(gameObject.transform.scale) *
+                Matrix4.CreateTranslation(gameObject.transform.position)
             );
 
             //texture.Use(TextureUnit.Texture0);
             material.shader.Use();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, buffer);
 
             int modelLocation = GL.GetUniformLocation(material.shader.Handle, "model");
             GL.UniformMatrix4(modelLocation, true, ref model);

@@ -28,8 +28,8 @@ namespace FirewoodEngine
         public void Start()
         {
             // Hide the cursor and lock it to the center of the screen
-            Input.HideCursor = true;
-            Input.LockCursor = true;
+            //Input.HideCursor = true;
+            //Input.LockCursor = true;
 
             // Create a new GameObject
             var cameraObject = new GameObject();
@@ -257,19 +257,22 @@ namespace FirewoodEngine
             }
 
             
-            if (Input.GetKey(Key.X))
+            if (Input.GetKeyDown(Key.X))
             {
-                house.transform.eulerAngles.X += 0.1f;
+                house.transform.eulerAngles.X += 1f;
+                Warn(house.transform.eulerAngles);
                 //house.transform.position.X += 0.1f;
             }
-            if (Input.GetKey(Key.Y))
+            if (Input.GetKeyDown(Key.Y))
             {
-                house.transform.eulerAngles.Y += 0.1f;
+                house.transform.eulerAngles.Y += 1f;
+                Warn(house.transform.eulerAngles);
                 //house.transform.position.Y += 0.1f;
             }
-            if (Input.GetKey(Key.Z))
+            if (Input.GetKeyDown(Key.Z))
             {
-                house.transform.eulerAngles.Z += 0.1f;
+                house.transform.eulerAngles.Z += 1f;
+                Warn(house.transform.eulerAngles);
                 //house.transform.position.Z += 0.1f;
             }
 
