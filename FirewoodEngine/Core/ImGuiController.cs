@@ -361,7 +361,7 @@ void main()
                     GL.BufferData(BufferTarget.ArrayBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
                     _vertexBufferSize = newSize;
 
-                    Console.WriteLine($"Resized dear imgui vertex buffer to new size {_vertexBufferSize}");
+                    //Console.WriteLine($"Resized dear imgui vertex buffer to new size {_vertexBufferSize}");
                 }
 
                 int indexSize = cmd_list.IdxBuffer.Size * sizeof(ushort);
@@ -371,7 +371,7 @@ void main()
                     GL.BufferData(BufferTarget.ElementArrayBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
                     _indexBufferSize = newSize;
 
-                    Console.WriteLine($"Resized dear imgui index buffer to new size {_indexBufferSize}");
+                    //Console.WriteLine($"Resized dear imgui index buffer to new size {_indexBufferSize}");
                 }
             }
 
@@ -514,7 +514,7 @@ void main()
             if (success == 0)
             {
                 string info = GL.GetProgramInfoLog(program);
-                Warn($"GL.LinkProgram had info log [{name}]:\n{info}");
+                //Warn($"GL.LinkProgram had info log [{name}]:\n{info}");
             }
 
             GL.DetachShader(program, vertex);
@@ -538,7 +538,7 @@ void main()
             if (success == 0)
             {
                 string info = GL.GetShaderInfoLog(shader);
-                Warn($"GL.CompileShader for shader '{name}' [{type}] had info log:\n{info}");
+                //Warn($"GL.CompileShader for shader '{name}' [{type}] had info log:\n{info}");
             }
 
             return shader;
@@ -550,7 +550,7 @@ void main()
             int i = 1;
             while ((error = GL.GetError()) != ErrorCode.NoError)
             {
-                Error($"{title} ({i++}): {error}");
+                //Error($"{title} ({i++}): {error}");
             }
         }
     }

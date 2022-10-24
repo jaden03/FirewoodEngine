@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D2E7B5B5-9392-4F28-84F6-DDA5F5530DDD}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>FirewoodEngine</RootNamespace>
     <AssemblyName>FirewoodEngine</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>

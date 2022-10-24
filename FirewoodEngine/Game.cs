@@ -307,8 +307,9 @@ namespace FirewoodEngine
             {
                 //(house.GetComponent("Rigidbody") as Rigidbody).velocity.Y = 0;
             }
-            if (Input.GetKey(Key.F))
+            if (Input.GetKeyDown(Key.F))
             {
+                Print("test");
                 //(house.GetComponent<Rigidbody>()).useGravity = true;
             }
         }

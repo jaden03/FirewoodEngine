@@ -13,6 +13,7 @@ using System.Timers;
 using System.Threading;
 using Dear_ImGui_Sample;
 using ImGuiNET;
+using System.IO;
 
 namespace FirewoodEngine.Core
 {
@@ -28,6 +29,9 @@ namespace FirewoodEngine.Core
         public Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
         public List<object> activeScripts;
+
+        StringWriter consoleOut;
+        public List<string> consoleOutput;
 
         //------------------------\\
 
@@ -48,7 +52,31 @@ namespace FirewoodEngine.Core
 
             _controller.Update(this, (float)e.Time);
 
-            ImGui.ShowDemoWindow();
+            if (consoleOut.ToString() != "")
+            {
+                consoleOutput.Add(consoleOut.ToString());
+            }
+            consoleOut.GetStringBuilder().Clear();
+
+            //ImGui.ShowDemoWindow();
+            ImGui.SetNextWindowSize(new System.Numerics.Vector2(500, 350), ImGuiCond.FirstUseEver);
+            ImGui.Begin("Console");
+            if (ImGui.Button("Clear"))
+            {
+                consoleOutput.Clear();
+            }
+            ImGui.Separator();
+            ImGui.BeginChild("Scrolling");
+
+            foreach (string output in consoleOutput)
+            {
+                ImGui.Text(output);
+            }
+
+            ImGui.SetScrollY(ImGui.GetScrollMaxY());
+            ImGui.EndChild();
+
+            ImGui.End();
 
             _controller.Render();
 
@@ -101,13 +129,17 @@ namespace FirewoodEngine.Core
 
         protected override void OnLoad(EventArgs e)
         {
+            consoleOut = new StringWriter();
+            Console.SetOut(consoleOut);
+            consoleOutput = new List<string>();
+            
+            _controller = new ImGuiController(ClientSize.Width, ClientSize.Height);
+            
             GameObjectManager.Initialize();
             RenderManager.Initialize();
 
             //WindowState = WindowState.Fullscreen;
             Location = new System.Drawing.Point(80, 45);
-
-            _controller = new ImGuiController(ClientSize.Width, ClientSize.Height);
 
             startPhysics();
 
