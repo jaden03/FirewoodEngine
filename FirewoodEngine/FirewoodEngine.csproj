@@ -1,40 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D2E7B5B5-9392-4F28-84F6-DDA5F5530DDD}</ProjectGuid>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>FirewoodEngine</RootNamespace>
-    <AssemblyName>FirewoodEngine</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -42,94 +15,6 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Core\Varela.ttf" />
-    <None Include="Models\amogus.obj" />
-    <None Include="Models\donut.obj" />
-    <None Include="Models\flatGround.obj" />
-    <None Include="Models\ground.obj" />
-    <None Include="Models\house.obj" />
-    <None Include="Models\cube.obj" />
-    <None Include="Models\player.obj" />
-    <None Include="Models\skyboxCube.mtl" />
-    <None Include="Models\skyboxCube.obj" />
-    <None Include="Models\sphere.obj" />
-    <None Include="Models\TheMountain.obj" />
-    <None Include="Models\untitled.obj" />
-    <None Include="OpenTK.dll.config" />
-    <None Include="packages.config" />
-    <None Include="Shaders\texture.frag" />
-    <None Include="Shaders\texture.vert" />
-    <None Include="Shaders\color.frag" />
-    <None Include="Shaders\color.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="ImGui.NET, Version=1.87.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ImGui.NET.1.87.3\lib\netstandard2.0\ImGui.NET.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK, Version=3.3.2.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.3.3.2\lib\net20\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Components\AudioListener.cs" />
-    <Compile Include="Components\AudioSource.cs" />
-    <Compile Include="Components\BoxCollider.cs" />
-    <Compile Include="Components\Camera.cs" />
-    <Compile Include="Components\SphereCollider.cs" />
-    <Compile Include="Core\AudioManager.cs" />
-    <Compile Include="Core\Colors.cs" />
-    <Compile Include="Core\Component.cs" />
-    <Compile Include="Core\Debug.cs" />
-    <Compile Include="Core\Editor.cs" />
-    <Compile Include="Core\EditorUI.cs" />
-    <Compile Include="Core\GameObjectManager.cs" />
-    <Compile Include="Core\ImGuiController.cs" />
-    <Compile Include="Core\Utility.cs" />
-    <Compile Include="Scripts\Freecam.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="Core\Application.cs" />
-    <Compile Include="Core\GameObject.cs" />
-    <Compile Include="Core\Input.cs" />
-    <Compile Include="Components\LineRenderer.cs" />
-    <Compile Include="Core\Logging.cs" />
-    <Compile Include="Core\MainProgram.cs" />
-    <Compile Include="Core\Material.cs" />
-    <Compile Include="Core\Noise.cs" />
-    <Compile Include="Core\OBJLoader.cs" />
-    <Compile Include="Core\Physics.cs" />
-    <Compile Include="Components\Renderer.cs" />
-    <Compile Include="Core\RenderManager.cs" />
-    <Compile Include="Components\Rigidbody.cs" />
-    <Compile Include="Core\Shader.cs" />
-    <Compile Include="Core\Texture.cs" />
-    <Compile Include="Core\Transform.cs" />
-    <Compile Include="Scripts\Generation.cs" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="Core\icon.ico" />
     <Content Include="Core\OpenAL32.dll" />
@@ -148,12 +33,16 @@
     <Content Include="Textures\Untitled.png" />
     <Content Include="Textures\wall.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\ImGui.NET.1.87.3\build\net40\ImGui.NET.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ImGui.NET.1.87.3\build\net40\ImGui.NET.targets'))" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="ImGui.NET" Version="1.87.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="OpenTK" Version="3.3.2" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.3" />
+  </ItemGroup>
   <Import Project="..\packages\ImGui.NET.1.87.3\build\net40\ImGui.NET.targets" Condition="Exists('..\packages\ImGui.NET.1.87.3\build\net40\ImGui.NET.targets')" />
 </Project>

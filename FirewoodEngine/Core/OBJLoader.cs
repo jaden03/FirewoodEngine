@@ -24,7 +24,7 @@ namespace FirewoodEngine.Core
             Vector3 cent = new Vector3(0, 0, 0);
             float fartherestPoint = 0;
 
-            foreach (string line in File.ReadLines("../../Models/" + path))
+            foreach (string line in File.ReadLines("../../../Models/" + path))
             {
                 if (line.StartsWith("v "))
                 {
@@ -134,7 +134,7 @@ namespace FirewoodEngine.Core
             Vector3 cent = new Vector3(0, 0, 0);
             float fartherestPoint = 0;
 
-            foreach (string line in File.ReadLines("../../Models/" + path))
+            foreach (string line in File.ReadLines("../../../Models/" + path))
             {
                 if (line.StartsWith("v "))
                 {
