@@ -17,9 +17,9 @@ namespace FirewoodEngine.Core
         static float speed = 4f;
         static float fov = 90;
 
-        static Vector3 position = Vector3.Zero;
+        static Vector3 position = new Vector3(0, 3, -8);
         static Vector3 front = new Vector3(0.0f, 0.0f, -1.0f);
-        static float pitch = 0;
+        static float pitch = -10;
         static float yaw = 90;
 
         public static void Update(FrameEventArgs e)

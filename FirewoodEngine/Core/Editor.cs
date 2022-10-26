@@ -111,7 +111,6 @@ namespace FirewoodEngine.Core
                 LoadGameObject(child, newGameObject);
             }
 
-
             var components = gameObject["components"];
 
             foreach (var component in components)
@@ -139,7 +138,7 @@ namespace FirewoodEngine.Core
                         
                         material.rgb = component["properties"]["material"]["rgb"].ToObject<bool>();
 
-                        if (component["properties"]["material"]["texturePath"].ToString() != "")
+                        if (shaderType == "Texture")
                         {
                             material.SetTexture(component["properties"]["material"]["texturePath"].ToString());
                         }
@@ -191,6 +190,15 @@ namespace FirewoodEngine.Core
 
         public static void ClearScene()
         {
+            Renderer[] renderers = new Renderer[RenderManager.renderers.Count];
+            RenderManager.renderers.CopyTo(renderers);
+
+            foreach (var renderer in renderers)
+            {
+                RenderManager.RemoveRenderer(renderer);
+            }
+
+
             GameObject[] gameObjects = new GameObject[GameObjectManager.gameObjects.Count];
             GameObjectManager.gameObjects.CopyTo(gameObjects);
 
@@ -205,6 +213,8 @@ namespace FirewoodEngine.Core
         
         public static void LoadScene(String path)
         {
+            Console.WriteLine("Loading scene: " + path);
+
             ClearScene();
             using (StreamReader file = File.OpenText(path))
             using (JsonTextReader reader = new JsonTextReader(file))
