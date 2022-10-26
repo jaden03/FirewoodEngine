@@ -38,19 +38,21 @@ namespace FirewoodEngine.Componenents
                 OBJLoader.loadOBJFromFile(path, out vertices, out triangles, out bounds, out offset, out radius);
         }
 
-        public void Render(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer)
+        public void Render(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer, int frameBuffer, int renderTexture, int depthTexture)
         {
-            Matrix4 model =
-            (
-                Matrix4.CreateFromQuaternion(gameObject.transform.rotation) *
-                Matrix4.CreateScale(gameObject.transform.scale) *
-                Matrix4.CreateTranslation(gameObject.transform.position)
-            );
+            Matrix4 model = Matrix4.Identity;
+            model = 
+                Matrix4.CreateScale(transform.scale) * 
+                Matrix4.CreateFromQuaternion(transform.rotation) * 
+                Matrix4.CreateTranslation(transform.position);
 
             //texture.Use(TextureUnit.Texture0);
             material.shader.Use();
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, buffer);
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthTexture);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
+            GL.BindTexture(TextureTarget.Texture2D, renderTexture);
 
             int modelLocation = GL.GetUniformLocation(material.shader.Handle, "model");
             GL.UniformMatrix4(modelLocation, true, ref model);
@@ -60,6 +62,7 @@ namespace FirewoodEngine.Componenents
 
             int projectionLocation = GL.GetUniformLocation(material.shader.Handle, "projection");
             GL.UniformMatrix4(projectionLocation, true, ref projection);
+
             
             if (material.rgb == true)
                 material.color = Colors.ColorFromHSV((timeValue * 100) % 255, 1, 1);

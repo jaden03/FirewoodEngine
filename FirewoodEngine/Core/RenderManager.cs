@@ -9,6 +9,7 @@ using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 using System.Diagnostics;
 using FirewoodEngine.Componenents;
+using OpenTK.Platform.MacOS;
 
 namespace FirewoodEngine.Core
 {
@@ -19,7 +20,11 @@ namespace FirewoodEngine.Core
         public static List<LineRenderer> lineRenderers;
         static int VertexBufferObject;
 
-        public static void Initialize()
+        static int FrameBufferObject;
+        static int RenderTextureObject;
+        static int DepthBufferObject;
+
+        public static void Initialize(Application app)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Renderer Initialized");
@@ -29,8 +34,15 @@ namespace FirewoodEngine.Core
             GL.Enable(EnableCap.DepthTest);
 
             VertexBufferObject = GL.GenBuffer();
-
             GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
+
+
+            FrameBufferObject = GL.GenFramebuffer();
+            RenderTextureObject = GL.GenTexture();
+            DepthBufferObject = GL.GenRenderbuffer();
+
+            app.RenderTexture = RenderTextureObject;
+
 
             renderers = new List<Renderer>();
             lineRenderers = new List<LineRenderer>();
@@ -56,20 +68,43 @@ namespace FirewoodEngine.Core
             lineRenderers.Remove(rend);
         }
 
-        public static void Render(Matrix4 view, Matrix4 projection, Stopwatch stopwatch, Vector3 _lightpos, Vector3 _camPos)
+        public static void Render(Matrix4 view, Matrix4 projection, Stopwatch stopwatch, Vector3 _lightpos, Vector3 _camPos, Application app)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, FrameBufferObject);
+            GL.BindTexture(TextureTarget.Texture2D, RenderTextureObject);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, app.Width, app.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, DepthBufferObject);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, app.Width, app.Height);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, DepthBufferObject);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, RenderTextureObject, 0);
+
+
+            if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+                Console.WriteLine("ERROR");
+
+
             foreach (Renderer rend in renderers)
             {
-                rend.Render(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos, VertexBufferObject);
+                rend.Render(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos, VertexBufferObject, FrameBufferObject, RenderTextureObject, DepthBufferObject);
             }
 
             foreach (LineRenderer rend in lineRenderers)
             {
                 rend.Draw(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos, VertexBufferObject);
             }
+            GL.ReadBuffer(ReadBufferMode.Back);
+            GL.BlitFramebuffer(0, 0, app.Width, app.Height, 0, 0, app.Width, app.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
 
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 
 

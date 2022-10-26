@@ -18,7 +18,7 @@ namespace FirewoodEngine
         Vector2 lastMousePos;
         //float lastMouseWheelPos = 0;
         
-        float sensitivity = 0.0005f;
+        float sensitivity = 0.1f;
         //float fov = 90f;
 
         float speed = 4f;
@@ -30,29 +30,32 @@ namespace FirewoodEngine
 
         public void Update(FrameEventArgs e)
         {
-            if (Input.GetKey(Key.W))
+            if (Input.GetMouseButton(MouseButton.Right))
             {
-                gameObject.transform.position += transform.children[0].forward * speed * (float)e.Time;
-            }
-            if (Input.GetKey(Key.S))
-            {
-                gameObject.transform.position -= transform.children[0].forward * speed * (float)e.Time;
-            }
-            if (Input.GetKey(Key.A))
-            {
-                gameObject.transform.position -= Vector3.Normalize(Vector3.Cross(transform.children[0].forward, Vector3.UnitY)) * speed * (float)e.Time;
-            }
-            if (Input.GetKey(Key.D))
-            {
-                gameObject.transform.position += Vector3.Normalize(Vector3.Cross(transform.children[0].forward, Vector3.UnitY)) * speed * (float)e.Time;
-            }
-            if (Input.GetKey(Key.Space))
-            {
-                gameObject.transform.position += Vector3.UnitY * speed * (float)e.Time;
-            }
-            if (Input.GetKey(Key.ControlLeft))
-            {
-                gameObject.transform.position -= Vector3.UnitY * speed * (float)e.Time;
+                if (Input.GetKey(Key.W))
+                {
+                    gameObject.transform.position += transform.children[0].forward * speed * (float)e.Time;
+                }
+                if (Input.GetKey(Key.S))
+                {
+                    gameObject.transform.position -= transform.children[0].forward * speed * (float)e.Time;
+                }
+                if (Input.GetKey(Key.A))
+                {
+                    gameObject.transform.position -= Vector3.Normalize(Vector3.Cross(transform.children[0].forward, Vector3.UnitY)) * speed * (float)e.Time;
+                }
+                if (Input.GetKey(Key.D))
+                {
+                    gameObject.transform.position += Vector3.Normalize(Vector3.Cross(transform.children[0].forward, Vector3.UnitY)) * speed * (float)e.Time;
+                }
+                if (Input.GetKey(Key.Space))
+                {
+                    gameObject.transform.position += Vector3.UnitY * speed * (float)e.Time;
+                }
+                if (Input.GetKey(Key.ControlLeft))
+                {
+                    gameObject.transform.position -= Vector3.UnitY * speed * (float)e.Time;
+                }
             }
 
 
@@ -61,7 +64,7 @@ namespace FirewoodEngine
             {
                 lastMousePos = new Vector2(mousePos.X, mousePos.Y);
             }
-            else
+            else if (Input.GetMouseButton(MouseButton.Right))
             {
                 float deltaX = mousePos.X - lastMousePos.X;
                 float deltaY = mousePos.Y - lastMousePos.Y;
@@ -83,6 +86,10 @@ namespace FirewoodEngine
                 {
                     transform.children[0].localEulerAngles.X -= deltaY * sensitivity;
                 }
+            }
+            else
+            {
+                lastMousePos = new Vector2(mousePos.X, mousePos.Y);
             }
 
 

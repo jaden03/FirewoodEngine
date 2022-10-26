@@ -54,6 +54,10 @@ namespace Dear_ImGui_Sample
             ImGui.SetCurrentContext(context);
             var io = ImGui.GetIO();
             io.Fonts.AddFontDefault();
+            
+            io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
+            io.ConfigWindowsMoveFromTitleBarOnly = true;
+            io.ConfigFlags |= ImGuiConfigFlags.ViewportsEnable;
 
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 
@@ -149,6 +153,8 @@ void main()
             GL.BindBuffer(BufferTarget.ArrayBuffer, prevArrayBuffer);
 
             CheckGLError("End of ImGui setup");
+
+            Console.WriteLine("ImGui Initialized");
         }
 
         /// <summary>
@@ -199,6 +205,8 @@ void main()
             if (_frameBegun)
             {
                 _frameBegun = false;
+                var io = ImGui.GetIO();
+                ImGui.DockSpaceOverViewport(ImGui.GetMainViewport());
                 ImGui.Render();
                 RenderImDrawData(ImGui.GetDrawData());
             }

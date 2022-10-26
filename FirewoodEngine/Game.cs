@@ -245,31 +245,25 @@ namespace FirewoodEngine
         // Fires every frame
         public void Update(FrameEventArgs e)
         {
-            // If escape is pressed, exit the game
-            if (Input.GetKey(Key.Escape))
-            {
-                app.Exit();
-            }
-
             if (Input.GetKeyDown(Key.L))
             {
                 testSoundObject.GetComponent<AudioSource>().Play();
             }
 
             
-            if (Input.GetKeyDown(Key.X))
+            if (Input.GetKey(Key.X))
             {
                 house.transform.eulerAngles.X += 1f;
                 Warn(house.transform.eulerAngles);
                 //house.transform.position.X += 0.1f;
             }
-            if (Input.GetKeyDown(Key.Y))
+            if (Input.GetKey(Key.Y))
             {
                 house.transform.eulerAngles.Y += 1f;
                 Warn(house.transform.eulerAngles);
                 //house.transform.position.Y += 0.1f;
             }
-            if (Input.GetKeyDown(Key.Z))
+            if (Input.GetKey(Key.Z))
             {
                 house.transform.eulerAngles.Z += 1f;
                 Warn(house.transform.eulerAngles);

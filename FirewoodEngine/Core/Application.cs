@@ -18,10 +18,10 @@ using System.IO;
 namespace FirewoodEngine.Core
 {
     using static Logging;
-    class Application : GameWindow
+    public class Application : GameWindow
     {
         public Application(int width, int height, string title) : base(width, height, GraphicsMode.Default, title) {  }
-
+        
         ImGuiController _controller;
 
         public Stopwatch stopwatch = new Stopwatch();
@@ -33,13 +33,14 @@ namespace FirewoodEngine.Core
         StringWriter consoleOut;
         public List<string> consoleOutput;
 
+        public int RenderTexture;
+
+        EditorUI editorUI;
+
         //------------------------\\
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            if (!Focused)
-                return;
-
             foreach (object script in activeScripts)
             {
                 script.GetType().GetMethod("Update").Invoke(script, new[] { e });
@@ -57,26 +58,10 @@ namespace FirewoodEngine.Core
                 consoleOutput.Add(consoleOut.ToString());
             }
             consoleOut.GetStringBuilder().Clear();
+            
+            editorUI.UpdateUI(RenderTexture, consoleOutput);
 
-            //ImGui.ShowDemoWindow();
-            ImGui.SetNextWindowSize(new System.Numerics.Vector2(500, 350), ImGuiCond.FirstUseEver);
-            ImGui.Begin("Console");
-            if (ImGui.Button("Clear"))
-            {
-                consoleOutput.Clear();
-            }
-            ImGui.Separator();
-            ImGui.BeginChild("Scrolling");
-
-            foreach (string output in consoleOutput)
-            {
-                ImGui.Text(output);
-            }
-
-            ImGui.SetScrollY(ImGui.GetScrollMaxY());
-            ImGui.EndChild();
-
-            ImGui.End();
+            Input.focused = Focused;
 
             _controller.Render();
 
@@ -129,17 +114,20 @@ namespace FirewoodEngine.Core
 
         protected override void OnLoad(EventArgs e)
         {
+            _controller = new ImGuiController(Width, Height);
+            editorUI = new EditorUI();
+            editorUI.Initialize(_controller);
+            editorUI.app = this;
+
             consoleOut = new StringWriter();
             Console.SetOut(consoleOut);
             consoleOutput = new List<string>();
             
-            _controller = new ImGuiController(ClientSize.Width, ClientSize.Height);
-            
             GameObjectManager.Initialize();
-            RenderManager.Initialize();
+            RenderManager.Initialize(this);
 
-            //WindowState = WindowState.Fullscreen;
-            Location = new System.Drawing.Point(80, 45);
+            WindowState = WindowState.Maximized;
+            //Location = new System.Drawing.Point(80, 45);
 
             startPhysics();
 
@@ -178,7 +166,7 @@ namespace FirewoodEngine.Core
             GL.MatrixMode(MatrixMode.Projection);
             GL.Ortho(-1.0f * ClientSize.Width / ClientSize.Height, 1.0f * ClientSize.Width / ClientSize.Height, -1.0f, 1.0f, .1f, 100f);
 
-            _controller.WindowResized(ClientSize.Width, ClientSize.Height);
+            _controller.WindowResized(Width, Height);
 
             base.OnResize(e);
         }

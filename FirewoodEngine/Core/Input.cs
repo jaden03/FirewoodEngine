@@ -25,6 +25,8 @@ namespace FirewoodEngine.Core
 
         static Vector2 currentMousePos = Vector2.Zero;
 
+        public static bool focused;
+
         //KeyboardState currentInput;
 
 
@@ -54,8 +56,21 @@ namespace FirewoodEngine.Core
 
         public static bool GetKey(Key key)
         {
+            if (!focused)
+            {
+                return false;
+            }
             var currentInput = Keyboard.GetState();
             return currentInput.IsKeyDown(key);
+        }
+        public static bool GetMouseButton(MouseButton button)
+        {
+            if (!focused)
+            {
+                return false;
+            }
+            var currentMouse = Mouse.GetState();
+            return currentMouse.IsButtonDown(button);
         }
 
         public static Vector2 GetMousePos()
@@ -70,6 +85,10 @@ namespace FirewoodEngine.Core
 
         public static float GetMouseWheel()
         {
+            if (!focused)
+            {
+                return 0;
+            }
             var currentMouse = Mouse.GetState();
             return currentMouse.WheelPrecise;
         }
@@ -115,11 +134,19 @@ namespace FirewoodEngine.Core
 
         public static bool GetKeyDown(Key key)
         {
+            if (!focused)
+            {
+                return false;
+            }
             return keyDowns.Contains(key);
         }
 
         public static bool GetKeyUp(Key key)
         {
+            if (!focused)
+            {
+                return false;
+            }
             return keyUps.Contains(key);
         }
 

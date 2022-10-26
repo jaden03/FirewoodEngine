@@ -54,10 +54,10 @@ namespace FirewoodEngine.Core
             }
             else
             {
-                rotation = Quaternion.FromEulerAngles(eulerAngles);
+                rotation = Quaternion.FromEulerAngles(new Vector3(MathHelper.DegreesToRadians(eulerAngles.X), MathHelper.DegreesToRadians(eulerAngles.Y), MathHelper.DegreesToRadians(eulerAngles.Z)));
             }
-            localRotation = Quaternion.FromEulerAngles(localEulerAngles);
-            
+            localRotation = Quaternion.FromEulerAngles(new Vector3(MathHelper.DegreesToRadians(localEulerAngles.X), MathHelper.DegreesToRadians(localEulerAngles.Y), MathHelper.DegreesToRadians(localEulerAngles.Z)));
+
             foreach (Transform child in children)
             {
                 child.position = position + ((child.localPosition.Z * forward) + (child.localPosition.Y * up) + (-child.localPosition.X * right));
