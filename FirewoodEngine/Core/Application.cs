@@ -29,6 +29,7 @@ namespace FirewoodEngine.Core
         public Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
         public List<object> activeScripts;
+        public List<object> activeCoreScripts;
 
         StringWriter consoleOut;
         public List<string> consoleOutput;
@@ -41,7 +42,12 @@ namespace FirewoodEngine.Core
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            EditorCamera.Update(e);
             foreach (object script in activeScripts)
+            {
+                script.GetType().GetMethod("Update").Invoke(script, new[] { e });
+            }
+            foreach (object script in activeCoreScripts)
             {
                 script.GetType().GetMethod("Update").Invoke(script, new[] { e });
             }
@@ -66,7 +72,7 @@ namespace FirewoodEngine.Core
             _controller.Render();
 
             ImGuiController.CheckGLError("End of frame");
-
+            
             Physics.Update(e);
 
             Context.SwapBuffers();
@@ -127,11 +133,12 @@ namespace FirewoodEngine.Core
             WindowState = WindowState.Maximized;
 
             activeScripts = new List<object>();
+            activeCoreScripts = new List<object>();
 
+            EditorCamera.app = this;
             GameObjectManager.Initialize();
             RenderManager.Initialize(this);
             AudioManager.Init();
-
             Editor.Initialize(this);
 
             startPhysics();
@@ -145,7 +152,7 @@ namespace FirewoodEngine.Core
 
             var input = new Input();
             input.app = this;
-            activeScripts.Add(input);
+            activeCoreScripts.Add(input);
 
             base.OnLoad(e);
         }

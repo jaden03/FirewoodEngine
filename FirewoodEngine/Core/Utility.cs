@@ -36,5 +36,24 @@ namespace FirewoodEngine.Core
             return angles;
         }
 
+
+        public static Vector3 Forward(Vector3 eulerAngles)
+        {
+            var q = Quaternion.FromEulerAngles(new Vector3(MathHelper.DegreesToRadians(eulerAngles.X), MathHelper.DegreesToRadians(eulerAngles.Y), MathHelper.DegreesToRadians(eulerAngles.Z)));
+            return q * Vector3.UnitZ;
+        }
+
+        public static Vector3 Right(Vector3 eulerAngles)
+        {
+            var q = Quaternion.FromEulerAngles(new Vector3(MathHelper.DegreesToRadians(eulerAngles.X), MathHelper.DegreesToRadians(eulerAngles.Y), MathHelper.DegreesToRadians(eulerAngles.Z)));
+            return q * -Vector3.UnitX;
+        }
+
+        public static Vector3 Up(Vector3 eulerAngles)
+        {
+            var q = Quaternion.FromEulerAngles(new Vector3(MathHelper.DegreesToRadians(eulerAngles.X), MathHelper.DegreesToRadians(eulerAngles.Y), MathHelper.DegreesToRadians(eulerAngles.Z)));
+            return q * Vector3.UnitY;
+        }
+
     }
 }

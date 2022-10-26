@@ -23,6 +23,8 @@ namespace FirewoodEngine.Componenents
         public Vector3 offset;
         public float radius;
 
+        public string path;
+
 
         public Renderer()
         {
@@ -32,6 +34,7 @@ namespace FirewoodEngine.Componenents
 
         public void SetOBJ(string path, bool useTexture)
         {
+            this.path = path;
             if (useTexture == true)
                 OBJLoader.loadOBJFromFileWithTexture(path, out vertices, out triangles, out bounds, out offset, out radius);
             else
