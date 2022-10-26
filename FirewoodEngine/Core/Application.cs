@@ -69,6 +69,8 @@ namespace FirewoodEngine.Core
 
             Physics.Update(e);
 
+            Context.SwapBuffers();
+
             base.OnUpdateFrame(e);
         }
 
@@ -111,36 +113,35 @@ namespace FirewoodEngine.Core
             base.OnKeyDown(e);
         }
 
-
         protected override void OnLoad(EventArgs e)
         {
+            consoleOut = new StringWriter();
+            Console.SetOut(consoleOut);
+            consoleOutput = new List<string>();
+
             _controller = new ImGuiController(Width, Height);
             editorUI = new EditorUI();
             editorUI.Initialize(_controller);
             editorUI.app = this;
 
-            consoleOut = new StringWriter();
-            Console.SetOut(consoleOut);
-            consoleOutput = new List<string>();
-            
-            GameObjectManager.Initialize();
-            RenderManager.Initialize(this);
-
             WindowState = WindowState.Maximized;
-            //Location = new System.Drawing.Point(80, 45);
-
-            startPhysics();
-
-            AudioManager.Init();
-
-            stopwatch.Start();
 
             activeScripts = new List<object>();
 
-            var game = new Game();
-            game.app = this;
-            activeScripts.Add(game);
-            game.Start();
+            GameObjectManager.Initialize();
+            RenderManager.Initialize(this);
+            AudioManager.Init();
+
+            Editor.Initialize(this);
+
+            startPhysics();
+
+            stopwatch.Start();
+
+            //var game = new Game();
+            //game.app = this;
+            //activeScripts.Add(game);
+            //game.Start();
 
             var input = new Input();
             input.app = this;

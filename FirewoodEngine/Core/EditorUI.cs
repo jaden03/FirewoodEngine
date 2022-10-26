@@ -8,6 +8,7 @@ using System.Numerics;
 using Dear_ImGui_Sample;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace FirewoodEngine.Core
 {
@@ -33,7 +34,7 @@ namespace FirewoodEngine.Core
         public void Initialize(ImGuiController cont)
         {
             var io = ImGui.GetIO();
-            font = io.Fonts.AddFontFromFileTTF("../../Core/Varela.ttf", 20);
+            font = io.Fonts.AddFontFromFileTTF("../../../Core/Varela.ttf", 20);
             cont.RecreateFontDeviceTexture();
             
             RangeAccessor<Vector4> colors = ImGui.GetStyle().Colors;
@@ -173,7 +174,16 @@ namespace FirewoodEngine.Core
                     }
                     if (ImGui.MenuItem("Open Scene"))
                     {
-                        
+                        OpenFileDialog openFileDialog = new OpenFileDialog();
+                        openFileDialog.FileName = "Scene";
+                        openFileDialog.InitialDirectory = Path.Combine(Environment.CurrentDirectory, "Scenes");
+
+                        Nullable<bool> result = openFileDialog.ShowDialog();
+
+                        if (result == true)
+                        {
+                            Editor.LoadScene(openFileDialog.FileName);
+                        }
                     }
                     if (ImGui.MenuItem("Save Scene"))
                     {

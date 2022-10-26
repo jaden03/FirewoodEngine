@@ -27,7 +27,7 @@ namespace FirewoodEngine.Core
 
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Audio Manager Initialized");
+            Console.WriteLine("Audio Initialized");
             Console.ForegroundColor = ConsoleColor.White;
         }
 

@@ -21,7 +21,6 @@ namespace FirewoodEngine.Componenents
         {
             Matrix4 view = Matrix4.LookAt(gameObject.transform.position, gameObject.transform.position + transform.forward, transform.up);
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), (float)EditorUI.viewportSize.X / (float)EditorUI.viewportSize.Y, 0.01f, 1000.0f);
-            app.Context.SwapBuffers();
 
             RenderManager.Render(view, projection, app.stopwatch, app._lightPos, gameObject.transform.position, app);
         }
