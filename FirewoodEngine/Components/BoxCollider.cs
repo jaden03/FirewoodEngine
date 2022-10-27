@@ -15,6 +15,11 @@ namespace FirewoodEngine.Componenents
         public Vector3 size = Vector3.One;
         public bool isTrigger = false;
 
+        public BoxCollider()
+        {
+            linkedComponent = this;
+        }
+        
         public void CalculateBoundsFromMesh()
         {
             if (gameObject == null)

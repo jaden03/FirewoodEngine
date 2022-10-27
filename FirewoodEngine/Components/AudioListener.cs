@@ -11,11 +11,16 @@ namespace FirewoodEngine.Components
     using static Logging;
     internal class AudioListener : Component
     {
-        Vector3 lastPos = Vector3.Zero;
+        private Vector3 lastPos = Vector3.Zero;
 
         public void Start()
         {
             AudioManager.SetListener(this);
+        }
+
+        public AudioListener()
+        {
+            linkedComponent = this;
         }
         
         public void Update(FrameEventArgs e)

@@ -16,6 +16,7 @@ namespace FirewoodEngine.Components
 
         public AudioSource(string path)
         {
+            linkedComponent = this;
             this.path = path;
         }
         

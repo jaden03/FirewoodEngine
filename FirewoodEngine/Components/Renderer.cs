@@ -28,6 +28,7 @@ namespace FirewoodEngine.Componenents
 
         public Renderer()
         {
+            linkedComponent = this;
             VertexArrayObject = GL.GenVertexArray();
             RenderManager.AddRenderer(this);
         }

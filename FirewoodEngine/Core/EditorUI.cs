@@ -8,7 +8,10 @@ using System.Numerics;
 using Dear_ImGui_Sample;
 using System.IO;
 using System.Diagnostics;
+using System.Reflection;
 using Microsoft.Win32;
+using OpenTK.Input;
+using Vector3 = OpenTK.Vector3;
 
 namespace FirewoodEngine.Core
 {
@@ -17,14 +20,19 @@ namespace FirewoodEngine.Core
     {
         static bool autoScrollConsole = true;
         public static Vector2 viewportSize = new Vector2(800, 600);
+        public static Vector2 gameSize = new Vector2(800, 600);
+        public float titleBarHeight;
 
         static int renderTexture;
+        static int renderTextureEditor;
         static List<string> consoleOutput = new List<string>();
         public Application app;
 
         ImFontPtr font;
+        ImFontPtr fontBig;
 
         static bool scene = true;
+        static bool game = true;
         static bool console = true;
         static bool assets = true;
         static bool inspector = true;
@@ -35,6 +43,7 @@ namespace FirewoodEngine.Core
         {
             var io = ImGui.GetIO();
             font = io.Fonts.AddFontFromFileTTF("../../../Core/Varela.ttf", 20);
+            fontBig = io.Fonts.AddFontFromFileTTF("../../../Core/Varela.ttf", 50);
             cont.RecreateFontDeviceTexture();
             
             RangeAccessor<Vector4> colors = ImGui.GetStyle().Colors;
@@ -62,12 +71,12 @@ namespace FirewoodEngine.Core
             colors[(int)ImGuiCol.Button] = new Vector4(0.43f, 0.43f, 0.43f, 0.40f);
             colors[(int)ImGuiCol.ButtonHovered] = new Vector4(0.20f, 0.20f, 0.20f, 1.00f);
             colors[(int)ImGuiCol.ButtonActive] = new Vector4(0.06f, 0.53f, 0.98f, 1.00f);
-            colors[(int)ImGuiCol.Header] = new Vector4(0.43f, 0.43f, 0.43f, 0.31f);
-            colors[(int)ImGuiCol.HeaderHovered] = new Vector4(0.20f, 0.20f, 0.20f, 0.80f);
-            colors[(int)ImGuiCol.HeaderActive] = new Vector4(0.26f, 0.59f, 0.98f, 1.00f);
+            colors[(int)ImGuiCol.Header] = new Vector4(0.12f, 0.12f, 0.12f, 1.00f);
+            colors[(int)ImGuiCol.HeaderHovered] = new Vector4(0.12f, 0.12f, 0.12f, 1.00f);
+            colors[(int)ImGuiCol.HeaderActive] = new Vector4(0.12f, 0.12f, 0.12f, 1.00f);
             colors[(int)ImGuiCol.Separator] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
             colors[(int)ImGuiCol.SeparatorHovered] = new Vector4(0.20f, 0.20f, 0.20f, 0.80f);
-            colors[(int)ImGuiCol.SeparatorActive] = new Vector4(0.12f, 0.12f, 0.12f, 1.00f);
+            colors[(int)ImGuiCol.SeparatorActive] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
             colors[(int)ImGuiCol.ResizeGrip] = new Vector4(0.26f, 0.59f, 0.98f, 0.20f);
             colors[(int)ImGuiCol.ResizeGripHovered] = new Vector4(0.20f, 0.20f, 0.20f, 0.67f);
             colors[(int)ImGuiCol.ResizeGripActive] = new Vector4(0.26f, 0.59f, 0.98f, 0.95f);
@@ -106,16 +115,16 @@ namespace FirewoodEngine.Core
             ImGui.GetStyle().ChildBorderSize = 0;
 
             ImGui.GetStyle().FramePadding = new Vector2(10, 6);
-
         }
 
 
-        public void UpdateUI(int _renderTexture, List<String> _consoleOutput)
+        public void UpdateUI(int _renderTexture, List<String> _consoleOutput, int _renderTextureEditor)
         {
             //ImGui.ShowDemoWindow();
             ImGui.PushFont(font);
 
             renderTexture = _renderTexture;
+            renderTextureEditor = _renderTextureEditor;
             consoleOutput = _consoleOutput;
 
             MainMenuBar();
@@ -124,6 +133,8 @@ namespace FirewoodEngine.Core
 
             if (scene)
                 Scene();
+            if (game)
+                GameV();
             if (console)
                 Console();
             if (assets)
@@ -143,7 +154,9 @@ namespace FirewoodEngine.Core
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(0, 10));
             if (ImGui.BeginMainMenuBar())
             {
+                titleBarHeight = ImGui.GetWindowSize().Y;
                 ImGui.PopStyleVar();
+
                 if (ImGui.BeginMenu("File"))
                 {
                     if (ImGui.MenuItem("New Project"))
@@ -222,6 +235,10 @@ namespace FirewoodEngine.Core
                     {
                         scene = !scene;
                     }
+                    if (ImGui.MenuItem("Game"))
+                    {
+                        game = !game;
+                    }
                     if (ImGui.MenuItem("Console"))
                     {
                         console = !console;
@@ -260,10 +277,68 @@ namespace FirewoodEngine.Core
                     }
                     ImGui.EndMenu();
                 }
+
+
+                #region PlayButton
+                var playButtonSize = new Vector2(30, 30);
+                var windowSize = ImGui.GetWindowSize();
+                // put the play button in the center
+                var playButtonPos = new Vector2((windowSize.X / 2) - playButtonSize.X, (windowSize.Y / 2 ) - playButtonSize.Y + 15);
+                ImGui.SetCursorPos(playButtonPos);
+                if (ImGui.Button("", playButtonSize))
+                {
+                    //Editor.Play();
+                }
+                ImGui.GetWindowDrawList().AddTriangleFilled(
+                        new Vector2(playButtonPos.X + 10, playButtonPos.Y + 10),
+                        new Vector2(playButtonPos.X + 10, playButtonPos.Y + 20),
+                        new Vector2(playButtonPos.X + 20, playButtonPos.Y + 15),
+                        0xFFFFFFFF);
+
+
+                #endregion
+
+                #region PauseButton
+
+                var pauseButtonSize = new Vector2(30, 30);
+                var pauseButtonPos = new Vector2((windowSize.X / 2) - pauseButtonSize.X + 40, (windowSize.Y / 2) - pauseButtonSize.Y + 15);
+                ImGui.SetCursorPos(pauseButtonPos);
+                if (ImGui.Button("", pauseButtonSize))
+                {
+                    //Editor.Pause();
+                }
+                // draw two vertical boxes
+                ImGui.GetWindowDrawList().AddRectFilled(
+                        new Vector2(pauseButtonPos.X + 10, pauseButtonPos.Y + 10),
+                        new Vector2(pauseButtonPos.X + 13, pauseButtonPos.Y + 20),
+                        0xFFFFFFFF);
+                ImGui.GetWindowDrawList().AddRectFilled(
+                    new Vector2(pauseButtonPos.X + 17, pauseButtonPos.Y + 10),
+                        new Vector2(pauseButtonPos.X + 20, pauseButtonPos.Y + 20),
+                        0xFFFFFFFF);
+
+                #endregion
+
+                #region StopButton
+
+                var stopButtonSize = new Vector2(30, 30);
+                var stopButtonPos = new Vector2((windowSize.X / 2) - stopButtonSize.X - 40, (windowSize.Y / 2) - stopButtonSize.Y + 15);
+                ImGui.SetCursorPos(stopButtonPos);
+                if (ImGui.Button("", stopButtonSize))
+                {
+                    //Editor.Stop();
+                }
+                ImGui.GetWindowDrawList().AddRectFilled(
+                        new Vector2(stopButtonPos.X + 10, stopButtonPos.Y + 10),
+                        new Vector2(stopButtonPos.X + 20, stopButtonPos.Y + 20),
+                        0xFFFFFFFF);
+
+                #endregion
+
                 ImGui.EndMainMenuBar();
             };
+
         }
-        
 
         void Scene()
         {
@@ -276,10 +351,46 @@ namespace FirewoodEngine.Core
 
             ImGui.Begin("Scene", ref scene, sceneFlags);
             ImGui.PopStyleVar();
-            ImGui.Image((IntPtr)renderTexture, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()), new Vector2(0, 1), new Vector2(1, 0));
+            ImGui.Image((IntPtr)renderTextureEditor, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()), new Vector2(0, 1), new Vector2(1, 0));
 
             viewportSize.X = ImGui.GetWindowSize().X;
             viewportSize.Y = ImGui.GetWindowSize().Y;
+
+            Editor.sceneFocused = ImGui.IsWindowFocused();
+
+            ImGui.End();
+        }
+
+
+        void GameV()
+        {
+            // Scene
+            var gameFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse;
+            ImGui.SetNextWindowSize(new System.Numerics.Vector2(gameSize.X, gameSize.Y), ImGuiCond.FirstUseEver);
+
+            // Get rid of padding
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new System.Numerics.Vector2(0, 0));
+
+            ImGui.Begin("Game", ref scene, gameFlags);
+            ImGui.PopStyleVar();
+            
+            if (app.gameCamera == null)
+            {
+                ImGui.PushFont(fontBig);
+                var textSize = ImGui.CalcTextSize("No Camera Found In Scene");
+                var windowSize = ImGui.GetWindowSize();
+                var textPos = new Vector2(windowSize.X / 2 - textSize.X / 2, windowSize.Y / 2 - textSize.Y / 2);
+                ImGui.SetCursorPos(textPos);
+                ImGui.Text("No Camera Found In Scene");
+                ImGui.PopFont();
+            }
+            else
+            {
+                ImGui.Image((IntPtr)renderTexture, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()), new Vector2(0, 1), new Vector2(1, 0));
+            }
+
+            gameSize.X = ImGui.GetWindowSize().X;
+            gameSize.Y = ImGui.GetWindowSize().Y;
 
             ImGui.End();
         }
@@ -333,33 +444,81 @@ namespace FirewoodEngine.Core
         {
             // Inspector
             var inspectorFlags = ImGuiWindowFlags.NoCollapse;
-            ImGui.SetNextWindowSize(new System.Numerics.Vector2(350, 500), ImGuiCond.FirstUseEver);
+            ImGui.SetNextWindowSize(new System.Numerics.Vector2(450, 500), ImGuiCond.FirstUseEver);
+
+            // This line doesnt work for some reason
+            ImGui.SetNextWindowSizeConstraints(new Vector2(450, 0), new Vector2(10000, 10000));
+            
             ImGui.Begin("Inspector", ref inspector, inspectorFlags);
+
+            if (Editor.selectedObject == null) { ImGui.End(); return; }
+            var selectedObject = Editor.selectedObject;
+
+            var windowWidth = ImGui.GetWindowWidth();
+            #region Name Input Box
 
             // Name Input
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new System.Numerics.Vector2(10, 5));
+            var widthInverse = 15;
+            ImGui.SetNextItemWidth(windowWidth - (widthInverse * 2));
 
-            // The amount of pixels between the edges and the box
-            var widthInverse = 10;
-            var windowWidth = ImGui.GetWindowWidth();
+            ImGui.SetCursorPosX(widthInverse);
+            ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 5);
+            
+            ImGui.InputText("##name", ref selectedObject.name, 100);
 
-            // Set the width to the window width minus the width of the padding
-            ImGui.PushItemWidth(windowWidth - widthInverse);
-            var test = "";
+            #endregion
 
-            // Set the X position of the cursor to have it be centered
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() - widthInverse / 2);
-            ImGui.InputTextWithHint("", "Name", ref test, 100);
-            ImGui.PopStyleVar();
-            ImGui.PopItemWidth();
+            // LabelText
+            var labelPixelsFromLeft = 50;
 
+            // InputBox
+            var inputBoxPixelsFromRight = 10;
+            var inputBoxWidth = 250;
+            var inputBoxXPos = windowWidth - inputBoxPixelsFromRight - inputBoxWidth;
+            
+            
+            #region Tag
 
             // Tag Text
+            var tagTextSize = ImGui.CalcTextSize("Tag");
+            var tagTextPos = new Vector2(labelPixelsFromLeft - tagTextSize.X, ImGui.GetCursorPosY() + 10);
+            
+            ImGui.SetCursorPos(tagTextPos);
+            ImGui.Text("Tag");
+
+            ImGui.SameLine();
+
+            // Tag Input
+            ImGui.SetNextItemWidth(inputBoxWidth);
+            ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
+            
+            ImGui.InputText("##tag", ref selectedObject.tag, 100);
+            
+
+            #endregion
+            
+            ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+            ImGui.Separator();
+            ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+
+            #region Components
+
+            var components = selectedObject.components;
+
+            InspectorDrawComponent(selectedObject.transform);
+            foreach (Component component in components)
+            {
+                InspectorDrawComponent(component.linkedComponent);
+            }
+            
+            #endregion
 
 
             ImGui.End();
         }
 
+        
         static void Hierarchy()
         {
             // Hierarchy
@@ -389,6 +548,176 @@ namespace FirewoodEngine.Core
                 ImGui.TreePop();
             }
             ImGui.End();
+        }
+        
+        static void InspectorDrawComponent(object component)
+        {
+            var nameCapitalized = component.GetType().Name;
+            nameCapitalized = nameCapitalized[0].ToString().ToUpper() + nameCapitalized.Substring(1);
+            
+            if (ImGui.CollapsingHeader(nameCapitalized, ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnArrow))
+            {
+                var properties = component.GetType().GetFields();
+                
+                foreach (var prop in properties)
+                {
+                    DrawField(prop, component);
+                }
+
+
+
+                // // Position Text
+                // var positionTextSize = ImGui.CalcTextSize("Position");
+                // var positionTextPos = new Vector2(labelPixelsFromLeft, ImGui.GetCursorPosY() + 10);
+                // ImGui.SetCursorPos(positionTextPos);
+                // ImGui.Text("Position");
+                //
+                // ImGui.SameLine();
+                //
+                // // Position Input
+                // ImGui.SetNextItemWidth(inputBoxWidth);
+                // ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
+                //
+                // var test = "";
+                //
+                // ImGui.InputText("##position", ref test, 100);
+                //
+                // ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+            }
+        }
+
+        static void DrawField(FieldInfo field, object component)
+        {
+            var labelPixelsFromLeft = 50;
+            var inputBoxPixelsFromRight = 10;
+            var inputBoxWidth = 250;
+            var windowWidth = ImGui.GetWindowWidth();
+            var inputBoxXPos = windowWidth - inputBoxPixelsFromRight - inputBoxWidth;
+            
+            var nameCapitalized = field.Name;
+            nameCapitalized = nameCapitalized[0].ToString().ToUpper() + nameCapitalized.Substring(1);
+            
+            var textSize = ImGui.CalcTextSize(field.Name);
+            var textSizeTextPos = new Vector2(labelPixelsFromLeft, ImGui.GetCursorPosY() + 10);
+            
+            var attributes = field.GetCustomAttributes(false);
+            if (attributes.Any(x => x.GetType() == typeof(HideInInspector)))
+            {
+                return;
+            }
+            
+            var fieldType = field.FieldType;
+            if (fieldType == (typeof(OpenTK.Vector3)))
+            {
+                // Text
+                ImGui.SetCursorPos(textSizeTextPos);
+                ImGui.Text(nameCapitalized);
+                ImGui.SameLine();
+                // Input
+                ImGui.SetNextItemWidth(inputBoxWidth);
+                ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
+
+                System.Numerics.Vector3 retrievedVector = new System.Numerics.Vector3(((Vector3)field.GetValue(component)).X, ((Vector3)field.GetValue(component)).Y, ((Vector3)field.GetValue(component)).Z);
+                if (ImGui.InputFloat3("##" + field.Name, ref retrievedVector) && Input.GetKeyDown(Key.Enter))
+                {
+                    field.SetValue(component, new Vector3(retrievedVector.X, retrievedVector.Y, retrievedVector.Z));
+                }
+
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+            }
+            else if (fieldType == (typeof(float)))
+            {
+                // Text
+                ImGui.SetCursorPos(textSizeTextPos);
+                ImGui.Text(nameCapitalized);
+                ImGui.SameLine();
+                // Input
+                ImGui.SetNextItemWidth(inputBoxWidth);
+                ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
+
+                float retrievedFloat = (float)field.GetValue(component);
+                if (ImGui.InputFloat("##" + field.Name, ref retrievedFloat) && Input.GetKeyDown(Key.Enter))
+                {
+                    field.SetValue(component, retrievedFloat);
+                }
+
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+            }
+            else if (fieldType == (typeof(int)))
+            {
+                // Text
+                ImGui.SetCursorPos(textSizeTextPos);
+                ImGui.Text(nameCapitalized);
+                ImGui.SameLine();
+                // Input
+                ImGui.SetNextItemWidth(inputBoxWidth);
+                ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
+
+                int retrievedInt = (int)field.GetValue(component);
+                if (ImGui.InputInt("##" + field.Name, ref retrievedInt) && Input.GetKeyDown(Key.Enter))
+                {
+                    field.SetValue(component, retrievedInt);
+                }
+
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+            }
+            else if (fieldType == (typeof(string)))
+            {
+                // Text
+                ImGui.SetCursorPos(textSizeTextPos);
+                ImGui.Text(nameCapitalized);
+                ImGui.SameLine();
+                // Input
+                ImGui.SetNextItemWidth(inputBoxWidth);
+                ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
+
+                string retrievedString = (string)field.GetValue(component);
+                if (ImGui.InputText("##" + field.Name, ref retrievedString, 100) && Input.GetKeyDown(Key.Enter))
+                {
+                    field.SetValue(component, retrievedString);
+                }
+
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+            }
+            else if (fieldType == (typeof(bool)))
+            {
+                // Text
+                ImGui.SetCursorPos(textSizeTextPos);
+                ImGui.Text(nameCapitalized);
+                ImGui.SameLine();
+                // Input
+                ImGui.SetNextItemWidth(inputBoxWidth);
+                ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
+
+                bool retrievedBool = (bool)field.GetValue(component);
+                if (ImGui.Checkbox("##" + field.Name, ref retrievedBool) && Input.GetKeyDown(Key.Enter))
+                {
+                    field.SetValue(component, retrievedBool);
+                }
+
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+            }
+            else if (fieldType == (typeof(string)))
+            {
+                // Text
+                ImGui.SetCursorPos(textSizeTextPos);
+                ImGui.Text(nameCapitalized);
+                ImGui.SameLine();
+                // Input
+                ImGui.SetNextItemWidth(inputBoxWidth);
+                ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
+                
+                string retrievedString = (string)field.GetValue(component);
+                if (ImGui.InputText("##" + field.Name, ref retrievedString, 100) && Input.GetKeyDown(Key.Enter))
+                {
+                    field.SetValue(component, retrievedString);
+                }
+                
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
+            }
+
+
+
         }
     }
 }

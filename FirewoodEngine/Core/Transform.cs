@@ -15,16 +15,31 @@ namespace FirewoodEngine.Core
         public Vector3 eulerAngles;
         public Vector3 scale;
         
+        [HideInInspector]
         public Vector3 localPosition;
+        
+        [HideInInspector]
         public Quaternion localRotation;
+        
+        [HideInInspector]
         public Vector3 localEulerAngles;
         
+        [HideInInspector]
         public GameObject gameObject;
+        
+        [HideInInspector]
         public Transform parent;
+        
+        [HideInInspector]
         public List<Transform> children;
 
+        [HideInInspector]
         public Vector3 forward;
+        
+        [HideInInspector]
         public Vector3 right;
+        
+        [HideInInspector]
         public Vector3 up;
 
         public Transform()

@@ -15,6 +15,11 @@ namespace FirewoodEngine.Componenents
         public float radius = 1f;
         public bool isTrigger = false;
 
+        public SphereCollider()
+        {
+            linkedComponent = this;
+        }
+        
         public void CalculateBoundsFromMesh()
         {
             if (gameObject == null)

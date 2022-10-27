@@ -14,6 +14,7 @@ using System.Threading;
 using Dear_ImGui_Sample;
 using ImGuiNET;
 using System.IO;
+using FirewoodEngine.Componenents;
 
 namespace FirewoodEngine.Core
 {
@@ -35,8 +36,11 @@ namespace FirewoodEngine.Core
         public List<string> consoleOutput;
 
         public int RenderTexture;
+        public int RenderTextureEditor;
 
         EditorUI editorUI;
+
+        public Camera gameCamera = null;
 
         //------------------------\\
 
@@ -65,7 +69,7 @@ namespace FirewoodEngine.Core
             }
             consoleOut.GetStringBuilder().Clear();
             
-            editorUI.UpdateUI(RenderTexture, consoleOutput);
+            editorUI.UpdateUI(RenderTexture, consoleOutput, RenderTextureEditor);
 
             Input.focused = Focused;
 
@@ -74,6 +78,24 @@ namespace FirewoodEngine.Core
             ImGuiController.CheckGLError("End of frame");
             
             Physics.Update(e);
+
+
+
+
+            if (gameCamera == null)
+            {
+                for (int i = 0; i < GameObjectManager.gameObjects.Count; i++)
+                {
+                    if (GameObjectManager.gameObjects[i].GetComponent<Camera>() != null)
+                    {
+                        gameCamera = GameObjectManager.gameObjects[i].GetComponent<Camera>();
+                    }
+                }
+            }
+                
+
+
+
 
             Context.SwapBuffers();
 
@@ -114,7 +136,31 @@ namespace FirewoodEngine.Core
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            _controller.PressChar((char)e.Key);
+            // Im not sure how to handle caps lock
+            
+            var key = e.Key.ToString();
+
+            if (key.StartsWith("Number"))
+            {
+                // remove "Number" from the string
+                key = key.Remove(0, 6);
+            }
+            
+            if (key == "Space")
+            {
+                key = " ";
+                _controller.PressChar((char)key.ToCharArray()[0]);
+            }
+            
+            if (key.Length > 1)
+                return;
+            
+            if (Input.GetKey(Key.ShiftLeft))
+                key = key.ToUpper();
+            else
+                key = key.ToLower();
+            
+            _controller.PressChar((char)key.ToCharArray()[0]);
 
             base.OnKeyDown(e);
         }

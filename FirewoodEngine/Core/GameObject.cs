@@ -9,7 +9,8 @@ namespace FirewoodEngine.Core
 {
     public class GameObject
     {
-        public string name;
+        public string name = "GameObject";
+        public string tag = "Untagged";
         public List<Component> components;
         public Transform transform;
 

@@ -114,6 +114,7 @@ namespace FirewoodEngine.Core
                 if (keysDownThisFrame.Contains(key) && !keysDownLastFrame.Contains(key))
                 {
                     keyDowns.Add(key);
+                    
                 }
                 if (!keysDownThisFrame.Contains(key) && keysDownLastFrame.Contains(key))
                 {

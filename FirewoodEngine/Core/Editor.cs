@@ -18,6 +18,7 @@ namespace FirewoodEngine.Core
     {
         public static Application app;
         public static GameObject selectedObject = null;
+        public static bool sceneFocused = false;
 
 
         public static void Initialize(Application _app)
@@ -66,6 +67,31 @@ namespace FirewoodEngine.Core
             terrainRenderer.SetOBJ("flatGround.obj", false);
             terrainRenderer.material = terrainMat;
             terrain.AddComponent(terrainRenderer);
+
+
+
+
+
+            // Create a new GameObject
+            var cameraObject = new GameObject();
+            cameraObject.name = "CameraObject";
+            cameraObject.transform.position = new Vector3(0, 5, -5);
+            cameraObject.name = "Camera";
+
+            var cameraObjectChild = new GameObject();
+            cameraObjectChild.name = "CameraObjectChild";
+            cameraObjectChild.transform.SetParent(cameraObject.transform);
+
+            // Create a camera component
+            var camera = new Camera();
+            // Set the app variable in Camera
+            camera.app = app;
+            // Add the camera component to the GameObject
+            cameraObjectChild.AddComponent(camera);
+            // Add the camera component to the active scripts so the update function will work (will be refactored so you dont have to do this)
+            app.activeScripts.Add(camera);
+
+            selectedObject = cameraObjectChild;
 
         }
 
@@ -150,7 +176,6 @@ namespace FirewoodEngine.Core
                         break;
                     case "AudioSource":
                         var audioSource = new AudioSource(component["properties"]["path"].ToString());
-                        //audioSource.SetAudioClip(component["audioClip"].ToString());
                         newGameObject.AddComponent(audioSource);
                         break;
                     case "Camera":
@@ -158,12 +183,6 @@ namespace FirewoodEngine.Core
                         camera.app = app;
                         newGameObject.AddComponent(camera);
                         app.activeCoreScripts.Add(camera);
-                        break;
-                    case "Freecam":
-                        var freecam = new Freecam();
-                        newGameObject.AddComponent(freecam);
-                        freecam.Start();
-                        app.activeCoreScripts.Add(freecam);
                         break;
                     case "AudioListener":
                         var audioListener = new AudioListener();
@@ -173,16 +192,43 @@ namespace FirewoodEngine.Core
                         break;
                     case "Rigidbody":
                         var rigidbody = new Rigidbody();
+                        rigidbody.mass = component["properties"]["mass"].ToObject<float>();
+                        rigidbody.useGravity = component["properties"]["useGravity"].ToObject<bool>();
+                        rigidbody.kinematic = component["properties"]["kinematic"].ToObject<bool>();
                         newGameObject.AddComponent(rigidbody);
                         break;
                     case "BoxCollider":
                         var boxCollider = new BoxCollider();
+                        boxCollider.size = component["properties"]["size"].ToObject<Vector3>();
+                        boxCollider.center = component["properties"]["center"].ToObject<Vector3>();
+                        boxCollider.isTrigger = component["properties"]["isTrigger"].ToObject<bool>();
                         newGameObject.AddComponent(boxCollider);
                         break;
                     case "SphereCollider":
                         var sphereCollider = new SphereCollider();
+                        sphereCollider.radius = component["properties"]["radius"].ToObject<float>();
+                        sphereCollider.center = component["properties"]["center"].ToObject<Vector3>();
+                        sphereCollider.isTrigger = component["properties"]["isTrigger"].ToObject<bool>();
                         newGameObject.AddComponent(sphereCollider);
                         break;
+                    case "LineRenderer":
+                        var lineRenderer = new LineRenderer();
+                        lineRenderer.material = new Material();
+
+                        var lineColorR = component["properties"]["material"]["color"]["r"].ToObject<int>();
+                        var lineColorG = component["properties"]["material"]["color"]["g"].ToObject<int>();
+                        var lineColorB = component["properties"]["material"]["color"]["b"].ToObject<int>();
+                        var lineColorA = component["properties"]["material"]["color"]["a"].ToObject<int>();
+
+                        lineRenderer.material.color = Color.FromArgb(lineColorA, lineColorR, lineColorG, lineColorB);
+
+                        lineRenderer.material.shader = Shader.colorShader;
+                        lineRenderer.material.rgb = component["properties"]["material"]["rgb"].ToObject<bool>();
+                        lineRenderer.position1 = component["properties"]["position1"].ToObject<Vector3>();
+                        lineRenderer.position2 = component["properties"]["position2"].ToObject<Vector3>();
+                        newGameObject.AddComponent(lineRenderer);
+                        break;
+
                 }
             }
         }

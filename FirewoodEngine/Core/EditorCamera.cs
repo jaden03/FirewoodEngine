@@ -24,7 +24,7 @@ namespace FirewoodEngine.Core
 
         public static void Update(FrameEventArgs e)
         {
-            if (Input.GetMouseButton(MouseButton.Right))
+            if (Input.GetMouseButton(MouseButton.Right) && Editor.sceneFocused)
             {
                 if (Input.GetKey(Key.W))
                 {
@@ -55,7 +55,7 @@ namespace FirewoodEngine.Core
 
 
             var mousePos = Input.GetMousePos();
-            if (Input.GetMouseButton(MouseButton.Right))
+            if (Input.GetMouseButton(MouseButton.Right) && Editor.sceneFocused)
             {
                 float deltaX = mousePos.X - lastMousePos.X;
                 float deltaY = mousePos.Y - lastMousePos.Y;
@@ -88,7 +88,7 @@ namespace FirewoodEngine.Core
             Matrix4 view = Matrix4.LookAt(position, position + front, Vector3.UnitY);
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), (float)EditorUI.viewportSize.X / (float)EditorUI.viewportSize.Y, 0.01f, 1000.0f);
 
-            RenderManager.Render(view, projection, app.stopwatch, app._lightPos, position, app);
+            RenderManager.RenderEditor(view, projection, app.stopwatch, app._lightPos, position, app);
         }
     }
 }

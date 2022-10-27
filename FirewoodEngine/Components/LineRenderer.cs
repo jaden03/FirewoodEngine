@@ -20,6 +20,7 @@ namespace FirewoodEngine.Componenents
 
         public LineRenderer()
         {
+            linkedComponent = this;
             position1 = Vector3.Zero;
             position2 = Vector3.One;
             RenderManager.AddRenderer(this);
@@ -27,12 +28,13 @@ namespace FirewoodEngine.Componenents
 
         public LineRenderer(Vector3 _position1, Vector3 _position2)
         {
+            linkedComponent = this;
             position1 = _position1;
             position2 = _position2;
             RenderManager.AddRenderer(this);
         }
 
-        public void Draw(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer)
+        public void Draw(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer, int frameBuffer, int renderTexture, int depthTexture)
         {
             Matrix4 model =
             (
@@ -44,9 +46,13 @@ namespace FirewoodEngine.Componenents
             material.shader.Use();
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, buffer);
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthTexture);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
+            GL.BindTexture(TextureTarget.Texture2D, renderTexture);
 
             if (material.rgb == true)
                 material.color = Colors.ColorFromHSV((timeValue * 100) % 255, 1, 1);
+
 
             int modelLocation = GL.GetUniformLocation(material.shader.Handle, "model");
             GL.UniformMatrix4(modelLocation, true, ref model);

@@ -10,5 +10,6 @@ namespace FirewoodEngine.Core
     {
         public GameObject gameObject;
         public Transform transform;
+        public object linkedComponent;
     }
 }
