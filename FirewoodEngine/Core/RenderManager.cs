@@ -8,7 +8,7 @@ using OpenTK.Graphics;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 using System.Diagnostics;
-using FirewoodEngine.Componenents;
+using FirewoodEngine.Components;
 using OpenTK.Platform.MacOS;
 
 namespace FirewoodEngine.Core

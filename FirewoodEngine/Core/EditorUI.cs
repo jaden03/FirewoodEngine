@@ -249,19 +249,19 @@ namespace FirewoodEngine.Core
                 {
                     if (ImGui.MenuItem("Create Empty"))
                     {
-                        //GameObjectManager.CreateEmpty();
+                        GameObjectManager.CreateEmpty();
                     }
                     if (ImGui.MenuItem("Create Cube"))
                     {
-                        //GameObjectManager.CreateCube();
+                        GameObjectManager.CreateCube();
                     }
                     if (ImGui.MenuItem("Create Sphere"))
                     {
-                        //GameObjectManager.CreateSphere();
+                        GameObjectManager.CreateSphere();
                     }
                     if (ImGui.MenuItem("Create Plane"))
                     {
-                        //GameObjectManager.CreatePlane();
+                        GameObjectManager.CreatePlane();
                     }
                     ImGui.EndMenu();
                 }
@@ -297,7 +297,19 @@ namespace FirewoodEngine.Core
                     if (ImGui.Button("##playButton", playButtonSize))
                     {
                         if (!playing)
-                            Editor.SaveScene(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/FirewoodEngine/tempScene.json");
+                        {
+                            Editor.SaveScene(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                             "/FirewoodEngine/tempScene.json");
+                            
+                            var components = ComponentManager.components;
+                            
+                            foreach (Component component in components)
+                            {
+                                component.GetType().GetMethod("Start").Invoke(component, new object[] { });
+                            }
+                            
+                        }
+
                         app.isPaused = false;
                         app.isPlaying = true;
                     }
@@ -402,6 +414,11 @@ namespace FirewoodEngine.Core
 
             viewportSize.X = ImGui.GetWindowSize().X;
             viewportSize.Y = ImGui.GetWindowSize().Y;
+
+            if (ImGui.IsWindowHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            {
+                ImGui.SetWindowFocus();
+            }
 
             Editor.sceneFocused = ImGui.IsWindowFocused();
 
@@ -564,7 +581,7 @@ namespace FirewoodEngine.Core
             InspectorDrawComponent(selectedObject.transform);
             foreach (Component component in components)
             {
-                InspectorDrawComponent(component.linkedComponent);
+                InspectorDrawComponent(component);
             }
             
             #endregion

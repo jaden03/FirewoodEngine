@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FirewoodEngine.Componenents;
 using FirewoodEngine.Components;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenTK;
 using System.Drawing;
+using System.Reflection;
 
 namespace FirewoodEngine.Core
 {
@@ -68,10 +68,18 @@ namespace FirewoodEngine.Core
             terrainRenderer.SetOBJ("flatGround.obj", false);
             terrainRenderer.material = terrainMat;
             terrain.AddComponent(terrainRenderer);
+            
+            BoxCollider terrainCollider = new BoxCollider();
+            terrain.AddComponent(terrainCollider);
+            terrainCollider.CalculateBoundsFromMesh();
+            
+            var terrinRB = new Rigidbody();
+            terrinRB.useGravity = false;
+            terrain.AddComponent(terrinRB);
 
 
-            
-            
+
+
             // house gameobject
             var house = new GameObject();
             house.name = "House";
@@ -115,9 +123,19 @@ namespace FirewoodEngine.Core
             var camera = new Camera();
             // Add the camera component to the GameObject
             cameraObjectChild.AddComponent(camera);
-            // Add the camera component to the active scripts so the update function will work (will be refactored so you dont have to do this)
+
+
+            // Create a freecam component
+            var freecam = new Freecam();
+            // Add the freecam component to the GameObject
+            cameraObject.AddComponent(freecam);
+
+
+            // Audio Listener \\
+            var audioListener = new AudioListener();
+            cameraObjectChild.AddComponent(audioListener);
             
-            
+
             // line object
             var lineObject = new GameObject();
             lineObject.name = "Lines";
@@ -185,7 +203,7 @@ namespace FirewoodEngine.Core
 
                 switch (type)
                 {
-                    case "Renderer":
+                    case "FirewoodEngine.Components.Renderer":
                         var shaderType = component["properties"]["material"]["shader"]["type"].ToString();
 
                         var shader = Shader.textureShader;
@@ -214,11 +232,11 @@ namespace FirewoodEngine.Core
                         renderer.SetOBJ(component["properties"]["path"].ToString(), shaderType == "Texture");
                         newGameObject.AddComponent(renderer);
                         break;
-                    case "AudioSource":
+                    case "FirewoodEngine.Components.AudioSource":
                         var audioSource = new AudioSource(component["properties"]["path"].ToString());
                         newGameObject.AddComponent(audioSource);
                         break;
-                    case "Camera":
+                    case "FirewoodEngine.Components.Camera":
                         var camera = new Camera();
                         camera.fov = component["properties"]["fov"].ToObject<float>();
                         camera.near = component["properties"]["near"].ToObject<float>();
@@ -234,33 +252,33 @@ namespace FirewoodEngine.Core
                         newGameObject.AddComponent(camera);
                         app.activeCoreScripts.Add(camera);
                         break;
-                    case "AudioListener":
+                    case "FirewoodEngine.Components.AudioListener":
                         var audioListener = new AudioListener();
                         newGameObject.AddComponent(audioListener);
                         audioListener.Start();
                         break;
-                    case "Rigidbody":
+                    case "FirewoodEngine.Components.Rigidbody":
                         var rigidbody = new Rigidbody();
                         rigidbody.mass = component["properties"]["mass"].ToObject<float>();
                         rigidbody.useGravity = component["properties"]["useGravity"].ToObject<bool>();
                         rigidbody.kinematic = component["properties"]["kinematic"].ToObject<bool>();
                         newGameObject.AddComponent(rigidbody);
                         break;
-                    case "BoxCollider":
+                    case "FirewoodEngine.Components.BoxCollider":
                         var boxCollider = new BoxCollider();
                         boxCollider.size = component["properties"]["size"].ToObject<Vector3>();
                         boxCollider.center = component["properties"]["center"].ToObject<Vector3>();
                         boxCollider.isTrigger = component["properties"]["isTrigger"].ToObject<bool>();
                         newGameObject.AddComponent(boxCollider);
                         break;
-                    case "SphereCollider":
+                    case "FirewoodEngine.Components.SphereCollider":
                         var sphereCollider = new SphereCollider();
                         sphereCollider.radius = component["properties"]["radius"].ToObject<float>();
                         sphereCollider.center = component["properties"]["center"].ToObject<Vector3>();
                         sphereCollider.isTrigger = component["properties"]["isTrigger"].ToObject<bool>();
                         newGameObject.AddComponent(sphereCollider);
                         break;
-                    case "LineRenderer":
+                    case "FirewoodEngine.Components.LineRenderer":
                         var lineRenderer = new LineRenderer();
                         lineRenderer.material = new Material();
 
@@ -278,6 +296,37 @@ namespace FirewoodEngine.Core
                         lineRenderer.useLocal = component["properties"]["useLocal"].ToObject<bool>();
                         newGameObject.AddComponent(lineRenderer);
                         break;
+                    
+                    default:
+                        
+                        // get the type
+                        var typeObject = Type.GetType(type);
+                        
+                        Print(typeObject);
+                        
+                        //create an instance of the type
+                        var instance = Activator.CreateInstance(typeObject);
+                        
+                        // get the properties
+                        var properties = component["properties"];
+
+                        var fields = typeObject.GetFields();
+                        
+                        foreach (var field in fields)
+                        {
+                            Print(field.Name);
+                            var value = properties[field.Name];
+                            
+                            if (value != null)
+                            {
+                                Print(value);
+                                field.SetValue(instance, value.ToObject(field.FieldType));
+                            }
+                        }
+                            
+                        newGameObject.AddComponent(instance as Component);
+                        
+                        break;
 
                 }
             }
@@ -288,20 +337,28 @@ namespace FirewoodEngine.Core
         {
             Renderer[] renderers = new Renderer[RenderManager.renderers.Count];
             RenderManager.renderers.CopyTo(renderers);
-
+            
             foreach (var renderer in renderers)
             {
                 RenderManager.RemoveRenderer(renderer);
             }
-
+            
             LineRenderer[] lineRenderers = new LineRenderer[RenderManager.lineRenderers.Count];
             RenderManager.lineRenderers.CopyTo(lineRenderers);
-
+            
             foreach (var lineRenderer in lineRenderers)
             {
                 RenderManager.RemoveRenderer(lineRenderer);
             }
-
+            
+            Component[] components = new Component[ComponentManager.components.Count];
+            ComponentManager.components.CopyTo(components);
+            
+            foreach (var component in components)
+            {
+                ComponentManager.RemoveComponent(component);
+            }
+            
             GameObject[] gameObjects = new GameObject[GameObjectManager.gameObjects.Count];
             GameObjectManager.gameObjects.CopyTo(gameObjects);
 
@@ -315,8 +372,6 @@ namespace FirewoodEngine.Core
         
         public static void LoadScene(String path)
         {
-            Console.WriteLine("Loading scene: " + path);
-
             ClearScene();
             using (StreamReader file = File.OpenText(path))
             using (JsonTextReader reader = new JsonTextReader(file))
@@ -335,8 +390,6 @@ namespace FirewoodEngine.Core
         
         public static void SaveScene(String path)
         {
-            Console.WriteLine("Saving scene: " + path);
-
             // create json object
             var currentFile = new JObject();
 
@@ -356,8 +409,9 @@ namespace FirewoodEngine.Core
                 if (gameObject.transform.parent == null)
                     SaveGameObject(gameObject, null);
             }
-            var file = new System.IO.FileInfo(path); 
-            file.Directory.Create();
+            
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllText(path, currentFile.ToString());
         }
 
@@ -412,7 +466,7 @@ namespace FirewoodEngine.Core
             {
                 JObject componentJson = new JObject();
 
-                componentJson.Add("type", component.GetType().Name);
+                componentJson.Add("type", component.GetType().FullName);
 
                 JObject properties = new JObject();
 
@@ -420,9 +474,9 @@ namespace FirewoodEngine.Core
 
                 components.Add(componentJson);
 
-                switch (component.GetType().Name)
+                switch (component.GetType().FullName)
                 {
-                    case "Renderer":
+                    case "FirewoodEngine.Components.Renderer":
                         Renderer renderer = (Renderer)component;
 
                         properties.Add("path", renderer.path);
@@ -453,7 +507,7 @@ namespace FirewoodEngine.Core
 
                         break;
 
-                    case "Camera":
+                    case "FirewoodEngine.Components.Camera":
                         Camera camera = (Camera)component;
 
                         properties.Add("fov", camera.fov);
@@ -468,15 +522,20 @@ namespace FirewoodEngine.Core
                         properties.Add("backgroundColor", backgroundColor);
                         break;
 
-                    case "AudioSource":
+                    case "FirewoodEngine.Components.AudioSource":
                         AudioSource audioSource = (AudioSource)component;
 
                         properties.Add("path", audioSource.path);
                         properties.Add("volume", audioSource.volume);
 
                         break;
+                    
+                    case "FirewoodEngine.Components.AudioListener":
+                        AudioListener audioListener = (AudioListener)component;
+                        
+                        break;
 
-                    case "Rigidbody":
+                    case "FirewoodEngine.Components.Rigidbody":
                         Rigidbody rigidBody = (Rigidbody)component;
 
                         properties.Add("mass", rigidBody.mass);
@@ -485,7 +544,7 @@ namespace FirewoodEngine.Core
                         
                         break;
 
-                    case "BoxCollider":
+                    case "FirewoodEngine.Components.BoxCollider":
                         BoxCollider boxCollider = (BoxCollider)component;
 
                         JObject size = new JObject();
@@ -504,7 +563,7 @@ namespace FirewoodEngine.Core
 
                         break;
 
-                    case "SphereCollider":
+                    case "FirewoodEngine.Components.SphereCollider":
                         SphereCollider sphereCollider = (SphereCollider)component;
 
                         properties.Add("radius", sphereCollider.radius);
@@ -519,7 +578,7 @@ namespace FirewoodEngine.Core
 
                         break;
 
-                    case "LineRenderer":
+                    case "FirewoodEngine.Components.LineRenderer":
                         LineRenderer lineRenderer = (LineRenderer)component;
 
                         JObject material2 = new JObject();
@@ -553,9 +612,91 @@ namespace FirewoodEngine.Core
 
                         break;
 
+                    default:
+                        // get all of the properties
+                        FieldInfo[] properties2 = component.GetType().GetFields();
+ 
+                        // loop through all of the properties
+                        foreach (FieldInfo property in properties2)
+                        {
+                            // get the value of the property
+                            object value = property.GetValue(component);
+
+                            // if the value is a float
+                            if (value.GetType() == typeof(float))
+                            {
+                                // add the property to the json
+                                properties.Add(property.Name, (float)value);
+                            }
+                            // if the value is a int
+                            else if (value.GetType() == typeof(int))
+                            {
+                                // add the property to the json
+                                properties.Add(property.Name, (int)value);
+                            }
+                            // if the value is a bool
+                            else if (value.GetType() == typeof(bool))
+                            {
+                                // add the property to the json
+                                properties.Add(property.Name, (bool)value);
+                            }
+                            // if the value is a string
+                            else if (value.GetType() == typeof(string))
+                            {
+                                // add the property to the json
+                                properties.Add(property.Name, (string)value);
+                            }
+                            // if the value is a vector3
+                            else if (value.GetType() == typeof(Vector3))
+                            {
+                                // add the property to the json
+                                JObject vector3 = new JObject();
+                                vector3.Add("x", ((Vector3)value).X);
+                                vector3.Add("y", ((Vector3)value).Y);
+                                vector3.Add("z", ((Vector3)value).Z);
+                                properties.Add(property.Name, vector3);
+                            }
+                            // if the value is a vector2
+                            else if (value.GetType() == typeof(Vector2))
+                            {
+                                // add the property to the json
+                                JObject vector2 = new JObject();
+                                vector2.Add("x", ((Vector2)value).X);
+                                vector2.Add("y", ((Vector2)value).Y);
+                                properties.Add(property.Name, vector2);
+                            }
+                            // if the value is a color
+                            else if (value.GetType() == typeof(Color))
+                            {
+                                // add the property to the json
+                                JObject color3 = new JObject();
+                                color3.Add("r", ((Color)value).R);
+                                color3.Add("g", ((Color)value).G);
+                                color3.Add("b", ((Color)value).B);
+                                color3.Add("a", ((Color)value).A);
+                                properties.Add(property.Name, color3);
+                            }
+                            // if the value is a quaternion
+                            else if (value.GetType() == typeof(Quaternion))
+                            {
+                                // add the property to the json
+                                JObject quaternion = new JObject();
+                                quaternion.Add("x", ((Quaternion)value).X);
+                                quaternion.Add("y", ((Quaternion)value).Y);
+                                quaternion.Add("z", ((Quaternion)value).Z);
+                                quaternion.Add("w", ((Quaternion)value).W);
+                                properties.Add(property.Name, quaternion);
+                            }
+                        }
+                        
+                        break;
+                    
+
                 }
+
             }
             
+
             var children = new JArray();
             gameObjectJson.Add("children", children);
 

@@ -11,7 +11,7 @@ using System.Windows.Media.Media3D;
 using FirewoodEngine.Core;
 using OpenTK.Graphics.OpenGL;
 
-namespace FirewoodEngine.Componenents
+namespace FirewoodEngine.Components
 {
     public class Camera : Component
     {
@@ -21,10 +21,5 @@ namespace FirewoodEngine.Componenents
         public float far = 1000f;
         
         public Color backgroundColor = Color.Black;
-
-        public Camera()
-        {
-            linkedComponent = this;
-        }
     }
 }

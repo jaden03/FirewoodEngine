@@ -14,7 +14,7 @@ using System.Threading;
 using Dear_ImGui_Sample;
 using ImGuiNET;
 using System.IO;
-using FirewoodEngine.Componenents;
+using FirewoodEngine.Components;
 
 namespace FirewoodEngine.Core
 {
@@ -61,13 +61,7 @@ namespace FirewoodEngine.Core
                     gameCamera = gameObjects[i].GetComponent<Camera>();
                     foundCamera = true;
                 }
-
-                if (!isPlaying) { continue; }
                 
-                foreach (Component component in components)
-                {
-                    component.GetType().GetMethod("Update").Invoke(component, new object[] { e });
-                }
 
                 // for (int j = 0; j < gameObjects[i].components.Count; j++)
                 // {
@@ -81,6 +75,7 @@ namespace FirewoodEngine.Core
                 //     }
                 // }
             }
+            
             if (!foundCamera)
                 gameCamera = null;
             
@@ -113,6 +108,13 @@ namespace FirewoodEngine.Core
             Physics.Update(e);
             
             Context.SwapBuffers();
+            
+            if (!isPlaying || isPaused) { return; }
+                
+            foreach (Component component in components)
+            {
+                component.GetType().GetMethod("Update").Invoke(component, new object[] { e });
+            }
 
             base.OnUpdateFrame(e);
         }

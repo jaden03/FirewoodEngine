@@ -9,7 +9,6 @@ using System.Drawing;
 using OpenTK.Input;
 using FirewoodEngine.Scripts;
 using FirewoodEngine.Core;
-using FirewoodEngine.Componenents;
 using FirewoodEngine.Components;
 
 namespace FirewoodEngine

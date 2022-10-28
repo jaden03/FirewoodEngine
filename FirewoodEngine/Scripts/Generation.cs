@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FirewoodEngine.Core;
-using FirewoodEngine.Componenents;
+using FirewoodEngine.Components;
 
 namespace FirewoodEngine.Scripts
 {

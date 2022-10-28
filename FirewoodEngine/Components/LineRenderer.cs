@@ -8,7 +8,7 @@ using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using FirewoodEngine.Core;
 
-namespace FirewoodEngine.Componenents
+namespace FirewoodEngine.Components
 {
     using static Logging;
     class LineRenderer : Component
@@ -22,7 +22,6 @@ namespace FirewoodEngine.Componenents
 
         public LineRenderer()
         {
-            linkedComponent = this;
             position1 = Vector3.Zero;
             position2 = Vector3.One;
             RenderManager.AddRenderer(this);
@@ -30,7 +29,6 @@ namespace FirewoodEngine.Componenents
 
         public LineRenderer(Vector3 _position1, Vector3 _position2)
         {
-            linkedComponent = this;
             position1 = _position1;
             position2 = _position2;
             RenderManager.AddRenderer(this);

@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
-using FirewoodEngine.Componenents;
+using FirewoodEngine.Components;
 
 namespace FirewoodEngine.Core
 {
@@ -38,7 +38,7 @@ namespace FirewoodEngine.Core
         public static void Update(FrameEventArgs e)
         {
             if (!app.isPlaying || app.isPaused) { return; }
-            
+
             foreach (Rigidbody rb in rbs)
             {
                 var lastPos = rb.gameObject.transform.position;
@@ -47,6 +47,7 @@ namespace FirewoodEngine.Core
                 if (rb.useGravity)
                 {
                     rb.velocity -= new Vector3(0, .1f, 0) * (float)e.Time;
+                    Print(rb.velocity.ToString());
                 }
 
                 var pos = rb.gameObject.transform.position;

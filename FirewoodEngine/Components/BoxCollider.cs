@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using FirewoodEngine.Core;
 
-namespace FirewoodEngine.Componenents
+namespace FirewoodEngine.Components
 {
     class BoxCollider : Component
     {
@@ -16,11 +16,7 @@ namespace FirewoodEngine.Componenents
         [HideInInspector]
         public Vector3 size = Vector3.One;
         public bool isTrigger = false;
-
-        public BoxCollider()
-        {
-            linkedComponent = this;
-        }
+        
         
         public void CalculateBoundsFromMesh()
         {

@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using FirewoodEngine.Core;
 
-namespace FirewoodEngine.Componenents
+namespace FirewoodEngine.Components
 {
     using static Logging;
     class Renderer : Component
@@ -38,7 +38,6 @@ namespace FirewoodEngine.Componenents
 
         public Renderer()
         {
-            linkedComponent = this;
             VertexArrayObject = GL.GenVertexArray();
             RenderManager.AddRenderer(this);
         }

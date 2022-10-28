@@ -13,16 +13,11 @@ namespace FirewoodEngine.Components
     {
         private Vector3 lastPos = Vector3.Zero;
 
-        public void Start()
+        public override void Start()
         {
             AudioManager.SetListener(this);
         }
 
-        public AudioListener()
-        {
-            linkedComponent = this;
-        }
-        
         public override void Update(FrameEventArgs e)
         {
             var velocity = (gameObject.transform.position - lastPos) / (float)e.Time;

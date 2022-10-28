@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FirewoodEngine.Core;
 
-namespace FirewoodEngine.Componenents
+namespace FirewoodEngine.Components
 {
     public class Rigidbody : Component
     {
@@ -20,7 +20,6 @@ namespace FirewoodEngine.Componenents
 
         public Rigidbody()
         {
-            linkedComponent = this;
             collidingBodies = new List<Rigidbody>();
             Physics.AddRigidbody(this);
         }

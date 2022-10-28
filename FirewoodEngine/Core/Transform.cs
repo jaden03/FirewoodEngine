@@ -35,7 +35,7 @@ namespace FirewoodEngine.Core
         
         [HideInInspector]
         public List<Transform> children;
-
+        
         [HideInInspector]
         public Vector3 forward;
         

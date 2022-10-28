@@ -8,7 +8,7 @@ using System.Windows.Media.Media3D;
 using Quaternion = OpenTK.Quaternion;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
-using FirewoodEngine.Componenents;
+using FirewoodEngine.Components;
 
 namespace FirewoodEngine.Core
 {
