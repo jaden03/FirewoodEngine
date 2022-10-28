@@ -11,7 +11,9 @@ namespace FirewoodEngine.Componenents
 {
     class BoxCollider : Component
     {
+        [HideInInspector]
         public Vector3 center = Vector3.Zero;
+        [HideInInspector]
         public Vector3 size = Vector3.One;
         public bool isTrigger = false;
 

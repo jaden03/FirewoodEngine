@@ -3,6 +3,7 @@ using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,22 +15,16 @@ namespace FirewoodEngine.Componenents
 {
     public class Camera : Component
     {
-        public Application app;
         public float fov = 90f;
+        
+        public float near = 0.01f;
+        public float far = 1000f;
+        
+        public Color backgroundColor = Color.Black;
 
         public Camera()
         {
             linkedComponent = this;
         }
-        
-        public void Update(FrameEventArgs e)
-        {
-            Matrix4 view = Matrix4.LookAt(gameObject.transform.position, gameObject.transform.position + transform.forward, transform.up);
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), (float)EditorUI.gameSize.X / (float)EditorUI.gameSize.Y, 0.01f, 1000.0f);
-
-            RenderManager.Render(view, projection, app.stopwatch, app._lightPos, gameObject.transform.position, app);
-        }
-        
-
     }
 }

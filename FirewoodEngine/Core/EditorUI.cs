@@ -37,7 +37,9 @@ namespace FirewoodEngine.Core
         static bool assets = true;
         static bool inspector = true;
         static bool hierarchy = true;
-
+        
+        static System.Numerics.Vector2 selectedItemPosition = new System.Numerics.Vector2(0, 0);
+        static System.Numerics.Vector2 selectedItemSize = new System.Numerics.Vector2(0, 0);
 
         public void Initialize(ImGuiController cont)
         {
@@ -45,7 +47,7 @@ namespace FirewoodEngine.Core
             font = io.Fonts.AddFontFromFileTTF("../../../Core/Varela.ttf", 20);
             fontBig = io.Fonts.AddFontFromFileTTF("../../../Core/Varela.ttf", 50);
             cont.RecreateFontDeviceTexture();
-            
+
             RangeAccessor<Vector4> colors = ImGui.GetStyle().Colors;
             colors[(int)ImGuiCol.Text] = new Vector4(1.00f, 1.00f, 1.00f, 1.00f);
             colors[(int)ImGuiCol.TextDisabled] = new Vector4(0.50f, 0.50f, 0.50f, 1.00f);
@@ -72,8 +74,8 @@ namespace FirewoodEngine.Core
             colors[(int)ImGuiCol.ButtonHovered] = new Vector4(0.20f, 0.20f, 0.20f, 1.00f);
             colors[(int)ImGuiCol.ButtonActive] = new Vector4(0.06f, 0.53f, 0.98f, 1.00f);
             colors[(int)ImGuiCol.Header] = new Vector4(0.12f, 0.12f, 0.12f, 1.00f);
-            colors[(int)ImGuiCol.HeaderHovered] = new Vector4(0.12f, 0.12f, 0.12f, 1.00f);
-            colors[(int)ImGuiCol.HeaderActive] = new Vector4(0.12f, 0.12f, 0.12f, 1.00f);
+            colors[(int)ImGuiCol.HeaderHovered] = new Vector4(0.20f, 0.20f, 0.20f, 1.00f);
+            colors[(int)ImGuiCol.HeaderActive] = new Vector4(0.06f, 0.53f, 0.98f, 1.00f);
             colors[(int)ImGuiCol.Separator] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
             colors[(int)ImGuiCol.SeparatorHovered] = new Vector4(0.20f, 0.20f, 0.20f, 0.80f);
             colors[(int)ImGuiCol.SeparatorActive] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
@@ -200,32 +202,18 @@ namespace FirewoodEngine.Core
                     }
                     if (ImGui.MenuItem("Save Scene"))
                     {
-                        //GameObjectManager.Play();
-                    }
-                    ImGui.EndMenu();
-                }
-                if (ImGui.BeginMenu("Edit"))
-                {
-                    if (ImGui.MenuItem("Undo", "CTRL+Z"))
-                    {
+                        SaveFileDialog saveFileDialog = new SaveFileDialog();
+                        saveFileDialog.FileName = "Scene";
+                        saveFileDialog.DefaultExt = ".json";
+                        saveFileDialog.Filter = "JSON documents (.json)|*.json";
+                        saveFileDialog.InitialDirectory = Path.Combine(Environment.CurrentDirectory, "Scenes");
 
-                    }
-                    if (ImGui.MenuItem("Redo", "CTRL+Y", false, false))
-                    {
+                        Nullable<bool> result = saveFileDialog.ShowDialog();
 
-                    }  // Disabled item
-                    ImGui.Separator();
-                    if (ImGui.MenuItem("Cut", "CTRL+X"))
-                    {
-
-                    }
-                    if (ImGui.MenuItem("Copy", "CTRL+C"))
-                    {
-
-                    }
-                    if (ImGui.MenuItem("Paste", "CTRL+V"))
-                    {
-
+                        if (result == true)
+                        {
+                            Editor.SaveScene(saveFileDialog.FileName);
+                        }
                     }
                     ImGui.EndMenu();
                 }
@@ -279,21 +267,47 @@ namespace FirewoodEngine.Core
                 }
 
 
+                var playing = app.isPlaying;
+                var paused = app.isPaused;
+
                 #region PlayButton
+                
+                
                 var playButtonSize = new Vector2(30, 30);
                 var windowSize = ImGui.GetWindowSize();
                 // put the play button in the center
                 var playButtonPos = new Vector2((windowSize.X / 2) - playButtonSize.X, (windowSize.Y / 2 ) - playButtonSize.Y + 15);
                 ImGui.SetCursorPos(playButtonPos);
-                if (ImGui.Button("", playButtonSize))
+
+                if (playing && !paused)
                 {
-                    //Editor.Play();
+                    ImGui.BeginDisabled();
+                    ImGui.Button("##playButton", playButtonSize);
+
+                    ImGui.GetWindowDrawList().AddTriangleFilled(
+                        new Vector2(playButtonPos.X + 10, playButtonPos.Y + 10),
+                        new Vector2(playButtonPos.X + 10, playButtonPos.Y + 20),
+                        new Vector2(playButtonPos.X + 20, playButtonPos.Y + 15),
+                        0xFF4F4F4F);
+                    
+                    ImGui.EndDisabled();
                 }
-                ImGui.GetWindowDrawList().AddTriangleFilled(
+                else
+                {
+                    if (ImGui.Button("##playButton", playButtonSize))
+                    {
+                        if (!playing)
+                            Editor.SaveScene(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/FirewoodEngine/tempScene.json");
+                        app.isPaused = false;
+                        app.isPlaying = true;
+                    }
+                    ImGui.GetWindowDrawList().AddTriangleFilled(
                         new Vector2(playButtonPos.X + 10, playButtonPos.Y + 10),
                         new Vector2(playButtonPos.X + 10, playButtonPos.Y + 20),
                         new Vector2(playButtonPos.X + 20, playButtonPos.Y + 15),
                         0xFFFFFFFF);
+                }
+
 
 
                 #endregion
@@ -303,19 +317,36 @@ namespace FirewoodEngine.Core
                 var pauseButtonSize = new Vector2(30, 30);
                 var pauseButtonPos = new Vector2((windowSize.X / 2) - pauseButtonSize.X + 40, (windowSize.Y / 2) - pauseButtonSize.Y + 15);
                 ImGui.SetCursorPos(pauseButtonPos);
-                if (ImGui.Button("", pauseButtonSize))
+
+                if (!paused)
                 {
-                    //Editor.Pause();
-                }
-                // draw two vertical boxes
-                ImGui.GetWindowDrawList().AddRectFilled(
+                    if (ImGui.Button("##pauseButton", pauseButtonSize))
+                    {
+                        app.isPaused = true;
+                    }
+                    ImGui.GetWindowDrawList().AddRectFilled(
                         new Vector2(pauseButtonPos.X + 10, pauseButtonPos.Y + 10),
                         new Vector2(pauseButtonPos.X + 13, pauseButtonPos.Y + 20),
                         0xFFFFFFFF);
-                ImGui.GetWindowDrawList().AddRectFilled(
-                    new Vector2(pauseButtonPos.X + 17, pauseButtonPos.Y + 10),
+                    ImGui.GetWindowDrawList().AddRectFilled(
+                        new Vector2(pauseButtonPos.X + 17, pauseButtonPos.Y + 10),
                         new Vector2(pauseButtonPos.X + 20, pauseButtonPos.Y + 20),
                         0xFFFFFFFF);
+                }
+                else
+                {
+                    ImGui.BeginDisabled();
+                    ImGui.Button("##pauseButton", pauseButtonSize);
+                    ImGui.GetWindowDrawList().AddRectFilled(
+                        new Vector2(pauseButtonPos.X + 10, pauseButtonPos.Y + 10),
+                        new Vector2(pauseButtonPos.X + 13, pauseButtonPos.Y + 20),
+                        0xFF4F4F4F);
+                    ImGui.GetWindowDrawList().AddRectFilled(
+                        new Vector2(pauseButtonPos.X + 17, pauseButtonPos.Y + 10),
+                        new Vector2(pauseButtonPos.X + 20, pauseButtonPos.Y + 20),
+                        0xFF4F4F4F);
+                    ImGui.EndDisabled();
+                }
 
                 #endregion
 
@@ -324,14 +355,30 @@ namespace FirewoodEngine.Core
                 var stopButtonSize = new Vector2(30, 30);
                 var stopButtonPos = new Vector2((windowSize.X / 2) - stopButtonSize.X - 40, (windowSize.Y / 2) - stopButtonSize.Y + 15);
                 ImGui.SetCursorPos(stopButtonPos);
-                if (ImGui.Button("", stopButtonSize))
+
+                if (playing)
                 {
-                    //Editor.Stop();
-                }
-                ImGui.GetWindowDrawList().AddRectFilled(
+                    if (ImGui.Button("##stopButton", stopButtonSize))
+                    {
+                        app.isPlaying = false;
+                        app.isPaused = true;
+                        Editor.LoadScene(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/FirewoodEngine/tempScene.json");
+                    }
+                    ImGui.GetWindowDrawList().AddRectFilled(
                         new Vector2(stopButtonPos.X + 10, stopButtonPos.Y + 10),
                         new Vector2(stopButtonPos.X + 20, stopButtonPos.Y + 20),
                         0xFFFFFFFF);
+                }
+                else
+                {
+                    ImGui.BeginDisabled();
+                    ImGui.Button("##stopButton", stopButtonSize);
+                    ImGui.GetWindowDrawList().AddRectFilled(
+                        new Vector2(stopButtonPos.X + 10, stopButtonPos.Y + 10),
+                        new Vector2(stopButtonPos.X + 20, stopButtonPos.Y + 20),
+                        0xFF4F4F4F);
+                    ImGui.EndDisabled();
+                }
 
                 #endregion
 
@@ -464,8 +511,12 @@ namespace FirewoodEngine.Core
 
             ImGui.SetCursorPosX(widthInverse);
             ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 5);
-            
-            ImGui.InputText("##name", ref selectedObject.name, 100);
+
+            var selectedObjectName = selectedObject.name;
+            if (ImGui.InputText("##name", ref selectedObjectName, 100) && Input.GetKeyDown(Key.Enter))
+            {
+                selectedObject.name = selectedObjectName;
+            }
 
             #endregion
 
@@ -492,8 +543,12 @@ namespace FirewoodEngine.Core
             // Tag Input
             ImGui.SetNextItemWidth(inputBoxWidth);
             ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
-            
-            ImGui.InputText("##tag", ref selectedObject.tag, 100);
+
+            var selectedObjectTag = selectedObject.tag;
+            if (ImGui.InputText("##tag", ref selectedObjectTag, 100) && Input.GetKeyDown(Key.Enter))
+            {
+                selectedObject.tag = selectedObjectTag;
+            }
             
 
             #endregion
@@ -525,29 +580,67 @@ namespace FirewoodEngine.Core
             var hierarchyFlags = ImGuiWindowFlags.NoCollapse;
             ImGui.SetNextWindowSize(new System.Numerics.Vector2(350, 500), ImGuiCond.FirstUseEver);
             ImGui.Begin("Hierarchy", ref hierarchy, hierarchyFlags);
-                
-            if (ImGui.TreeNode("Scene"))
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    var treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow;
-                    var open = ImGui.TreeNodeEx("GameObject " + i, treeNodeFlags);
 
-                    if (open)
-                    {
-                        ImGui.TreePush();
-                        open = ImGui.TreeNodeEx("Child", treeNodeFlags);
-                        if (open)
-                        {
-                            ImGui.TreePop();
-                        }
-                        ImGui.TreePop();
-                        ImGui.TreePop();
-                    }
+            if (ImGui.IsWindowHovered() && ImGui.IsMouseClicked(0))
+            {
+                Editor.selectedObject = null;
+            }
+            
+            var gameObjects = GameObjectManager.gameObjects;
+
+            var treeNodeFlags = ImGuiTreeNodeFlags.SpanAvailWidth | ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.Framed;
+            if (ImGui.TreeNodeEx("Scene" , treeNodeFlags))
+            {
+                foreach (GameObject gameObject in gameObjects)
+                {
+                    if (gameObject.transform.parent != null)
+                        continue;
+                    
+                    HierarchyDrawGameObject(gameObject, null);
                 }
                 ImGui.TreePop();
             }
             ImGui.End();
+        }
+
+        static void HierarchyDrawGameObject(GameObject gameObject, GameObject parent)
+        {
+            var selectedObject = Editor.selectedObject;
+            
+            var treeNodeFlags = ImGuiTreeNodeFlags.SpanAvailWidth | ImGuiTreeNodeFlags.OpenOnArrow | (gameObject.transform.children.Count == 0 ? ImGuiTreeNodeFlags.Leaf : 0);
+
+            bool selected = gameObject == selectedObject;
+            
+            if (selected)
+            {
+                System.Numerics.Vector4 color = ImGui.GetStyle().Colors[(int)ImGuiCol.HeaderHovered];
+                
+                ImGui.GetWindowDrawList().AddRectFilled(selectedItemPosition, selectedItemPosition + selectedItemSize, ImGui.ColorConvertFloat4ToU32(color));
+            }
+
+            bool opened = (ImGui.TreeNodeEx(gameObject.name, treeNodeFlags));
+            
+            if (selected)
+            {
+                selectedItemPosition = ImGui.GetItemRectMin();
+                selectedItemSize = ImGui.GetItemRectSize();
+            }
+            
+            
+            if (ImGui.IsItemClicked() && !ImGui.IsItemToggledOpen())
+            {
+                Editor.selectedObject = gameObject;
+            }
+
+            if (opened)
+            {
+                foreach (Transform child in gameObject.transform.children)
+                {
+                    HierarchyDrawGameObject(child.gameObject, gameObject);
+                }
+
+                ImGui.TreePop();
+            }
         }
         
         static void InspectorDrawComponent(object component)
@@ -555,7 +648,7 @@ namespace FirewoodEngine.Core
             var nameCapitalized = component.GetType().Name;
             nameCapitalized = nameCapitalized[0].ToString().ToUpper() + nameCapitalized.Substring(1);
             
-            if (ImGui.CollapsingHeader(nameCapitalized, ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnArrow))
+            if (ImGui.CollapsingHeader(nameCapitalized, ImGuiTreeNodeFlags.DefaultOpen))
             {
                 var properties = component.GetType().GetFields();
                 
@@ -563,26 +656,6 @@ namespace FirewoodEngine.Core
                 {
                     DrawField(prop, component);
                 }
-
-
-
-                // // Position Text
-                // var positionTextSize = ImGui.CalcTextSize("Position");
-                // var positionTextPos = new Vector2(labelPixelsFromLeft, ImGui.GetCursorPosY() + 10);
-                // ImGui.SetCursorPos(positionTextPos);
-                // ImGui.Text("Position");
-                //
-                // ImGui.SameLine();
-                //
-                // // Position Input
-                // ImGui.SetNextItemWidth(inputBoxWidth);
-                // ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
-                //
-                // var test = "";
-                //
-                // ImGui.InputText("##position", ref test, 100);
-                //
-                // ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
             }
         }
 
@@ -605,6 +678,7 @@ namespace FirewoodEngine.Core
             {
                 return;
             }
+            bool readOnly = attributes.Any(x => x.GetType() == typeof(ReadOnly));
             
             var fieldType = field.FieldType;
             if (fieldType == (typeof(OpenTK.Vector3)))
@@ -618,10 +692,21 @@ namespace FirewoodEngine.Core
                 ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
 
                 System.Numerics.Vector3 retrievedVector = new System.Numerics.Vector3(((Vector3)field.GetValue(component)).X, ((Vector3)field.GetValue(component)).Y, ((Vector3)field.GetValue(component)).Z);
-                if (ImGui.InputFloat3("##" + field.Name, ref retrievedVector) && Input.GetKeyDown(Key.Enter))
+
+                if (readOnly)
                 {
-                    field.SetValue(component, new Vector3(retrievedVector.X, retrievedVector.Y, retrievedVector.Z));
+                    ImGui.BeginDisabled();
+                    ImGui.InputFloat3("##" + field.Name, ref retrievedVector);
+                    ImGui.EndDisabled();
                 }
+                else
+                {
+                    if (ImGui.InputFloat3("##" + field.Name, ref retrievedVector))
+                    {
+                        field.SetValue(component, new Vector3(retrievedVector.X, retrievedVector.Y, retrievedVector.Z));
+                    }
+                }
+
 
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
             }
@@ -636,9 +721,18 @@ namespace FirewoodEngine.Core
                 ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
 
                 float retrievedFloat = (float)field.GetValue(component);
-                if (ImGui.InputFloat("##" + field.Name, ref retrievedFloat) && Input.GetKeyDown(Key.Enter))
+                if (readOnly)
                 {
-                    field.SetValue(component, retrievedFloat);
+                    ImGui.BeginDisabled();
+                    ImGui.InputFloat("##" + field.Name, ref retrievedFloat);
+                    ImGui.EndDisabled();
+                }
+                else
+                {
+                    if (ImGui.InputFloat("##" + field.Name, ref retrievedFloat) && Input.GetKeyDown(Key.Enter))
+                    {
+                        field.SetValue(component, retrievedFloat);
+                    }
                 }
 
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
@@ -654,9 +748,18 @@ namespace FirewoodEngine.Core
                 ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
 
                 int retrievedInt = (int)field.GetValue(component);
-                if (ImGui.InputInt("##" + field.Name, ref retrievedInt) && Input.GetKeyDown(Key.Enter))
+                if (readOnly)
                 {
-                    field.SetValue(component, retrievedInt);
+                    ImGui.BeginDisabled();
+                    ImGui.InputInt("##" + field.Name, ref retrievedInt);
+                    ImGui.EndDisabled();
+                }
+                else
+                {
+                    if (ImGui.InputInt("##" + field.Name, ref retrievedInt) && Input.GetKeyDown(Key.Enter))
+                    {
+                        field.SetValue(component, retrievedInt);
+                    }
                 }
 
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
@@ -672,9 +775,18 @@ namespace FirewoodEngine.Core
                 ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
 
                 string retrievedString = (string)field.GetValue(component);
-                if (ImGui.InputText("##" + field.Name, ref retrievedString, 100) && Input.GetKeyDown(Key.Enter))
+                if (readOnly)
                 {
-                    field.SetValue(component, retrievedString);
+                    ImGui.BeginDisabled();
+                    ImGui.InputText("##" + field.Name, ref retrievedString, 100);
+                    ImGui.EndDisabled();
+                }
+                else
+                {
+                    if (ImGui.InputText("##" + field.Name, ref retrievedString, 100) && Input.GetKeyDown(Key.Enter))
+                    {
+                        field.SetValue(component, retrievedString);
+                    }
                 }
 
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
@@ -690,29 +802,20 @@ namespace FirewoodEngine.Core
                 ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
 
                 bool retrievedBool = (bool)field.GetValue(component);
-                if (ImGui.Checkbox("##" + field.Name, ref retrievedBool) && Input.GetKeyDown(Key.Enter))
+                if (readOnly)
                 {
-                    field.SetValue(component, retrievedBool);
+                    ImGui.BeginDisabled();
+                    ImGui.Checkbox("##" + field.Name, ref retrievedBool);
+                    ImGui.EndDisabled();
+                }
+                else
+                {
+                    if (ImGui.Checkbox("##" + field.Name, ref retrievedBool))
+                    {
+                        field.SetValue(component, retrievedBool);
+                    }
                 }
 
-                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
-            }
-            else if (fieldType == (typeof(string)))
-            {
-                // Text
-                ImGui.SetCursorPos(textSizeTextPos);
-                ImGui.Text(nameCapitalized);
-                ImGui.SameLine();
-                // Input
-                ImGui.SetNextItemWidth(inputBoxWidth);
-                ImGui.SetCursorPos(new Vector2(inputBoxXPos, ImGui.GetCursorPosY() - 5));
-                
-                string retrievedString = (string)field.GetValue(component);
-                if (ImGui.InputText("##" + field.Name, ref retrievedString, 100) && Input.GetKeyDown(Key.Enter))
-                {
-                    field.SetValue(component, retrievedString);
-                }
-                
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10);
             }
 

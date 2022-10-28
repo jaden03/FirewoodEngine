@@ -13,14 +13,24 @@ namespace FirewoodEngine.Componenents
     using static Logging;
     class Renderer : Component
     {
+        [HideInInspector]
         public float[] vertices;
+        
+        [HideInInspector]
         public float[] triangles;
         public bool wireframe = false;
+        
+        [HideInInspector]
         public int VertexArrayObject;
+        
+        [HideInInspector]
         public Material material;
 
+        [HideInInspector]
         public Vector3 bounds;
+        [HideInInspector]
         public Vector3 offset;
+        [HideInInspector]
         public float radius;
 
         public string path;
@@ -46,7 +56,7 @@ namespace FirewoodEngine.Componenents
         {
             Matrix4 model = Matrix4.Identity;
             model = 
-                Matrix4.CreateScale(transform.scale) * 
+                Matrix4.CreateScale(transform.scale * transform.localScale) * 
                 Matrix4.CreateFromQuaternion(transform.rotation) * 
                 Matrix4.CreateTranslation(transform.position);
 
@@ -129,6 +139,9 @@ namespace FirewoodEngine.Componenents
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Length * 3);
+            
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            
             GL.Flush();
         }
 

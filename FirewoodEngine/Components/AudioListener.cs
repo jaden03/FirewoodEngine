@@ -23,7 +23,7 @@ namespace FirewoodEngine.Components
             linkedComponent = this;
         }
         
-        public void Update(FrameEventArgs e)
+        public override void Update(FrameEventArgs e)
         {
             var velocity = (gameObject.transform.position - lastPos) / (float)e.Time;
             

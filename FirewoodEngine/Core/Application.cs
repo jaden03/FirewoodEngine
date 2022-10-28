@@ -28,8 +28,7 @@ namespace FirewoodEngine.Core
         public Stopwatch stopwatch = new Stopwatch();
 
         public Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
-
-        public List<object> activeScripts;
+        
         public List<object> activeCoreScripts;
 
         StringWriter consoleOut;
@@ -41,16 +40,50 @@ namespace FirewoodEngine.Core
         EditorUI editorUI;
 
         public Camera gameCamera = null;
+        
+        public bool isPlaying = false;
+        public bool isPaused = true;
 
         //------------------------\\
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             EditorCamera.Update(e);
-            foreach (object script in activeScripts)
+
+            var gameObjects = GameObjectManager.gameObjects;
+            var components = ComponentManager.components;
+            
+            var foundCamera = false;
+            for (int i = 0; i < gameObjects.Count; i++)
             {
-                script.GetType().GetMethod("Update").Invoke(script, new[] { e });
+                if (gameObjects[i].GetComponent<Camera>() != null)
+                {
+                    gameCamera = gameObjects[i].GetComponent<Camera>();
+                    foundCamera = true;
+                }
+
+                if (!isPlaying) { continue; }
+                
+                foreach (Component component in components)
+                {
+                    component.GetType().GetMethod("Update").Invoke(component, new object[] { e });
+                }
+
+                // for (int j = 0; j < gameObjects[i].components.Count; j++)
+                // {
+                //     try
+                //     {
+                //          gameObjects[i].components[j].GetType().GetMethod("Update").Invoke(gameObjects[i].components[j], new object[] { e });
+                //     }
+                //     catch (Exception exception)
+                //     {
+                //         Console.WriteLine(exception);
+                //     }
+                // }
             }
+            if (!foundCamera)
+                gameCamera = null;
+            
             foreach (object script in activeCoreScripts)
             {
                 script.GetType().GetMethod("Update").Invoke(script, new[] { e });
@@ -78,25 +111,7 @@ namespace FirewoodEngine.Core
             ImGuiController.CheckGLError("End of frame");
             
             Physics.Update(e);
-
-
-
-
-            if (gameCamera == null)
-            {
-                for (int i = 0; i < GameObjectManager.gameObjects.Count; i++)
-                {
-                    if (GameObjectManager.gameObjects[i].GetComponent<Camera>() != null)
-                    {
-                        gameCamera = GameObjectManager.gameObjects[i].GetComponent<Camera>();
-                    }
-                }
-            }
-                
-
-
-
-
+            
             Context.SwapBuffers();
 
             base.OnUpdateFrame(e);
@@ -139,13 +154,25 @@ namespace FirewoodEngine.Core
             // Im not sure how to handle caps lock
             
             var key = e.Key.ToString();
+            
+            if (key == "Minus")
+                key = "-";
+            
+            if (key == "Plus")
+                key = "+";
+            
+            if (key == "Period")
+                key = ".";
+            
+            if (key == "Comma")
+                key = ",";
 
-            if (key.StartsWith("Number"))
+            if (key.StartsWith("Number") || key.StartsWith("Keypad"))
             {
                 // remove "Number" from the string
                 key = key.Remove(0, 6);
             }
-            
+
             if (key == "Space")
             {
                 key = " ";
@@ -171,23 +198,22 @@ namespace FirewoodEngine.Core
             Console.SetOut(consoleOut);
             consoleOutput = new List<string>();
 
+            startPhysics();
             _controller = new ImGuiController(Width, Height);
             editorUI = new EditorUI();
             editorUI.Initialize(_controller);
             editorUI.app = this;
 
             WindowState = WindowState.Maximized;
-
-            activeScripts = new List<object>();
+            
             activeCoreScripts = new List<object>();
 
             EditorCamera.app = this;
+            ComponentManager.Initialize();
             GameObjectManager.Initialize();
             RenderManager.Initialize(this);
             AudioManager.Init();
             Editor.Initialize(this);
-
-            startPhysics();
 
             stopwatch.Start();
 
@@ -205,13 +231,23 @@ namespace FirewoodEngine.Core
 
         void startPhysics()
         {
-            Physics.Initialize();
+            Physics.Initialize(this);
         }
 
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            base.OnRenderFrame(e);
+            if (gameCamera != null)
+            {
+                Matrix4 view = Matrix4.LookAt(gameCamera.transform.position, gameCamera.transform.position + gameCamera.transform.forward, gameCamera.transform.up);
+                Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(gameCamera.fov),
+                    (float)EditorUI.gameSize.X / (float)EditorUI.gameSize.Y, gameCamera.near, gameCamera.far);
+
+                GL.ClearColor(gameCamera.backgroundColor);
+                RenderManager.Render(view, projection, stopwatch, _lightPos, gameCamera.transform.position, this);
+        }
+
+        base.OnRenderFrame(e);
         }
 
         protected override void OnResize(EventArgs e)

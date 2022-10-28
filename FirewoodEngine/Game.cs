@@ -41,12 +41,9 @@ namespace FirewoodEngine
 
             // Create a camera component
             var camera = new Camera();
-            // Set the app variable in Camera
-            camera.app = app;
             // Add the camera component to the GameObject
             cameraObjectChild.AddComponent(camera);
             // Add the camera component to the active scripts so the update function will work (will be refactored so you dont have to do this)
-            app.activeScripts.Add(camera);
 
             // Create a freecam component
             var freecam = new Freecam();
@@ -55,15 +52,12 @@ namespace FirewoodEngine
             // Fire the Start function before anything else so execution order doesnt destroy you
             freecam.Start();
             // Add the freecam component to the active scripts so the update function will work (will be refactored so you dont have to do this)
-            app.activeScripts.Add(freecam);
 
 
             // Audio Listener \\
             var audioListener = new AudioListener();
             cameraObjectChild.AddComponent(audioListener);
             audioListener.Start();
-            app.activeScripts.Add(audioListener);
-
 
 
 

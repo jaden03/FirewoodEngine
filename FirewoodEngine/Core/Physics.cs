@@ -13,15 +13,16 @@ namespace FirewoodEngine.Core
     using static Logging;
     class Physics
     {
+        static Application app;
         public static List<Rigidbody> rbs;
 
-        public static void Initialize()
+        public static void Initialize(Application _app)
         {
+            app = _app;
+            
             rbs = new List<Rigidbody>();
-
-            Console.ForegroundColor = ConsoleColor.Green;
+            
             Console.WriteLine("Physics Initialized");
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static void AddRigidbody(Rigidbody rb)
@@ -36,6 +37,8 @@ namespace FirewoodEngine.Core
 
         public static void Update(FrameEventArgs e)
         {
+            if (!app.isPlaying || app.isPaused) { return; }
+            
             foreach (Rigidbody rb in rbs)
             {
                 var lastPos = rb.gameObject.transform.position;

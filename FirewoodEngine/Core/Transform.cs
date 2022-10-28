@@ -25,6 +25,9 @@ namespace FirewoodEngine.Core
         public Vector3 localEulerAngles;
         
         [HideInInspector]
+        public Vector3 localScale;
+        
+        [HideInInspector]
         public GameObject gameObject;
         
         [HideInInspector]
@@ -41,7 +44,7 @@ namespace FirewoodEngine.Core
         
         [HideInInspector]
         public Vector3 up;
-
+        
         public Transform()
         {
             position = Vector3.Zero;
@@ -52,6 +55,7 @@ namespace FirewoodEngine.Core
             localPosition = Vector3.Zero;
             localRotation = Quaternion.Identity;
             localEulerAngles = Vector3.Zero;
+            localScale = Vector3.One;
             gameObject = null;
             parent = null;
             children = new List<Transform>();
@@ -76,7 +80,7 @@ namespace FirewoodEngine.Core
             foreach (Transform child in children)
             {
                 child.position = position + ((child.localPosition.Z * forward) + (child.localPosition.Y * up) + (-child.localPosition.X * right));
-                child.Update(e);
+                //child.Update(e);
             }
         }
         

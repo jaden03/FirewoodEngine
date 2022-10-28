@@ -13,6 +13,7 @@ namespace FirewoodEngine.Componenents
         public float mass = 1f;
         public bool useGravity = false;
         public bool kinematic = false;
+        [ReadOnly]
         public Vector3 velocity;
 
         public List<Rigidbody> collidingBodies;

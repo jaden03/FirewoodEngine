@@ -16,6 +16,8 @@ namespace FirewoodEngine.Componenents
         public Vector3 position1;
         public Vector3 position2;
         public bool useLocal = false;
+        
+        [HideInInspector]
         public Material material;
 
         public LineRenderer()
@@ -36,12 +38,11 @@ namespace FirewoodEngine.Componenents
 
         public void Draw(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer, int frameBuffer, int renderTexture, int depthTexture)
         {
-            Matrix4 model =
-            (
-                Matrix4.CreateScale(gameObject.transform.scale)
-                * Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(gameObject.transform.eulerAngles.X, gameObject.transform.eulerAngles.Y, gameObject.transform.eulerAngles.Z))
-                * Matrix4.CreateTranslation(gameObject.transform.position)
-            );
+            Matrix4 model = Matrix4.Identity;
+            model = 
+                Matrix4.CreateScale(transform.scale * transform.localScale) * 
+                Matrix4.CreateFromQuaternion(transform.rotation) * 
+                Matrix4.CreateTranslation(transform.position);
 
             material.shader.Use();
 
