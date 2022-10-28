@@ -28,6 +28,14 @@ namespace FirewoodEngine.Core
 
         public static void RemoveGameObject(GameObject gameObject)
         {
+            Component[] components = new Component[gameObject.components.Count];
+            gameObject.components.CopyTo(components);
+            
+            foreach (var component in components)
+            {
+                gameObject.RemoveComponent(component);
+            }
+            
             gameObjects.Remove(gameObject);
         }
         

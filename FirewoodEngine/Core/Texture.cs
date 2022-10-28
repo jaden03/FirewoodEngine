@@ -11,9 +11,11 @@ using System.IO;
 
 namespace FirewoodEngine.Core
 {
-    class Texture
+    public class Texture
     {
         public readonly int Handle;
+        public static Texture fileIcon = Texture.LoadFromFile("../../../Core/Icons/file.png");
+        public static Texture folderIcon = Texture.LoadFromFile("../../../Core/Icons/folder.png");
 
         public static Texture LoadFromFile(string path)
         {

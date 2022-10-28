@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace FirewoodEngine.Core
 {
-    class Shader
+    public class Shader
     {
         public int Handle;
 
@@ -17,6 +17,8 @@ namespace FirewoodEngine.Core
 
         public Shader(string vertexPath, string fragmentPath)
         {
+            ShaderManager.AddShader(this);
+            
             int VertexShader;
             int FragmentShader;
 

@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +37,10 @@ namespace FirewoodEngine.Core
         static bool assets = true;
         static bool inspector = true;
         static bool hierarchy = true;
+        
+        static bool showGameObjectMenu = false;
+
+        private static bool addComponent = false;
         
         static System.Numerics.Vector2 selectedItemPosition = new System.Numerics.Vector2(0, 0);
         static System.Numerics.Vector2 selectedItemSize = new System.Numerics.Vector2(0, 0);
@@ -496,11 +500,18 @@ namespace FirewoodEngine.Core
         {
             // Assets
             var assetsFlags = ImGuiWindowFlags.NoCollapse;
-            ImGui.SetNextWindowSize(new Vector2(500, 350), ImGuiCond.FirstUseEver);
+            ImGui.SetNextWindowSize(new Vector2(350, 500), ImGuiCond.FirstUseEver);
             ImGui.Begin("Assets", ref assets, assetsFlags);
 
+            var currentDirectory = Editor.currentDirectory;
+            
+            // make a tree of the current directory
+            var directories = Directory.GetDirectories(currentDirectory);
+            var files = Directory.GetFiles(currentDirectory);
+            
 
             ImGui.End();
+
         }
 
 
@@ -581,14 +592,68 @@ namespace FirewoodEngine.Core
             InspectorDrawComponent(selectedObject.transform);
             foreach (Component component in components)
             {
+                ImGui.Separator();
                 InspectorDrawComponent(component);
             }
+
+            #endregion
+            
+            
+            #region Add Component Button
+            
+            ImGui.Separator();
+
+            var buttonSize = 200;
+            var buttonPos = new Vector2(windowWidth / 2 - buttonSize / 2, ImGui.GetCursorPosY() + 10);
+            
+            ImGui.SetCursorPos(buttonPos);
+            
+            if (ImGui.Button("Add Component", new Vector2(buttonSize, 30)))
+            {
+                ImGui.OpenPopup("Add Component");
+            }
+            
+            if (ImGui.BeginPopup("Add Component"))
+            {
+                ImGui.Text("Add Component");
+                ImGui.Separator();
+                
+                // get all types that inherit from Component
+                var componentTypes = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                    .Where(p => typeof(Component).IsAssignableFrom(p) && !p.IsAbstract);
+                
+                foreach (var type in componentTypes)
+                {
+                    if (type.Name == "Component") continue;
+                    
+                    if (ImGui.Button(type.Name))
+                    {
+                        selectedObject.AddComponent(type);
+                        ImGui.CloseCurrentPopup();
+                    }
+                }
+                
+                ImGui.EndPopup();
+            }
+            
+            if (ImGui.BeginPopup("Component Context Menu"))
+            {
+                if (ImGui.Button("Remove Component"))
+                {
+                    selectedObject.RemoveComponent(Editor.selectedComponent);
+                    ImGui.CloseCurrentPopup();
+                }
+            }
+
             
             #endregion
 
 
             ImGui.End();
         }
+        
+        
 
         
         static void Hierarchy()
@@ -604,7 +669,7 @@ namespace FirewoodEngine.Core
             }
             
             var gameObjects = GameObjectManager.gameObjects;
-
+            
             var treeNodeFlags = ImGuiTreeNodeFlags.SpanAvailWidth | ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.Framed;
             if (ImGui.TreeNodeEx("Scene" , treeNodeFlags))
             {
@@ -616,7 +681,24 @@ namespace FirewoodEngine.Core
                     HierarchyDrawGameObject(gameObject, null);
                 }
                 ImGui.TreePop();
+                
             }
+
+            if (showGameObjectMenu)
+            {
+                showGameObjectMenu = false;
+                ImGui.OpenPopup("GameObject Context Menu");
+            }
+
+            if (ImGui.BeginPopup("GameObject Context Menu"))
+            {
+                if (ImGui.Button("Remove GameObject"))
+                {
+                    GameObjectManager.RemoveGameObject(Editor.selectedObject);
+                    ImGui.CloseCurrentPopup();
+                }
+            }
+
             ImGui.End();
         }
 
@@ -649,6 +731,12 @@ namespace FirewoodEngine.Core
                 Editor.selectedObject = gameObject;
             }
 
+            if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+            {
+                Editor.selectedObject = gameObject;
+                showGameObjectMenu = true;
+            }
+
             if (opened)
             {
                 foreach (Transform child in gameObject.transform.children)
@@ -658,6 +746,7 @@ namespace FirewoodEngine.Core
 
                 ImGui.TreePop();
             }
+
         }
         
         static void InspectorDrawComponent(object component)
@@ -667,6 +756,14 @@ namespace FirewoodEngine.Core
             
             if (ImGui.CollapsingHeader(nameCapitalized, ImGuiTreeNodeFlags.DefaultOpen))
             {
+                if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+                {
+                    Editor.selectedComponent = (Component)component;
+                    ImGui.OpenPopup("Component Context Menu");
+                }
+                
+                
+                
                 var properties = component.GetType().GetFields();
                 
                 foreach (var prop in properties)

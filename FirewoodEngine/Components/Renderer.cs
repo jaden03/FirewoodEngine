@@ -34,10 +34,11 @@ namespace FirewoodEngine.Components
         public float radius;
 
         public string path;
-
-
+        private string lastPath;
+        
         public Renderer()
         {
+            path = "";
             VertexArrayObject = GL.GenVertexArray();
             RenderManager.AddRenderer(this);
         }
@@ -53,6 +54,21 @@ namespace FirewoodEngine.Components
 
         public void Render(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer, int frameBuffer, int renderTexture, int depthTexture)
         {
+            if (lastPath != path)
+            {
+                try
+                {
+                    SetOBJ(path, material.texture != null);
+                    lastPath = path;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error loading model, path not found");
+                }
+            }
+            
+            if (material == null || material.shader == null) return;
+            
             Matrix4 model = Matrix4.Identity;
             model = 
                 Matrix4.CreateScale(transform.scale * transform.localScale) * 
@@ -142,6 +158,8 @@ namespace FirewoodEngine.Components
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             
             GL.Flush();
+
+            lastPath = path;
         }
 
     }

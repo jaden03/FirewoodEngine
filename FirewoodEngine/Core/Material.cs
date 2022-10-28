@@ -8,7 +8,7 @@ using System.IO;
 
 namespace FirewoodEngine.Core
 {
-    internal class Material
+    public class Material
     {
         public string texturePath;
         public Shader shader;
@@ -19,6 +19,7 @@ namespace FirewoodEngine.Core
         public Material()
         {
             color = Color.White;
+            MaterialManager.materials.Add(this);
         }
 
         public void SetTexture(string path)

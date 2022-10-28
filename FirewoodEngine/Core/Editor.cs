@@ -18,13 +18,17 @@ namespace FirewoodEngine.Core
     {
         public static Application app;
         public static GameObject selectedObject = null;
+        public static Component selectedComponent = null;
         public static bool sceneFocused = false;
+        public static string currentDirectory;
 
         private static JArray gameObjectsArray;
 
         public static void Initialize(Application _app)
         {
             app = _app;
+            
+            currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             // Audio Listener \\
             //var audioListener = new AudioListener();

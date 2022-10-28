@@ -247,7 +247,7 @@ namespace FirewoodEngine.Core
 
                 GL.ClearColor(gameCamera.backgroundColor);
                 RenderManager.Render(view, projection, stopwatch, _lightPos, gameCamera.transform.position, this);
-        }
+            }
 
         base.OnRenderFrame(e);
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
+using FirewoodEngine.Components;
 
 namespace FirewoodEngine.Core
 {
@@ -29,11 +30,38 @@ namespace FirewoodEngine.Core
             components.Add(component);
         }
 
-        public void RemoveComponent(Component component)
+        public void AddComponent(Type type)
         {
-            components.Remove(component);
+            Component component = (Component)Activator.CreateInstance(type);
+            component.gameObject = this;
+            component.transform = transform;
+            components.Add(component);
         }
         
+        public Component AddComponent<T>() where T : Component
+        {
+            Component component = (Component)Activator.CreateInstance(typeof(T));
+            component.gameObject = this;
+            component.transform = transform;
+            components.Add(component);
+            return component;
+        }
+
+
+        public void RemoveComponent(Component component)
+        {
+            if (component is Renderer)
+            {
+                RenderManager.RemoveRenderer((Renderer)component);
+            }
+            else if (component is LineRenderer)
+            {
+                RenderManager.RemoveRenderer((LineRenderer)component);
+            }
+            
+            components.Remove(component);
+        }
+
         public T GetComponent<T>()
         {
             foreach (object component in components)

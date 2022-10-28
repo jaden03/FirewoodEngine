@@ -8,6 +8,7 @@ using OpenTK.Graphics;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 using System.Diagnostics;
+using System.Drawing;
 using FirewoodEngine.Components;
 using OpenTK.Platform.MacOS;
 
@@ -149,6 +150,7 @@ namespace FirewoodEngine.Core
             {
                 rend.Draw(view, projection, stopwatch.Elapsed.TotalSeconds, _lightpos, _camPos, VertexBufferObject, FrameBufferObjectEditor, RenderTextureObjectEditor, DepthBufferObjectEditor);
             }
+
             GL.ReadBuffer(ReadBufferMode.Back);
             GL.BlitFramebuffer(0, 0, app.Width, app.Height, 0, 0, app.Width, app.Height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
 

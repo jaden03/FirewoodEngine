@@ -36,6 +36,8 @@ namespace FirewoodEngine.Components
 
         public void Draw(Matrix4 view, Matrix4 projection, double timeValue, Vector3 lightPos, Vector3 camPos, int buffer, int frameBuffer, int renderTexture, int depthTexture)
         {
+            if (material == null || material.shader == null) return;
+            
             Matrix4 model = Matrix4.Identity;
             model = 
                 Matrix4.CreateScale(transform.scale * transform.localScale) * 
