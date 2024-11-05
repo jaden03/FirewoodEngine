@@ -118,7 +118,9 @@
     <Compile Include="Scripts\Generation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Core\OpenAL32.dll" />
+    <Content Include="openal32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\readme.txt" />
     <Content Include="Sounds\pwwuitt.wav" />
     <Content Include="Sounds\test.wav" />
